@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaihuan Huang · AI Engineer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B5CAD'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FDE68A'/%3E%3C/svg%3E">
+<meta name="description" content="Kaihuan Huang, AI engineer in the San Francisco Bay Area: LLM agents for money-moving workflows with eval gates, human confirmation and audit trails. Five live demos.">
+<style>
+:root{
+  --bg:#FFFFFF;--ink:#16191A;--ink-2:#3D4447;--muted:#5F686B;--line:#DFE3E5;--panel:#F4F6F7;
+  --accent:#0B5CAD;--mark:#FDE68A;--mark-ink:#16191A;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#101315;--ink:#E6EAEC;--ink-2:#C2CACD;--muted:#98A2A6;--line:#2A3134;--panel:#181D1F;
+  --accent:#6CB2F5;--mark:#5E5217;--mark-ink:#FBF1C2;
+}}
+:root[data-theme="dark"]{
+  --bg:#101315;--ink:#E6EAEC;--ink-2:#C2CACD;--muted:#98A2A6;--line:#2A3134;--panel:#181D1F;
+  --accent:#6CB2F5;--mark:#5E5217;--mark-ink:#FBF1C2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;padding:48px 16px 64px}
+main{max-width:860px;margin:0 auto}
+h1{font-size:clamp(1.7rem,4vw,2.2rem);line-height:1.2;margin:0;letter-spacing:-.01em}
+h2{font-size:1.15rem;margin:48px 0 12px}
+p{margin:0 0 14px}
+a{color:var(--accent);text-underline-offset:2px}
+.dek{font-size:1.1rem;color:var(--ink-2);margin-top:12px}
+.meta{font-size:.85rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:14px}
+.badge{display:inline-block;font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--ink-2)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+@media (max-width:680px){.grid{grid-template-columns:minmax(0,1fr)}}
+.pane{border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.pane h3{font-size:1rem;margin:0}
+.pane p{margin:0;font-size:.95rem;color:var(--ink-2)}
+.pane .k{font-size:.8rem;color:var(--muted);font-family:var(--mono)}
+.pane .go{margin-top:auto;font-size:.9rem}
+mark{background:var(--mark);color:var(--mark-ink);border-radius:3px;padding:1px 3px}
+.role{margin:0 0 16px}
+.role b{display:block}
+.role .when{font-size:.85rem;color:var(--muted)}
+.role ul{margin:6px 0 0;padding-left:20px}
+.role li{margin-bottom:6px}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}
+dt{color:var(--muted);font-size:.9rem}
+dd{margin:0}
+footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Kaihuan Huang</h1>
+    <p class="dek">AI engineer building LLM agents for money-moving workflows, with the controls finance teams need to go agentic: eval gates before launch, human confirmation before any agent action, audit trails, PII masking and duplicate-free processing.</p>
+    <div class="meta">
+      <span>San Francisco Bay Area, CA</span>
+      <span class="badge">US permanent resident</span>
+      <span><a href="https://github.com/kaihuan-huang">GitHub</a></span>
+      <span><a href="https://linkedin.com/in/kaihuanhuang/">LinkedIn</a></span>
+      <span><a href="mailto:kaihuanhuangus@gmail.com">kaihuanhuangus@gmail.com</a></span>
+    </div>
+  </header>
+
+  <section aria-labelledby="demos">
+    <h2 id="demos">Live demos</h2>
+    <p>Each one is an independent reimplementation on synthetic data, runs in the browser, and comes with its source and tests.</p>
+    <div class="grid">
+      <div class="pane">
+        <h3><a href="https://kaihuan-huang.github.io/refund-agent-demo/">Refund Agent</a></h3>
+        <p>An LLM agent proposes refunds through tool calls but cannot move money: fixed checks, human approval, then a hash-chained ledger entry. Includes a recorded run where the model over-refunds and the approver catches it.</p>
+        <span class="k">tool calls · approval gate · ledger · 16 tests</span>
+        <a class="go" href="https://kaihuan-huang.github.io/refund-agent-demo/">Open demo →</a>
+      </div>
+      <div class="pane">
+        <h3><a href="https://kaihuan-huang.github.io/booking-agent-demo/">Booking Agent</a></h3>
+        <p>A bilingual (English / 中文) booking agent that books only on an explicit yes. The model-only pilot got <mark>57%</mark> of messages right; rules plus a confirmation gate got <mark>85%</mark> with 0 invented values. Compare against your own local LLM.</p>
+        <span class="k">rule resolvers · confirmation gate · Ollama · 31 tests</span>
+        <a class="go" href="https://kaihuan-huang.github.io/booking-agent-demo/">Open demo →</a>
+      </div>
+      <div class="pane">
+        <h3><a href="https://kaihuan-huang.github.io/ledger-demo/">Tamper-Evident Ledger</a></h3>
+        <p>Payments, refunds and voids as a hash-chained event log. Edit, delete or rewrite a row and verification points to it; the third attack needs an anchor.</p>
+        <span class="k">hash chain · anchor · 16 tests</span>
+        <a class="go" href="https://kaihuan-huang.github.io/ledger-demo/">Open demo →</a>
+      </div>
+      <div class="pane">
+        <h3><a href="https://kaihuan-huang.github.io/pii-detector-demo/">PII Detector</a></h3>
+        <p>Finds card numbers, emails, phones and API keys before text reaches a model. openai/privacy-filter runs in your browser on WebGPU with <mark>0 network requests</mark> during detection.</p>
+        <span class="k">rules + Luhn · WebGPU · placeholders</span>
+        <a class="go" href="https://kaihuan-huang.github.io/pii-detector-demo/">Open demo →</a>
+      </div>
+      <div class="pane">
+        <h3><a href="https://kaihuan-huang.github.io/llm-arch-viz/">LLM Architecture Cards</a></h3>
+        <p>What is inside an open-weight model, from its config alone: attention layout, FFN, parameter split, one decoder layer with weight shapes, memory arithmetic, cross-checked against the Hub. No weights downloaded.</p>
+        <span class="k">torch meta device · transformers · MIT</span>
+        <a class="go" href="https://kaihuan-huang.github.io/llm-arch-viz/">Open demo →</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="work">
+    <h2 id="work">Work</h2>
+    <div class="role">
+      <b>AI Engineer · <a href="https://ipot.food/">IPOT (Jackson Ventures)</a>, restaurant-operations platform</b>
+      <span class="when">Apr 2026 – present · San Francisco Bay Area</span>
+      <ul>
+        <li>Rebuilt Nalu, a bilingual booking agent, after measuring the LLM-only pilot at 57% fully correct with invented values: rule-based field resolvers and an explicit confirmation gate. Held-out accuracy 85% (33/39), 0 invented values; a 35-case eval set gates CI; live replay 114 turns with 0 failures.</li>
+        <li>Built the Reservation API from the first commit, now in production with real guests: slot capacity, Twilio Verify OTP, SMS with self-service reschedule/cancel, guest self check-in, staff portal, UTM attribution feeding Google Ads offline conversions.</li>
+        <li>Own POS money movement: atomic bill settlement, tips, refunds and audited voids; revived a long-failing test suite and fixed diverged Alembic heads.</li>
+        <li>Audited a 46-item delivery tracker against the code: 6 authentication gaps and 3 routers never mounted. Added coding-agent hooks that hard-block production deploys and migrations.</li>
+      </ul>
+    </div>
+    <div class="role">
+      <b>AI Engineer Intern · <a href="https://www.polygraf.ai/">Polygraf.ai</a></b>
+      <span class="when">Oct 2025 – Jun 2026 · Remote</span>
+      <ul>
+        <li>Layered PII detector (Presidio, rules with check digits, a transformer NER model) for the English and Chinese text employees send to AI tools.</li>
+        <li>Policy engine as one pure function (allow / mask / watch / block) and a masked LLM chat where placeholders replace personal data.</li>
+        <li>Event pipeline on a Postgres transactional outbox with SKIP LOCKED workers, feeding an append-only, hash-chained audit trail with two-step enforcement.</li>
+      </ul>
+    </div>
+    <div class="role">
+      <b>AI-usage governance platform, independent rebuild</b>
+      <span class="when">Sep 2026 · Python, FastAPI, PostgreSQL, pgvector, WebGPU, AWS (OpenTofu)</span>
+      <ul>
+        <li>Rules plus openai/privacy-filter: p95 136 ms on a local GPU, rules alone p95 0.5 ms, on a 5,466-record bilingual benchmark gated in CI.</li>
+        <li>Outbox pipeline: 63 → 125 events/s from 1 → 3 workers with zero duplicates across 9,000 findings; found and fixed a lease-expiry race. 279 tests, 16 architecture decision records.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="edu">
+    <h2 id="edu">Education</h2>
+    <dl>
+      <dt>2025</dt><dd>MSc Computer Science with Artificial Intelligence, University of York, UK</dd>
+      <dt>2022</dt><dd>Certificate in Full Stack Web Development, UC Berkeley Extension</dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="skills">
+    <h2 id="skills">Skills</h2>
+    <dl>
+      <dt>AI / LLM</dt><dd>tool-calling agents, confirmation gates, eval gates, PII masking, RAG (pgvector), Ollama, Claude Code</dd>
+      <dt>Controls</dt><dd>hash-chained audit trails, two-step enforcement, envelope encryption (KMS), idempotent writes</dd>
+      <dt>Languages &amp; backend</dt><dd>Python, TypeScript, SQL; FastAPI, SQLAlchemy 2.0, Alembic, PostgreSQL, Redis</dd>
+      <dt>Infra</dt><dd>AWS (ECS Fargate, RDS, KMS), OpenTofu, Docker, GitHub Actions, Twilio; React, Next.js</dd>
+      <dt>Spoken</dt><dd>English, Mandarin, Cantonese, Spanish</dd>
+    </dl>
+  </section>
+
+  <footer>
+    <a href="https://kaihuan-huang.github.io/refund-agent-demo/">Refund Agent</a> · <a href="https://kaihuan-huang.github.io/booking-agent-demo/">Booking Agent Demo</a> · <a href="https://kaihuan-huang.github.io/ledger-demo/">Tamper-Evident Ledger</a> · <a href="https://kaihuan-huang.github.io/pii-detector-demo/">PII Detector Demo</a> · <a href="https://kaihuan-huang.github.io/llm-arch-viz/">LLM Architecture Cards</a> · <a href="https://github.com/kaihuan-huang">GitHub</a> · <a href="https://linkedin.com/in/kaihuanhuang/">LinkedIn</a>
+  </footer>
+</main>
+</body>
+</html>
