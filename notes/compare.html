@@ -70,6 +70,10 @@ html {
 .notes-bar a:hover{background:#eef4fb}
 .notes-bar a.on{background:#0b5cad;color:#fff}
 .notes-bar .t{color:#5f686b;margin-left:auto;font-size:12px}
+.notes-bar button{font:inherit;color:#fff;background:#0b5cad;border:0;border-radius:6px;padding:3px 10px;cursor:pointer}
+.orig{position:fixed;inset:0;z-index:20;background:#000c;display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:56px 16px 24px}
+.orig[hidden]{display:none}.orig img{max-width:min(1500px,100%);height:auto;border-radius:8px;background:#fff}
+.orig .x{position:fixed;top:12px;right:16px;font:14px system-ui,sans-serif;color:#fff;background:#0b5cad;border:0;border-radius:6px;padding:6px 12px;cursor:pointer}
 @media (prefers-color-scheme:dark){.notes-bar{background:#101315ee;border-color:#2a3134}.notes-bar a{color:#6cb2f5}
   .notes-bar a:hover{background:#16304a}.notes-bar a.on{background:#6cb2f5;color:#101315}.notes-bar .t{color:#98a2a6}}
 #mindmap{margin-top:46px;height:calc(100vh - 46px)!important}
