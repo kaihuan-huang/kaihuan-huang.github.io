@@ -1,0 +1,28 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Notes · Kaihuan Huang</title>
+<style>
+:root{--bg:#fff;--ink:#16191a;--mut:#5f686b;--line:#dfe3e5;--acc:#0b5cad;--panel:#f4f6f7}
+@media (prefers-color-scheme:dark){:root{--bg:#101315;--ink:#e6eaec;--mut:#98a2a6;--line:#2a3134;--acc:#6cb2f5;--panel:#181d1f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:96px 16px 48px!important}
+main{max-width:860px;margin:0 auto}h1{font-size:1.8rem;margin:0 0 6px}p.dek{color:var(--mut);margin:0 0 24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:10px;padding:16px;color:inherit;text-decoration:none}
+.card:hover{border-color:var(--acc);background:var(--panel)}.card .n{color:var(--acc);font-size:.8rem;font-weight:600;letter-spacing:.04em}
+.card i{color:var(--mut);font-style:normal;font-size:.9rem}.card p{margin:6px 0 0;font-size:.92rem;color:var(--mut)}
+</style><style>
+.notes-bar{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;
+  padding:8px 16px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:#ffffffee;border-bottom:1px solid #dfe3e5;
+  font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;backdrop-filter:blur(6px)}
+.notes-bar a{color:#0b5cad;text-decoration:none;padding:2px 6px;border-radius:6px}
+.notes-bar a:hover{background:#eef4fb}
+.notes-bar a.on{background:#0b5cad;color:#fff}
+.notes-bar .t{color:#5f686b;margin-left:auto;font-size:12px}
+@media (prefers-color-scheme:dark){.notes-bar{background:#101315ee;border-color:#2a3134}.notes-bar a{color:#6cb2f5}
+  .notes-bar a:hover{background:#16304a}.notes-bar a.on{background:#6cb2f5;color:#101315}.notes-bar .t{color:#98a2a6}}
+#mindmap{margin-top:46px;height:calc(100vh - 46px)!important}
+@media (max-width:700px){#mindmap{margin-top:84px;height:calc(100vh - 84px)!important}.notes-bar .t{display:none}}
+body{padding-top:0}
+</style>
+<body><nav class="notes-bar" aria-label="Notes"><a href="index.html" class="on">Notes</a><a href="ipot.html">Note 1 · IPOT 知识点</a><a href="governance-platform.html">Note 2 · governance-platform 知识点</a><a href="compare.html">Note 3 · 两项目对照</a><a href="../">Home</a><span class="t">点节点展开 · click a node to expand</span></nav><main><h1>Notes · 学习笔记</h1>
+<p class="dek">两个项目的知识点导图和一张对照图。顶部导航栏在每一页都有，可以来回切换。</p>
+<div class="grid"><a class="card" href="ipot.html"><span class="n">Note 1</span><b>IPOT 知识点</b><i>IPOT knowledge map</i><p>餐厅平台里我的三条线：预订 API、Nalu 助手、POS。每个 ipot-* 仓库一个模块，知识点和面试题中英对照。</p></a><a class="card" href="governance-platform.html"><span class="n">Note 2</span><b>governance-platform 知识点</b><i>governance-platform knowledge map</i><p>AI 使用治理平台的 7 个模块，按知识类别分组：通用回答、我的案例、提交证据。</p></a><a class="card" href="compare.html"><span class="n">Note 3</span><b>两项目对照</b><i>Two projects side by side</i><p>90 秒版、团队 vs 我、架构、关键决定、最难问题、结果与主动说明，两个项目并排看。</p></a></div></main></body></html>
