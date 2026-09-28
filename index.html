@@ -82,8 +82,8 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-si
       </div>
       <div class="pane">
         <h3><a href="https://kaihuan-huang.github.io/ledger-demo/">POS Platform</a></h3>
-        <p>Operate a restaurant POS: cashier terminal, kitchen display and guest phone against one in-page service. Every tap shows its Router → Service → Model path and the rows it wrote; settlement is one transaction, not four calls.</p>
-        <span class="k">atomic settle · price snapshots · audited refunds and voids · 20 tests</span>
+        <p>Operate a restaurant POS: cashier terminal, kitchen display, guest phone and the Nalu assistant against two in-page services. Every tap and every agent tool shows its Router → Service → Model path and the rows it wrote; bookings carry an idempotency key, refunds wait for a manager, and the model is never called.</p>
+        <span class="k">atomic settle · bare-yes gate · idempotent bookings · manager-approved refunds · 28 tests</span>
         <a class="go" href="https://kaihuan-huang.github.io/ledger-demo/">Open demo →</a>
       </div>
       <div class="pane">
