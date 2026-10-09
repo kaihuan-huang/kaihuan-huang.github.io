@@ -65,7 +65,7 @@ def nav(base):
         rows.append(f'<li><a href="{base}works/{w["slug"]}.html"><span class="m-num">{nn(i)}</span><span class="m-title">{w["title"]}</span><span class="m-tag">{bi(w["type"])}</span></a></li>')
     n = len(all_items())
     rows.append(f'<li><a href="{base}resume.html"><span class="m-num">{nn(n + 1)}</span><span class="m-title">{bi({"en": "Résumé", "zh": "简历"})}</span><span class="m-tag">Web · print</span></a></li>')
-    rows.append(f'<li><a href="{base}archive.html"><span class="m-num">A</span><span class="m-title">{bi({"en": "Learning Archive", "zh": "学习档案"})}</span><span class="m-tag">2022 — 2025</span></a></li>')
+    rows.append(f'<li><a href="{base}archive.html"><span class="m-num">A</span><span class="m-title">{bi({"en": "Learning Archive", "zh": "学习档案"})}</span><span class="m-tag">2023 — 2025</span></a></li>')
     rows.append(f'<li><a href="{base}notes/"><span class="m-num">{nn(n + 2)}</span><span class="m-title">{bi({"en": "Notes", "zh": "笔记"})}</span><span class="m-tag">Writing</span></a></li>')
     rows.append(f'<li><a href="{base}index.html#contact"><span class="m-num">{nn(n + 3)}</span><span class="m-title">{bi({"en": "Contact", "zh": "联系"})}</span><span class="m-tag">Say hi</span></a></li>')
     return f"""<nav class="nav" id="nav" aria-label="Main">
@@ -232,7 +232,7 @@ def build_index():
   </section>
 
   <section class="sec wrap" id="archive" aria-labelledby="archive-h">
-    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— {bi({"en": "Learning Archive", "zh": "学习档案"})}</h2><span class="sec-note mono">{bi({"en": "2022 — 2025 · what each early project taught me", "zh": "2022 — 2025 · 每个早期项目教会我的事"})}</span></div>
+    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— {bi({"en": "Learning Archive", "zh": "学习档案"})}</h2><span class="sec-note mono">{bi({"en": "2023 — 2025 · what each early project taught me", "zh": "2023 — 2025 · 每个早期项目教会我的事"})}</span></div>
     <p class="arch-intro">{bi(C['archive_intro'])}</p>
     {archive_register("")}
     <div class="cta left"><a class="btn" href="archive.html">{bi({"en": "Open the archive →", "zh": "打开学习档案 →"})}</a></div>
@@ -366,7 +366,7 @@ def archive_register(base):
 
 
 def timeline():
-    pts = [("2022", {"en": "First LLM apps", "zh": "第一批 LLM 应用"}), ("2023", {"en": "York MSc · hackathons", "zh": "约克硕士 · 黑客松"}),
+    pts = [("2023", {"en": "First LLM apps · York MSc · hackathons", "zh": "第一批 LLM 应用 · 约克硕士 · 黑客松"}),
            ("2024", {"en": "Rebuilding models · team product", "zh": "拆模型 · 团队产品"}), ("2025", {"en": "Polygraf.ai · PII & policy", "zh": "Polygraf.ai · PII 与策略"}),
            ("2026", {"en": "Production at Jackson Ventures", "zh": "Jackson Ventures 生产环境"})]
     lis = ""
@@ -397,7 +397,7 @@ def build_archive():
     html += nav("")
     html += f"""<main id="main" class="case">
   <header class="wrap case-head">
-    <div class="hero-top mono"><span>Section C–C · {bi({"en": "Learning archive", "zh": "学习档案"})}</span><span>2022 — 2026</span></div>
+    <div class="hero-top mono"><span>Section C–C · {bi({"en": "Learning archive", "zh": "学习档案"})}</span><span>2023 — 2026</span></div>
     <h1>{bi({"en": "How I got here", "zh": "一路走来"})}</h1>
     <p class="case-pitch">{bi(C['archive_intro'])}</p>
   </header>
