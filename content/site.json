@@ -1284,7 +1284,7 @@
   "archive": [
     {
       "id": "first-llm-apps",
-      "years": "2022–23",
+      "years": "2023",
       "kind": {
         "en": "Self-started",
         "zh": "自发项目"
@@ -1295,22 +1295,20 @@
       },
       "repos": [
         "AI-Content-Generator",
-        "Agent-AI-Post-Generator",
-        "Agent-AI-Generator-Version2",
-        "AutomaticChapterDetection-"
+        "Agent-AI-Generator-Version2"
       ],
-      "stack": "Python · Flask · Django · OpenAI text-davinci-003 · AssemblyAI",
+      "stack": "Python · Flask · OpenAI text-davinci-003",
       "then": {
-        "en": "Content generators that sent one prompt to GPT-3 and printed the answer, and a tool that transcribed audio with AssemblyAI to find chapter breaks.",
-        "zh": "把一个提示词发给 GPT-3 再打印结果的内容生成器，以及用 AssemblyAI 转写音频来找章节分界的工具。"
+        "en": "Content generators that sent one prompt to GPT-3 and printed the answer, wrapped in small Flask apps.",
+        "zh": "把一个提示词发给 GPT-3 再打印结果的内容生成器，外面包一层小型 Flask 应用。"
       },
       "learned": {
-        "en": "A prompt that works in a demo is not a feature. There was no test set, so I could not tell a better prompt from a luckier one, and API keys lived in the code.",
-        "zh": "在演示里能跑的提示词不等于功能。没有测试集，就分不清是提示词更好还是运气更好；API 密钥还写在代码里。"
+        "en": "A prompt that works in a demo is not a feature. There was no test set, so I could not tell a better prompt from a luckier one.",
+        "zh": "在演示里能跑的提示词不等于功能。没有测试集，就分不清是提示词更好还是运气更好。"
       },
       "rule": {
-        "en": "Measure on a held-out set before claiming it works; keep secrets out of the repo and scan before every push.",
-        "zh": "先在留出集上测量再下结论；密钥不进仓库，每次推送前扫描。"
+        "en": "Measure on a held-out set before claiming it works.",
+        "zh": "先在留出集上测量，再说它能用。"
       },
       "now": "booking-agent"
     },
@@ -1348,8 +1346,8 @@
       "id": "hackathons",
       "years": "2023",
       "kind": {
-        "en": "Hackathons & weekend builds",
-        "zh": "黑客松与周末作品"
+        "en": "Hackathons",
+        "zh": "黑客松"
       },
       "title": {
         "en": "Weekend products",
@@ -1357,23 +1355,22 @@
       },
       "repos": [
         "Light-Up",
-        "Gen-AI-Hack-II",
-        "LegalEase-AI"
+        "Gen-AI-Hack-II"
       ],
-      "stack": "React · Next.js · TypeScript · Jupyter · ElevenLabs · Luma",
+      "stack": "React · Jupyter · ElevenLabs · Luma",
       "then": {
-        "en": "Light-Up, a concept for transparent charity donations; Gen-AI Hack II, voice and 3D generation experiments; LegalEase AI, a legal-help chatbot for US users.",
-        "zh": "Light-Up：让慈善捐款更透明的产品概念；Gen-AI Hack II：语音与 3D 生成实验；LegalEase AI：面向美国用户的法律问答机器人。"
+        "en": "Light-Up, a concept for transparent charity donations; Gen-AI Hack II, voice and 3D generation experiments.",
+        "zh": "Light-Up：让慈善捐款更透明的产品概念；Gen-AI Hack II：语音与 3D 生成实验。"
       },
       "learned": {
-        "en": "A chatbot that sounds confident about the law is a liability. Shipping fast is useful for finding the problem, not for deciding what the model may claim.",
-        "zh": "对法律问题说得很自信的聊天机器人是一种风险。快速做出来有助于发现问题，但不能由此决定模型可以声称什么。"
+        "en": "A weekend demo proves the idea and hides the edge cases. What the demo does not handle is where the real work starts.",
+        "zh": "周末做出的演示能证明想法，也会藏住边界情况。演示处理不了的地方，才是真正工作的开始。"
       },
       "rule": {
-        "en": "The model may propose; only a checked, approved action may be described as done.",
-        "zh": "模型可以提议；只有经过校验和批准的动作才能说“已完成”。"
+        "en": "Write down what it does not handle, next to what it does.",
+        "zh": "把它处理不了的写清楚，放在它能做的旁边。"
       },
-      "now": "refund-agent"
+      "now": "career-ops"
     },
     {
       "id": "rebuilds",

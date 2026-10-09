@@ -12,9 +12,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 C = json.loads((ROOT / "content" / "site.json").read_text(encoding="utf-8"))
 P = C["person"]
-FONTS = ("https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;1,400"
-         "&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap")
-VER = "3"
+FONTS = ("https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600"
+         "&family=JetBrains+Mono:wght@400;500&display=swap")
+VER = "4"
 
 
 def bi(v):
@@ -46,9 +46,11 @@ def head(title, desc, base, og_img="assets/img/og.png"):
 <link rel="icon" href="{base}assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="{FONTS}" rel="stylesheet">
+<link rel="stylesheet" href="{FONTS}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{FONTS}"></noscript>
 <link rel="stylesheet" href="{base}assets/css/folio.css?v={VER}">
-<script src="{base}assets/js/folio.js?v={VER}"></script>
+<script>(function(){{var r=document.documentElement,l=null,s=null;try{{l=localStorage.getItem('kh-lang');s=sessionStorage.getItem('kh-intro')}}catch(e){{}}r.setAttribute('data-lang',l||((navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en'));if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('no-intro')}})();</script>
+<script src="{base}assets/js/folio.js?v={VER}" defer></script>
 </head>
 <body>
 <a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="zh">跳到正文</span></a>
@@ -65,7 +67,7 @@ def nav(base):
         rows.append(f'<li><a href="{base}works/{w["slug"]}.html"><span class="m-num">{nn(i)}</span><span class="m-title">{w["title"]}</span><span class="m-tag">{bi(w["type"])}</span></a></li>')
     n = len(all_items())
     rows.append(f'<li><a href="{base}resume.html"><span class="m-num">{nn(n + 1)}</span><span class="m-title">{bi({"en": "Résumé", "zh": "简历"})}</span><span class="m-tag">Web · print</span></a></li>')
-    rows.append(f'<li><a href="{base}archive.html"><span class="m-num">A</span><span class="m-title">{bi({"en": "Learning Archive", "zh": "学习档案"})}</span><span class="m-tag">2022 — 2025</span></a></li>')
+    rows.append(f'<li><a href="{base}archive.html"><span class="m-num">A</span><span class="m-title">{bi({"en": "Learning Archive", "zh": "学习档案"})}</span><span class="m-tag">2023 — 2025</span></a></li>')
     rows.append(f'<li><a href="{base}notes/"><span class="m-num">{nn(n + 2)}</span><span class="m-title">{bi({"en": "Notes", "zh": "笔记"})}</span><span class="m-tag">Writing</span></a></li>')
     rows.append(f'<li><a href="{base}index.html#contact"><span class="m-num">{nn(n + 3)}</span><span class="m-title">{bi({"en": "Contact", "zh": "联系"})}</span><span class="m-tag">Say hi</span></a></li>')
     return f"""<nav class="nav" id="nav" aria-label="Main">
@@ -73,7 +75,7 @@ def nav(base):
     <a class="brand" href="{base}index.html"><span class="stamp">KH</span><span class="b-txt">{P['name_first']} {P['name_last']} — Folio</span></a>
     <div class="nav-r">
       <a class="pill hide-sm" href="{base}resume.html">{bi({"en": "Résumé", "zh": "简历"})}</a>
-      <button class="pill" id="lang-btn" type="button" aria-label="Switch language / 切换语言">中</button>
+      <button class="pill" id="lang-btn" type="button" title="Switch language / 切换语言">中</button>
       <button class="pill" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu">{bi({"en": "Menu", "zh": "目录"})}</button>
     </div>
   </div>
@@ -98,15 +100,15 @@ def footer(base):
       <div class="sign">{P['name_first']} {P['name_last']}</div>
       <div class="motto">{bi({"en": "Measure first. Ship second. Keep the receipts.", "zh": "先测量，再上线，留好凭据。"})}</div>
     </div>
-    <div><h4>Index</h4><ul>{idx}</ul></div>
-    <div><h4>{bi({"en": "Elsewhere", "zh": "其他"})}</h4><ul>
+    <div><p class="foot-h">Index</p><ul>{idx}</ul></div>
+    <div><p class="foot-h">{bi({"en": "Elsewhere", "zh": "其他"})}</p><ul>
       <li><a href="{P['github']}">GitHub</a></li>
       <li><a href="{P['linkedin']}">LinkedIn</a></li>
       <li><a href="{base}resume.html">{bi({"en": "Résumé", "zh": "简历"})}</a></li>
       <li><a href="{base}archive.html">{bi({"en": "Learning Archive", "zh": "学习档案"})}</a></li>
       <li><a href="{base}notes/">{bi({"en": "Notes", "zh": "笔记"})}</a></li>
     </ul></div>
-    <div><h4>{bi({"en": "Contact", "zh": "联系"})}</h4><ul>
+    <div><p class="foot-h">{bi({"en": "Contact", "zh": "联系"})}</p><ul>
       <li><a href="mailto:{P['email']}">{P['email']}</a></li>
       <li>{bi(P['location'])}</li>
     </ul></div>
@@ -135,10 +137,13 @@ def metric(m):
 # ---------------- index ----------------
 
 def wall_card(i, w):
-    return f"""      <article class="work reveal">
+    small = w["img"].replace(".jpg", "-640.jpg")
+    load = 'fetchpriority="high"' if i == 1 else ('decoding="async"' if i <= 3 else 'loading="lazy" decoding="async"')
+    rev = "" if i <= 3 else " reveal"
+    return f"""      <article class="work{rev}">
         <a href="works/{w['slug']}.html">
           <div class="w-label mono"><span>Nº{nn(i)}</span><span>{w['tag']}</span></div>
-          <div class="frame"><img src="assets/img/works/{w['img']}" alt="{w['alt']}" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="frame"><img src="assets/img/works/{small}" srcset="assets/img/works/{small} 640w, assets/img/works/{w['img']} 960w" sizes="(max-width:680px) 92vw, (max-width:980px) 46vw, 380px" alt="{w['alt']}" {load} width="960" height="750"><span class="v-dim"></span></div>
           <div class="dim mono"><span class="d-line"></span><span class="d-txt">{w['dim']}</span></div>
           <div class="w-cap">
             <span class="num">{nn(i)}</span><h3>{w['title']}</h3>
@@ -232,7 +237,7 @@ def build_index():
   </section>
 
   <section class="sec wrap" id="archive" aria-labelledby="archive-h">
-    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— {bi({"en": "Learning Archive", "zh": "学习档案"})}</h2><span class="sec-note mono">{bi({"en": "2022 — 2025 · what each early project taught me", "zh": "2022 — 2025 · 每个早期项目教会我的事"})}</span></div>
+    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— {bi({"en": "Learning Archive", "zh": "学习档案"})}</h2><span class="sec-note mono">{bi({"en": "2023 — 2025 · what each early project taught me", "zh": "2023 — 2025 · 每个早期项目教会我的事"})}</span></div>
     <p class="arch-intro">{bi(C['archive_intro'])}</p>
     {archive_register("")}
     <div class="cta left"><a class="btn" href="archive.html">{bi({"en": "Open the archive →", "zh": "打开学习档案 →"})}</a></div>
@@ -242,7 +247,7 @@ def build_index():
     <div class="sec-head"><span class="n">03</span><h2 id="about-h">— {bi({"en": "The Engineer", "zh": "工程师"})}</h2></div>
     <div class="study">
       <figure class="fig reveal">
-        <div class="plate" id="plate">{PLATE_SVG}</div>
+        <div class="plate" id="plate">{PORTRAIT}</div>
         <figcaption class="mono"><span>FIG. 01 — {bi({"en": "The model proposes; the system decides", "zh": "模型提议，系统决定"})}</span><span>York · MSc</span></figcaption>
       </figure>
       <div class="reveal">
@@ -366,7 +371,7 @@ def archive_register(base):
 
 
 def timeline():
-    pts = [("2022", {"en": "First LLM apps", "zh": "第一批 LLM 应用"}), ("2023", {"en": "York MSc · hackathons", "zh": "约克硕士 · 黑客松"}),
+    pts = [("2023", {"en": "First LLM apps · York MSc · hackathons", "zh": "第一批 LLM 应用 · 约克硕士 · 黑客松"}),
            ("2024", {"en": "Rebuilding models · team product", "zh": "拆模型 · 团队产品"}), ("2025", {"en": "Polygraf.ai · PII & policy", "zh": "Polygraf.ai · PII 与策略"}),
            ("2026", {"en": "Production at Jackson Ventures", "zh": "Jackson Ventures 生产环境"})]
     lis = ""
@@ -397,7 +402,7 @@ def build_archive():
     html += nav("")
     html += f"""<main id="main" class="case">
   <header class="wrap case-head">
-    <div class="hero-top mono"><span>Section C–C · {bi({"en": "Learning archive", "zh": "学习档案"})}</span><span>2022 — 2026</span></div>
+    <div class="hero-top mono"><span>Section C–C · {bi({"en": "Learning archive", "zh": "学习档案"})}</span><span>2023 — 2026</span></div>
     <h1>{bi({"en": "How I got here", "zh": "一路走来"})}</h1>
     <p class="case-pitch">{bi(C['archive_intro'])}</p>
   </header>
@@ -441,6 +446,8 @@ def build_resume():
 
 
 PLATE_SVG = (ROOT / "assets" / "img" / "plate.svg").read_text(encoding="utf-8")
+PORTRAIT = ('<img src="assets/img/portrait.jpg" alt="Kaihuan Huang" width="800" height="1000">'
+            if (ROOT / "assets" / "img" / "portrait.jpg").exists() else PLATE_SVG)
 
 if __name__ == "__main__":
     build_index()

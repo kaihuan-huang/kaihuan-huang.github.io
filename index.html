@@ -15,9 +15,11 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/folio.css?v=3">
-<script src="assets/js/folio.js?v=3"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<link rel="stylesheet" href="assets/css/folio.css?v=4">
+<script>(function(){var r=document.documentElement,l=null,s=null;try{l=localStorage.getItem('kh-lang');s=sessionStorage.getItem('kh-intro')}catch(e){}r.setAttribute('data-lang',l||((navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en'));if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('no-intro')})();</script>
+<script src="assets/js/folio.js?v=4" defer></script>
 </head>
 <body>
 <a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="zh">跳到正文</span></a>
@@ -35,7 +37,7 @@
     <a class="brand" href="index.html"><span class="stamp">KH</span><span class="b-txt">Kaihuan Huang — Folio</span></a>
     <div class="nav-r">
       <a class="pill hide-sm" href="resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a>
-      <button class="pill" id="lang-btn" type="button" aria-label="Switch language / 切换语言">中</button>
+      <button class="pill" id="lang-btn" type="button" title="Switch language / 切换语言">中</button>
       <button class="pill" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu"><span lang="en">Menu</span><span lang="zh">目录</span></button>
     </div>
   </div>
@@ -55,7 +57,7 @@
 <li><a href="works/ipot.html"><span class="m-num">08</span><span class="m-title">IPOT Restaurant Platform</span><span class="m-tag"><span lang="en">Production · restaurant operations</span><span lang="zh">生产环境 · 餐饮运营</span></span></a></li>
 <li><a href="works/loan-draw-review.html"><span class="m-num">09</span><span class="m-title">Loan-Draw Review Controls</span><span class="m-tag"><span lang="en">Fintech lending · built, in review</span><span lang="zh">金融科技借贷 · 已完成，评审中</span></span></a></li>
 <li><a href="resume.html"><span class="m-num">10</span><span class="m-title"><span lang="en">Résumé</span><span lang="zh">简历</span></span><span class="m-tag">Web · print</span></a></li>
-<li><a href="archive.html"><span class="m-num">A</span><span class="m-title"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></span><span class="m-tag">2022 — 2025</span></a></li>
+<li><a href="archive.html"><span class="m-num">A</span><span class="m-title"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></span><span class="m-tag">2023 — 2025</span></a></li>
 <li><a href="notes/"><span class="m-num">11</span><span class="m-title"><span lang="en">Notes</span><span lang="zh">笔记</span></span><span class="m-tag">Writing</span></a></li>
 <li><a href="index.html#contact"><span class="m-num">12</span><span class="m-title"><span lang="en">Contact</span><span lang="zh">联系</span></span><span class="m-tag">Say hi</span></a></li>
     </ol>
@@ -89,10 +91,10 @@
       <span class="mono muted"><span lang="en">Live · independent reimplementations · synthetic data · source &amp; tests</span><span lang="zh">在线 · 独立重写 · 合成数据 · 附源码与测试</span></span>
     </div>
     <div class="works">
-      <article class="work reveal">
+      <article class="work">
         <a href="works/booking-agent.html">
           <div class="w-label mono"><span>Nº01</span><span>EN / 中文</span></div>
-          <div class="frame"><img src="assets/img/works/booking.jpg" alt="Booking Agent demo: chat on the left, the fields the rules found on the right" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="frame"><img src="assets/img/works/booking-640.jpg" srcset="assets/img/works/booking-640.jpg 640w, assets/img/works/booking.jpg 960w" sizes="(max-width:680px) 92vw, (max-width:980px) 46vw, 380px" alt="Booking Agent demo: chat on the left, the fields the rules found on the right" fetchpriority="high" width="960" height="750"><span class="v-dim"></span></div>
           <div class="dim mono"><span class="d-line"></span><span class="d-txt">33/39 held-out · 31 tests</span></div>
           <div class="w-cap">
             <span class="num">01</span><h3>Booking Agent</h3>
@@ -101,10 +103,10 @@
           </div>
         </a>
       </article>
-      <article class="work reveal">
+      <article class="work">
         <a href="works/pos-platform.html">
           <div class="w-label mono"><span>Nº02</span><span>Router → Service → Model</span></div>
-          <div class="frame"><img src="assets/img/works/pos.jpg" alt="POS platform demo: cashier terminal, kitchen display and guest phone" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="frame"><img src="assets/img/works/pos-640.jpg" srcset="assets/img/works/pos-640.jpg 640w, assets/img/works/pos.jpg 960w" sizes="(max-width:680px) 92vw, (max-width:980px) 46vw, 380px" alt="POS platform demo: cashier terminal, kitchen display and guest phone" decoding="async" width="960" height="750"><span class="v-dim"></span></div>
           <div class="dim mono"><span class="d-line"></span><span class="d-txt">29 tests · atomic settle</span></div>
           <div class="w-cap">
             <span class="num">02</span><h3>POS Platform</h3>
@@ -113,10 +115,10 @@
           </div>
         </a>
       </article>
-      <article class="work reveal">
+      <article class="work">
         <a href="works/refund-agent.html">
           <div class="w-label mono"><span>Nº03</span><span>tool calls</span></div>
-          <div class="frame"><img src="assets/img/works/refund.jpg" alt="Refund Agent demo: proposed refund awaiting human approval" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="frame"><img src="assets/img/works/refund-640.jpg" srcset="assets/img/works/refund-640.jpg 640w, assets/img/works/refund.jpg 960w" sizes="(max-width:680px) 92vw, (max-width:980px) 46vw, 380px" alt="Refund Agent demo: proposed refund awaiting human approval" decoding="async" width="960" height="750"><span class="v-dim"></span></div>
           <div class="dim mono"><span class="d-line"></span><span class="d-txt">16 tests · approval gate</span></div>
           <div class="w-cap">
             <span class="num">03</span><h3>Refund Agent</h3>
@@ -128,7 +130,7 @@
       <article class="work reveal">
         <a href="works/pii-detector.html">
           <div class="w-label mono"><span>Nº04</span><span>WebGPU</span></div>
-          <div class="frame"><img src="assets/img/works/pii.jpg" alt="PII Detector demo: text with detected cards, emails and keys highlighted" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="frame"><img src="assets/img/works/pii-640.jpg" srcset="assets/img/works/pii-640.jpg 640w, assets/img/works/pii.jpg 960w" sizes="(max-width:680px) 92vw, (max-width:980px) 46vw, 380px" alt="PII Detector demo: text with detected cards, emails and keys highlighted" loading="lazy" decoding="async" width="960" height="750"><span class="v-dim"></span></div>
           <div class="dim mono"><span class="d-line"></span><span class="d-txt">0 network requests</span></div>
           <div class="w-cap">
             <span class="num">04</span><h3>PII Detector</h3>
@@ -140,7 +142,7 @@
       <article class="work reveal">
         <a href="works/career-ops.html">
           <div class="w-label mono"><span>Nº05</span><span>live · Azure</span></div>
-          <div class="frame"><img src="assets/img/works/careerops.jpg" alt="Career OPS dashboard: open roles with source filters" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="frame"><img src="assets/img/works/careerops-640.jpg" srcset="assets/img/works/careerops-640.jpg 640w, assets/img/works/careerops.jpg 960w" sizes="(max-width:680px) 92vw, (max-width:980px) 46vw, 380px" alt="Career OPS dashboard: open roles with source filters" loading="lazy" decoding="async" width="960" height="750"><span class="v-dim"></span></div>
           <div class="dim mono"><span class="d-line"></span><span class="d-txt">264,148 postings</span></div>
           <div class="w-cap">
             <span class="num">05</span><h3>Career OPS</h3>
@@ -152,7 +154,7 @@
       <article class="work reveal">
         <a href="works/llm-arch-cards.html">
           <div class="w-label mono"><span>Nº06</span><span>MIT</span></div>
-          <div class="frame"><img src="assets/img/works/llmarch.jpg" alt="LLM Architecture Cards: attention layout and parameter split of an open-weight model" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="frame"><img src="assets/img/works/llmarch-640.jpg" srcset="assets/img/works/llmarch-640.jpg 640w, assets/img/works/llmarch.jpg 960w" sizes="(max-width:680px) 92vw, (max-width:980px) 46vw, 380px" alt="LLM Architecture Cards: attention layout and parameter split of an open-weight model" loading="lazy" decoding="async" width="960" height="750"><span class="v-dim"></span></div>
           <div class="dim mono"><span class="d-line"></span><span class="d-txt">config only · 0 weights</span></div>
           <div class="w-cap">
             <span class="num">06</span><h3>LLM Arch Cards</h3>
@@ -207,13 +209,13 @@
   </section>
 
   <section class="sec wrap" id="archive" aria-labelledby="archive-h">
-    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— <span lang="en">Learning Archive</span><span lang="zh">学习档案</span></h2><span class="sec-note mono"><span lang="en">2022 — 2025 · what each early project taught me</span><span lang="zh">2022 — 2025 · 每个早期项目教会我的事</span></span></div>
+    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— <span lang="en">Learning Archive</span><span lang="zh">学习档案</span></h2><span class="sec-note mono"><span lang="en">2023 — 2025 · what each early project taught me</span><span lang="zh">2023 — 2025 · 每个早期项目教会我的事</span></span></div>
     <p class="arch-intro"><span lang="en">Earlier projects that are not portfolio pieces on their own: tutorials, coursework, hackathons and prototypes. Each one taught me a rule I still build by, and each rule points to the work where it shows today.</span><span lang="zh">单独拿出来不够格当作品的早期项目：教程、课程、黑客松和原型。每一个都教会了我一条至今仍在用的规则，每条规则都指向今天体现它的作品。</span></p>
     <ol class="register"><li class="reg-head mono" aria-hidden="true"><span>No.</span><span><span lang="en">Year</span><span lang="zh">年份</span></span><span><span lang="en">Sheet</span><span lang="zh">图纸</span></span><span><span lang="en">The rule it left me</span><span lang="zh">留下的规则</span></span><span><span lang="en">Shows today in</span><span lang="zh">今天体现在</span></span></li><li class="reg-row reveal"><a href="archive.html#first-llm-apps">
           <span class="r-no mono">A01</span>
-          <span class="r-yr mono">2022–23</span>
+          <span class="r-yr mono">2023</span>
           <span class="r-ti"><b><span lang="en">First LLM apps</span><span lang="zh">第一批 LLM 应用</span></b><em><span lang="en">Self-started</span><span lang="zh">自发项目</span></em></span>
-          <span class="r-rule"><span lang="en">Measure on a held-out set before claiming it works; keep secrets out of the repo and scan before every push.</span><span lang="zh">先在留出集上测量再下结论；密钥不进仓库，每次推送前扫描。</span></span>
+          <span class="r-rule"><span lang="en">Measure on a held-out set before claiming it works.</span><span lang="zh">先在留出集上测量，再说它能用。</span></span>
           <span class="r-now mono">→ Booking Agent</span>
         </a></li><li class="reg-row reveal"><a href="archive.html#york-msc">
           <span class="r-no mono">A02</span>
@@ -224,9 +226,9 @@
         </a></li><li class="reg-row reveal"><a href="archive.html#hackathons">
           <span class="r-no mono">A03</span>
           <span class="r-yr mono">2023</span>
-          <span class="r-ti"><b><span lang="en">Weekend products</span><span lang="zh">周末产品</span></b><em><span lang="en">Hackathons & weekend builds</span><span lang="zh">黑客松与周末作品</span></em></span>
-          <span class="r-rule"><span lang="en">The model may propose; only a checked, approved action may be described as done.</span><span lang="zh">模型可以提议；只有经过校验和批准的动作才能说“已完成”。</span></span>
-          <span class="r-now mono">→ Refund Agent</span>
+          <span class="r-ti"><b><span lang="en">Weekend products</span><span lang="zh">周末产品</span></b><em><span lang="en">Hackathons</span><span lang="zh">黑客松</span></em></span>
+          <span class="r-rule"><span lang="en">Write down what it does not handle, next to what it does.</span><span lang="zh">把它处理不了的写清楚，放在它能做的旁边。</span></span>
+          <span class="r-now mono">→ Career OPS</span>
         </a></li><li class="reg-row reveal"><a href="archive.html#rebuilds">
           <span class="r-no mono">A04</span>
           <span class="r-yr mono">2023–24</span>
@@ -329,15 +331,15 @@
       <div class="sign">Kaihuan Huang</div>
       <div class="motto"><span lang="en">Measure first. Ship second. Keep the receipts.</span><span lang="zh">先测量，再上线，留好凭据。</span></div>
     </div>
-    <div><h4>Index</h4><ul><li><a href="works/booking-agent.html">01 Booking Agent</a></li><li><a href="works/pos-platform.html">02 POS Platform</a></li><li><a href="works/refund-agent.html">03 Refund Agent</a></li><li><a href="works/pii-detector.html">04 PII Detector</a></li><li><a href="works/career-ops.html">05 Career OPS</a></li><li><a href="works/llm-arch-cards.html">06 LLM Arch Cards</a></li><li><a href="works/governance-platform.html">07 AI Governance Platform</a></li><li><a href="works/ipot.html">08 IPOT Restaurant Platform</a></li><li><a href="works/loan-draw-review.html">09 Loan-Draw Review Controls</a></li></ul></div>
-    <div><h4><span lang="en">Elsewhere</span><span lang="zh">其他</span></h4><ul>
+    <div><p class="foot-h">Index</p><ul><li><a href="works/booking-agent.html">01 Booking Agent</a></li><li><a href="works/pos-platform.html">02 POS Platform</a></li><li><a href="works/refund-agent.html">03 Refund Agent</a></li><li><a href="works/pii-detector.html">04 PII Detector</a></li><li><a href="works/career-ops.html">05 Career OPS</a></li><li><a href="works/llm-arch-cards.html">06 LLM Arch Cards</a></li><li><a href="works/governance-platform.html">07 AI Governance Platform</a></li><li><a href="works/ipot.html">08 IPOT Restaurant Platform</a></li><li><a href="works/loan-draw-review.html">09 Loan-Draw Review Controls</a></li></ul></div>
+    <div><p class="foot-h"><span lang="en">Elsewhere</span><span lang="zh">其他</span></p><ul>
       <li><a href="https://github.com/kaihuan-huang">GitHub</a></li>
       <li><a href="https://linkedin.com/in/kaihuanhuang/">LinkedIn</a></li>
       <li><a href="resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a></li>
       <li><a href="archive.html"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></a></li>
       <li><a href="notes/"><span lang="en">Notes</span><span lang="zh">笔记</span></a></li>
     </ul></div>
-    <div><h4><span lang="en">Contact</span><span lang="zh">联系</span></h4><ul>
+    <div><p class="foot-h"><span lang="en">Contact</span><span lang="zh">联系</span></p><ul>
       <li><a href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a></li>
       <li><span lang="en">San Francisco Bay Area</span><span lang="zh">旧金山湾区</span></li>
     </ul></div>
