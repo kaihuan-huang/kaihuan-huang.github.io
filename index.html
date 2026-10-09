@@ -1,159 +1,348 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kaihuan Huang · AI Engineer</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230B5CAD'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FDE68A'/%3E%3C/svg%3E">
-<meta name="description" content="Kaihuan Huang, AI engineer in the San Francisco Bay Area: LLM agents for money-moving workflows with eval gates, human confirmation and audit trails. Five live demos.">
-<style>
-:root{
-  --bg:#FFFFFF;--ink:#16191A;--ink-2:#3D4447;--muted:#5F686B;--line:#DFE3E5;--panel:#F4F6F7;
-  --accent:#0B5CAD;--mark:#FDE68A;--mark-ink:#16191A;
-  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#101315;--ink:#E6EAEC;--ink-2:#C2CACD;--muted:#98A2A6;--line:#2A3134;--panel:#181D1F;
-  --accent:#6CB2F5;--mark:#5E5217;--mark-ink:#FBF1C2;
-}}
-:root[data-theme="dark"]{
-  --bg:#101315;--ink:#E6EAEC;--ink-2:#C2CACD;--muted:#98A2A6;--line:#2A3134;--panel:#181D1F;
-  --accent:#6CB2F5;--mark:#5E5217;--mark-ink:#FBF1C2;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;padding:48px 16px 64px}
-main{max-width:860px;margin:0 auto}
-h1{font-size:clamp(1.7rem,4vw,2.2rem);line-height:1.2;margin:0;letter-spacing:-.01em}
-h2{font-size:1.15rem;margin:48px 0 12px}
-p{margin:0 0 14px}
-a{color:var(--accent);text-underline-offset:2px}
-.dek{font-size:1.1rem;color:var(--ink-2);margin-top:12px}
-.meta{font-size:.85rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:14px}
-.badge{display:inline-block;font-size:.8rem;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--ink-2)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
-@media (max-width:680px){.grid{grid-template-columns:minmax(0,1fr)}}
-.pane{border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0;display:flex;flex-direction:column;gap:6px}
-.pane h3{font-size:1rem;margin:0}
-.pane p{margin:0;font-size:.95rem;color:var(--ink-2)}
-.pane .k{font-size:.8rem;color:var(--muted);font-family:var(--mono)}
-.pane .go{margin-top:auto;font-size:.9rem}
-mark{background:var(--mark);color:var(--mark-ink);border-radius:3px;padding:1px 3px}
-.role{margin:0 0 16px}
-.role b{display:block}
-.role .when{font-size:.85rem;color:var(--muted)}
-.role ul{margin:6px 0 0;padding-left:20px}
-.role li{margin-bottom:6px}
-dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}
-dt{color:var(--muted);font-size:.9rem}
-dd{margin:0}
-footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
-</style>
+<meta name="description" content="Kaihuan Huang, AI engineer: production Python services and evaluated LLM applications. Live demos with source, tests and measured results.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kaihuan Huang · AI Engineer">
+<meta property="og:description" content="Kaihuan Huang, AI engineer: production Python services and evaluated LLM applications. Live demos with source, tests and measured results.">
+<meta property="og:image" content="https://kaihuan-huang.github.io/assets/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f4f0e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120f" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/folio.css?v=3">
+<script src="assets/js/folio.js?v=3"></script>
 </head>
 <body>
-<main>
-  <header>
-    <h1>Kaihuan Huang</h1>
-    <p class="dek">AI engineer building LLM agents for money-moving workflows, with the controls finance teams need to go agentic: eval gates before launch, human confirmation before any agent action, audit trails, PII masking and duplicate-free processing.</p>
-    <div class="meta">
-      <span>San Francisco Bay Area, CA</span>
-      <span class="badge">US permanent resident</span>
-      <span><a href="https://github.com/kaihuan-huang">GitHub</a></span>
-      <span><a href="https://linkedin.com/in/kaihuanhuang/">LinkedIn</a></span>
-      <span><a href="mailto:kaihuanhuangus@gmail.com">kaihuanhuangus@gmail.com</a></span>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="zh">跳到正文</span></a>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="in-stage">
+    <div class="kicker">Selected work · 2025–2026</div>
+    <div class="in-name">Kaihuan <span class="red">Huang</span></div>
+    <div class="in-term" data-line="$ run evals --held-out  →  33/39 fully correct · 0 invented values"></div>
+    <div class="in-hint"><span lang="en">Click to enter</span><span lang="zh">点击进入</span></div>
+  </div>
+</div>
+<nav class="nav" id="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="stamp">KH</span><span class="b-txt">Kaihuan Huang — Folio</span></a>
+    <div class="nav-r">
+      <a class="pill hide-sm" href="resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a>
+      <button class="pill" id="lang-btn" type="button" aria-label="Switch language / 切换语言">中</button>
+      <button class="pill" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu"><span lang="en">Menu</span><span lang="zh">目录</span></button>
+    </div>
+  </div>
+</nav>
+<div class="menu" id="menu" aria-hidden="true">
+  <button class="pill menu-close" id="menu-close" type="button"><span lang="en">Close</span><span lang="zh">关闭</span></button>
+  <div class="wrap">
+    <ol>
+      <li><a href="index.html#top"><span class="m-num">00</span><span class="m-title"><span lang="en">Home</span><span lang="zh">首页</span></span><span class="m-tag">Start</span></a></li>
+<li><a href="works/booking-agent.html"><span class="m-num">01</span><span class="m-title">Booking Agent</span><span class="m-tag"><span lang="en">Bilingual LLM booking agent · 2026</span><span lang="zh">双语 LLM 预订助手 · 2026</span></span></a></li>
+<li><a href="works/pos-platform.html"><span class="m-num">02</span><span class="m-title">POS Platform</span><span class="m-tag"><span lang="en">Restaurant backend · 2026</span><span lang="zh">餐厅 POS 后端 · 2026</span></span></a></li>
+<li><a href="works/refund-agent.html"><span class="m-num">03</span><span class="m-title">Refund Agent</span><span class="m-tag"><span lang="en">Tool-calling agent · 2026</span><span lang="zh">工具调用 Agent · 2026</span></span></a></li>
+<li><a href="works/pii-detector.html"><span class="m-num">04</span><span class="m-title">PII Detector</span><span class="m-tag"><span lang="en">In-browser privacy model · 2026</span><span lang="zh">浏览器内隐私模型 · 2026</span></span></a></li>
+<li><a href="works/career-ops.html"><span class="m-num">05</span><span class="m-title">Career OPS</span><span class="m-tag"><span lang="en">Job-market data platform · 2026</span><span lang="zh">求职市场数据平台 · 2026</span></span></a></li>
+<li><a href="works/llm-arch-cards.html"><span class="m-num">06</span><span class="m-title">LLM Arch Cards</span><span class="m-tag"><span lang="en">Model internals · 2026</span><span lang="zh">模型内部结构 · 2026</span></span></a></li>
+<li><a href="works/governance-platform.html"><span class="m-num">07</span><span class="m-title">AI Governance Platform</span><span class="m-tag"><span lang="en">Privacy & policy platform · Sep 2026</span><span lang="zh">隐私与策略平台 · 2026 年 9 月</span></span></a></li>
+<li><a href="works/ipot.html"><span class="m-num">08</span><span class="m-title">IPOT Restaurant Platform</span><span class="m-tag"><span lang="en">Production · restaurant operations</span><span lang="zh">生产环境 · 餐饮运营</span></span></a></li>
+<li><a href="works/loan-draw-review.html"><span class="m-num">09</span><span class="m-title">Loan-Draw Review Controls</span><span class="m-tag"><span lang="en">Fintech lending · built, in review</span><span lang="zh">金融科技借贷 · 已完成，评审中</span></span></a></li>
+<li><a href="resume.html"><span class="m-num">10</span><span class="m-title"><span lang="en">Résumé</span><span lang="zh">简历</span></span><span class="m-tag">Web · print</span></a></li>
+<li><a href="archive.html"><span class="m-num">A</span><span class="m-title"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></span><span class="m-tag">2022 — 2025</span></a></li>
+<li><a href="notes/"><span class="m-num">11</span><span class="m-title"><span lang="en">Notes</span><span lang="zh">笔记</span></span><span class="m-tag">Writing</span></a></li>
+<li><a href="index.html#contact"><span class="m-num">12</span><span class="m-title"><span lang="en">Contact</span><span lang="zh">联系</span></span><span class="m-tag">Say hi</span></a></li>
+    </ol>
+    <div class="m-foot"><span><span lang="en">San Francisco Bay Area</span><span lang="zh">旧金山湾区</span></span><a href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a><a href="https://github.com/kaihuan-huang">GitHub</a></div>
+  </div>
+</div>
+
+<main id="main">
+  <header class="hero wrap" id="top">
+    <div class="hero-top mono">
+      <span>Section A–A · <span lang="en">Selected work</span><span lang="zh">作品选</span></span>
+      <span>SFO 37.7749°N 122.4194°W</span>
+    </div>
+    <h1>Kaihuan <span class="red">Huang</span></h1>
+    <div class="hero-row">
+      <div>
+        <p class="role-line"><span lang="en">AI Engineer — production Python services and evaluated LLM applications.</span><span lang="zh">AI 工程师 —— 生产级 Python 服务与经过评估的 LLM 应用。</span></p>
+        <p class="dek"><span lang="en">FastAPI, PostgreSQL, bilingual model evaluation and deterministic controls, turning operational workflows into AI features that hold up in production.</span><span lang="zh">FastAPI、PostgreSQL、双语模型评估与确定性控制，把业务流程做成能在生产中站得住的 AI 功能。</span></p>
+        <p class="avail mono"><span class="dot"></span><span lang="en">Open to AI / backend engineering roles · US permanent resident</span><span lang="zh">正在看 AI / 后端工程岗位 · 美国永久居民</span></p>
+      </div>
+      <div class="cta">
+        <a class="btn solid" href="mailto:huangkaihuan0216@gmail.com?subject=Intro%20call"><span lang="en">Email me →</span><span lang="zh">发邮件 →</span></a>
+        <a class="btn" href="resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a>
+      </div>
     </div>
   </header>
 
-  <section aria-labelledby="demos">
-    <h2 id="demos">Live demos</h2>
-    <p>Each one is an independent reimplementation on synthetic data, runs in the browser, and comes with its source and tests.</p>
-    <div class="grid">
-      <div class="pane">
-        <h3><a href="https://kaihuan-huang.github.io/refund-agent-demo/">Refund Agent</a></h3>
-        <p>An LLM agent proposes refunds through tool calls but cannot move money: fixed checks, human approval, then a hash-chained ledger entry. Includes a recorded run where the model over-refunds and the approver catches it.</p>
-        <span class="k">tool calls · approval gate · ledger · 16 tests</span>
-        <a class="go" href="https://kaihuan-huang.github.io/refund-agent-demo/">Open demo →</a>
-      </div>
-      <div class="pane">
-        <h3><a href="https://kaihuan-huang.github.io/booking-agent-demo/">Booking Agent</a></h3>
-        <p>A bilingual (English / 中文) booking agent that books only on an explicit yes. The model-only pilot got <mark>57%</mark> of messages right; rules plus a confirmation gate got <mark>85%</mark> with 0 invented values. Compare against your own local LLM.</p>
-        <span class="k">rule resolvers · confirmation gate · Ollama · 31 tests</span>
-        <a class="go" href="https://kaihuan-huang.github.io/booking-agent-demo/">Open demo →</a>
-      </div>
-      <div class="pane">
-        <h3><a href="https://kaihuan-huang.github.io/ledger-demo/">POS Platform</a></h3>
-        <p>Operate a restaurant POS: cashier terminal, kitchen display, guest phone and the Nalu assistant against two in-page services. Every tap and every agent tool shows its Router → Service → Model path and the rows it wrote; bookings carry an idempotency key, refunds wait for a manager, and the model is never called.</p>
-        <span class="k">atomic settle · bare-yes gate · idempotent bookings · manager-approved refunds · 28 tests</span>
-        <a class="go" href="https://kaihuan-huang.github.io/ledger-demo/">Open demo →</a>
-      </div>
-      <div class="pane">
-        <h3><a href="https://kaihuan-huang.github.io/pii-detector-demo/">PII Detector</a></h3>
-        <p>Finds card numbers, emails, phones and API keys before text reaches a model. openai/privacy-filter runs in your browser on WebGPU with <mark>0 network requests</mark> during detection.</p>
-        <span class="k">rules + Luhn · WebGPU · placeholders</span>
-        <a class="go" href="https://kaihuan-huang.github.io/pii-detector-demo/">Open demo →</a>
-      </div>
-      <div class="pane">
-        <h3><a href="https://kaihuan-huang.github.io/llm-arch-viz/">LLM Architecture Cards</a></h3>
-        <p>What is inside an open-weight model, from its config alone: attention layout, FFN, parameter split, one decoder layer with weight shapes, memory arithmetic, cross-checked against the Hub. No weights downloaded.</p>
-        <span class="k">torch meta device · transformers · MIT</span>
-        <a class="go" href="https://kaihuan-huang.github.io/llm-arch-viz/">Open demo →</a>
+  <section class="wall wrap" id="works" aria-labelledby="works-h">
+    <div class="wall-head">
+      <h2 id="works-h"><span lang="en">Six works on the wall</span><span lang="zh">墙上的六件作品</span></h2>
+      <span class="mono muted"><span lang="en">Live · independent reimplementations · synthetic data · source &amp; tests</span><span lang="zh">在线 · 独立重写 · 合成数据 · 附源码与测试</span></span>
+    </div>
+    <div class="works">
+      <article class="work reveal">
+        <a href="works/booking-agent.html">
+          <div class="w-label mono"><span>Nº01</span><span>EN / 中文</span></div>
+          <div class="frame"><img src="assets/img/works/booking.jpg" alt="Booking Agent demo: chat on the left, the fields the rules found on the right" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="dim mono"><span class="d-line"></span><span class="d-txt">33/39 held-out · 31 tests</span></div>
+          <div class="w-cap">
+            <span class="num">01</span><h3>Booking Agent</h3>
+            <span class="type"><span lang="en">Bilingual LLM booking agent · 2026</span><span lang="zh">双语 LLM 预订助手 · 2026</span></span>
+            <p><span lang="en">Books only on an explicit yes. Rules, not the model, fill every booking field.</span><span lang="zh">只有客人明确说“是”才下单；每个预订字段都由规则而不是模型填写。</span></p>
+          </div>
+        </a>
+      </article>
+      <article class="work reveal">
+        <a href="works/pos-platform.html">
+          <div class="w-label mono"><span>Nº02</span><span>Router → Service → Model</span></div>
+          <div class="frame"><img src="assets/img/works/pos.jpg" alt="POS platform demo: cashier terminal, kitchen display and guest phone" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="dim mono"><span class="d-line"></span><span class="d-txt">29 tests · atomic settle</span></div>
+          <div class="w-cap">
+            <span class="num">02</span><h3>POS Platform</h3>
+            <span class="type"><span lang="en">Restaurant backend · 2026</span><span lang="zh">餐厅 POS 后端 · 2026</span></span>
+            <p><span lang="en">Run a shift and watch every tap become one transaction. Refunds wait for a manager.</span><span lang="zh">跑一班营业，看每次点击变成一笔事务；退款要经理批准。</span></p>
+          </div>
+        </a>
+      </article>
+      <article class="work reveal">
+        <a href="works/refund-agent.html">
+          <div class="w-label mono"><span>Nº03</span><span>tool calls</span></div>
+          <div class="frame"><img src="assets/img/works/refund.jpg" alt="Refund Agent demo: proposed refund awaiting human approval" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="dim mono"><span class="d-line"></span><span class="d-txt">16 tests · approval gate</span></div>
+          <div class="w-cap">
+            <span class="num">03</span><h3>Refund Agent</h3>
+            <span class="type"><span lang="en">Tool-calling agent · 2026</span><span lang="zh">工具调用 Agent · 2026</span></span>
+            <p><span lang="en">The model proposes, it cannot pay. Fixed checks, human approval, hash-chained ledger.</span><span lang="zh">模型只能提议、不能付款：固定校验、人工批准、哈希链账本。</span></p>
+          </div>
+        </a>
+      </article>
+      <article class="work reveal">
+        <a href="works/pii-detector.html">
+          <div class="w-label mono"><span>Nº04</span><span>WebGPU</span></div>
+          <div class="frame"><img src="assets/img/works/pii.jpg" alt="PII Detector demo: text with detected cards, emails and keys highlighted" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="dim mono"><span class="d-line"></span><span class="d-txt">0 network requests</span></div>
+          <div class="w-cap">
+            <span class="num">04</span><h3>PII Detector</h3>
+            <span class="type"><span lang="en">In-browser privacy model · 2026</span><span lang="zh">浏览器内隐私模型 · 2026</span></span>
+            <p><span lang="en">Finds cards, emails, phones and API keys before text reaches a model.</span><span lang="zh">在文本进入模型之前，找出卡号、邮箱、电话和 API 密钥。</span></p>
+          </div>
+        </a>
+      </article>
+      <article class="work reveal">
+        <a href="works/career-ops.html">
+          <div class="w-label mono"><span>Nº05</span><span>live · Azure</span></div>
+          <div class="frame"><img src="assets/img/works/careerops.jpg" alt="Career OPS dashboard: open roles with source filters" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="dim mono"><span class="d-line"></span><span class="d-txt">264,148 postings</span></div>
+          <div class="w-cap">
+            <span class="num">05</span><h3>Career OPS</h3>
+            <span class="type"><span lang="en">Job-market data platform · 2026</span><span lang="zh">求职市场数据平台 · 2026</span></span>
+            <p><span lang="en">A traceable market feed from employer ATS APIs, extending open-source career-ops.</span><span lang="zh">基于雇主 ATS API 的可追溯岗位数据流，扩展自开源 career-ops。</span></p>
+          </div>
+        </a>
+      </article>
+      <article class="work reveal">
+        <a href="works/llm-arch-cards.html">
+          <div class="w-label mono"><span>Nº06</span><span>MIT</span></div>
+          <div class="frame"><img src="assets/img/works/llmarch.jpg" alt="LLM Architecture Cards: attention layout and parameter split of an open-weight model" loading="lazy" width="960" height="750"><span class="v-dim"></span></div>
+          <div class="dim mono"><span class="d-line"></span><span class="d-txt">config only · 0 weights</span></div>
+          <div class="w-cap">
+            <span class="num">06</span><h3>LLM Arch Cards</h3>
+            <span class="type"><span lang="en">Model internals · 2026</span><span lang="zh">模型内部结构 · 2026</span></span>
+            <p><span lang="en">What is inside an open-weight model, read from its config and checked against the Hub.</span><span lang="zh">只读配置文件，拆解开源模型的内部结构，并与 Hub 交叉核对。</span></p>
+          </div>
+        </a>
+      </article>
+    </div>
+    <div class="wall-foot mono">
+      <span>AI systems · 2025 — 2026 · Kaihuan Huang</span>
+      <span><span lang="en">Hover to measure · click to enter</span><span lang="zh">悬停测量 · 点击进入</span></span>
+    </div>
+  </section>
+
+  <div class="mq" aria-hidden="true"><div class="mq-track"><span class="mq-item">Eval in CI</span><span class="mq-item">Approval gates</span><span class="mq-item">PII masking</span><span class="mq-item">Audit trails</span><span class="mq-item">Idempotent writes</span><span class="mq-item">Bilingual LLM</span><span class="mq-item">FastAPI · Postgres</span><span class="mq-item">Row locks · outbox</span><span class="mq-item">Eval in CI</span><span class="mq-item">Approval gates</span><span class="mq-item">PII masking</span><span class="mq-item">Audit trails</span><span class="mq-item">Idempotent writes</span><span class="mq-item">Bilingual LLM</span><span class="mq-item">FastAPI · Postgres</span><span class="mq-item">Row locks · outbox</span></div></div>
+
+  <section class="sec wrap" id="deep" aria-labelledby="deep-h">
+    <div class="sec-head"><span class="n">01</span><h2 id="deep-h">— <span lang="en">Behind the wall</span><span lang="zh">墙后的工作</span></h2><span class="sec-note mono"><span lang="en">Production &amp; private code · design and results only</span><span lang="zh">生产与私有代码 · 只展示设计与结果</span></span></div>
+    <div class="deeps">
+      <article class="deep reveal">
+        <a href="works/governance-platform.html">
+          <div class="w-label mono"><span>Nº07</span><span><span lang="en">Independent rebuild · private repo</span><span lang="zh">独立重建 · 私有仓库</span></span></div>
+          <h3>AI Governance Platform</h3>
+          <span class="type"><span lang="en">Privacy & policy platform · Sep 2026</span><span lang="zh">隐私与策略平台 · 2026 年 9 月</span></span>
+          <p><span lang="en">Detect personal data in what employees send to AI tools, decide allow / mask / watch / block, and keep an audit trail no one can quietly edit.</span><span lang="zh">检测员工发往 AI 工具内容中的个人数据，决定放行 / 脱敏 / 观察 / 拦截，并保留无法被悄悄修改的审计记录。</span></p>
+          <ol class="flow" aria-label="Flow"><li class="step"><span><span lang="en">AI-tool event</span><span lang="zh">AI 工具事件</span></span></li><li class="step"><span><span lang="en">Outbox</span><span lang="zh">Outbox</span></span></li><li class="step"><span><span lang="en">Worker · row lock</span><span lang="zh">Worker · 行锁</span></span></li><li class="step gate"><span><span lang="en">Policy decides</span><span lang="zh">策略判定</span></span></li><li class="step"><span><span lang="en">Incident + audit chain</span><span lang="zh">事件 + 审计链</span></span></li></ol>
+          <span class="go mono"><span lang="en">Read the case →</span><span lang="zh">阅读案例 →</span></span>
+        </a>
+      </article>
+      <article class="deep reveal">
+        <a href="works/ipot.html">
+          <div class="w-label mono"><span>Nº08</span><span><span lang="en">Jackson Ventures · Apr 2026 — now</span><span lang="zh">Jackson Ventures · 2026 年 4 月至今</span></span></div>
+          <h3>IPOT Restaurant Platform</h3>
+          <span class="type"><span lang="en">Production · restaurant operations</span><span lang="zh">生产环境 · 餐饮运营</span></span>
+          <p><span lang="en">A reservation service real guests use, the POS money path, and Nalu, the bilingual booking agent.</span><span lang="zh">真实客人在用的预订服务、POS 资金链路，以及双语预订助手 Nalu。</span></p>
+          <ol class="flow" aria-label="Flow"><li class="step"><span><span lang="en">Guest · QR · Nalu</span><span lang="zh">客人 · 扫码 · Nalu</span></span></li><li class="step"><span><span lang="en">Reservation API</span><span lang="zh">Reservation API</span></span></li><li class="step"><span><span lang="en">Twilio Verify</span><span lang="zh">Twilio 验证</span></span></li><li class="step gate"><span><span lang="en">One transaction</span><span lang="zh">单一事务</span></span></li><li class="step"><span><span lang="en">PostgreSQL</span><span lang="zh">PostgreSQL</span></span></li></ol>
+          <span class="go mono"><span lang="en">Read the case →</span><span lang="zh">阅读案例 →</span></span>
+        </a>
+      </article>
+      <article class="deep reveal">
+        <a href="works/loan-draw-review.html">
+          <div class="w-label mono"><span>Nº09</span><span><span lang="en">BloomFrontier · Jackson Ventures · 2026</span><span lang="zh">BloomFrontier · Jackson Ventures · 2026</span></span></div>
+          <h3>Loan-Draw Review Controls</h3>
+          <span class="type"><span lang="en">Fintech lending · built, in review</span><span lang="zh">金融科技借贷 · 已完成，评审中</span></span>
+          <p><span lang="en">Money leaves only after two people sign off, the same draw cannot be funded twice, and every step lands in a verifiable audit chain.</span><span lang="zh">资金只在两人签字后放出，同一笔提款不能重复放款，每一步都写入可验证的审计链。</span></p>
+          <ol class="flow" aria-label="Flow"><li class="step"><span><span lang="en">Draw request</span><span lang="zh">提款申请</span></span></li><li class="step"><span><span lang="en">AI checks (team)</span><span lang="zh">AI 检查（团队）</span></span></li><li class="step"><span><span lang="en">Review queue</span><span lang="zh">审核队列</span></span></li><li class="step gate"><span><span lang="en">Maker + checker?</span><span lang="zh">制单 + 复核？</span></span></li><li class="step"><span><span lang="en">Fund + audit chain</span><span lang="zh">放款 + 审计链</span></span></li></ol>
+          <span class="go mono"><span lang="en">Read the case →</span><span lang="zh">阅读案例 →</span></span>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="archive" aria-labelledby="archive-h">
+    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— <span lang="en">Learning Archive</span><span lang="zh">学习档案</span></h2><span class="sec-note mono"><span lang="en">2022 — 2025 · what each early project taught me</span><span lang="zh">2022 — 2025 · 每个早期项目教会我的事</span></span></div>
+    <p class="arch-intro"><span lang="en">Earlier projects that are not portfolio pieces on their own: tutorials, coursework, hackathons and prototypes. Each one taught me a rule I still build by, and each rule points to the work where it shows today.</span><span lang="zh">单独拿出来不够格当作品的早期项目：教程、课程、黑客松和原型。每一个都教会了我一条至今仍在用的规则，每条规则都指向今天体现它的作品。</span></p>
+    <ol class="register"><li class="reg-head mono" aria-hidden="true"><span>No.</span><span><span lang="en">Year</span><span lang="zh">年份</span></span><span><span lang="en">Sheet</span><span lang="zh">图纸</span></span><span><span lang="en">The rule it left me</span><span lang="zh">留下的规则</span></span><span><span lang="en">Shows today in</span><span lang="zh">今天体现在</span></span></li><li class="reg-row reveal"><a href="archive.html#first-llm-apps">
+          <span class="r-no mono">A01</span>
+          <span class="r-yr mono">2022–23</span>
+          <span class="r-ti"><b><span lang="en">First LLM apps</span><span lang="zh">第一批 LLM 应用</span></b><em><span lang="en">Self-started</span><span lang="zh">自发项目</span></em></span>
+          <span class="r-rule"><span lang="en">Measure on a held-out set before claiming it works; keep secrets out of the repo and scan before every push.</span><span lang="zh">先在留出集上测量再下结论；密钥不进仓库，每次推送前扫描。</span></span>
+          <span class="r-now mono">→ Booking Agent</span>
+        </a></li><li class="reg-row reveal"><a href="archive.html#york-msc">
+          <span class="r-no mono">A02</span>
+          <span class="r-yr mono">2023–25</span>
+          <span class="r-ti"><b><span lang="en">York MSc in AI</span><span lang="zh">约克大学 AI 硕士</span></b><em><span lang="en">MSc coursework</span><span lang="zh">硕士课程</span></em></span>
+          <span class="r-rule"><span lang="en">Report recall and precision per category and per language, and state the limits next to the numbers.</span><span lang="zh">按类别、按语言报告召回率和精确率，并把局限写在数字旁边。</span></span>
+          <span class="r-now mono">→ PII Detector</span>
+        </a></li><li class="reg-row reveal"><a href="archive.html#hackathons">
+          <span class="r-no mono">A03</span>
+          <span class="r-yr mono">2023</span>
+          <span class="r-ti"><b><span lang="en">Weekend products</span><span lang="zh">周末产品</span></b><em><span lang="en">Hackathons & weekend builds</span><span lang="zh">黑客松与周末作品</span></em></span>
+          <span class="r-rule"><span lang="en">The model may propose; only a checked, approved action may be described as done.</span><span lang="zh">模型可以提议；只有经过校验和批准的动作才能说“已完成”。</span></span>
+          <span class="r-now mono">→ Refund Agent</span>
+        </a></li><li class="reg-row reveal"><a href="archive.html#rebuilds">
+          <span class="r-no mono">A04</span>
+          <span class="r-yr mono">2023–24</span>
+          <span class="r-ti"><b><span lang="en">Inside the models</span><span lang="zh">拆开模型看</span></b><em><span lang="en">Learning by rebuilding</span><span lang="zh">照着重建来学</span></em></span>
+          <span class="r-rule"><span lang="en">Know a model's shapes and memory cost before downloading it.</span><span lang="zh">下载模型之前，先弄清它的形状和内存成本。</span></span>
+          <span class="r-now mono">→ LLM Arch Cards</span>
+        </a></li><li class="reg-row reveal"><a href="archive.html#django-ai-app">
+          <span class="r-no mono">A05</span>
+          <span class="r-yr mono">2023–24</span>
+          <span class="r-ti"><b><span lang="en">Django AI Web App</span><span lang="zh">Django AI 网站</span></b><em><span lang="en">Team product</span><span lang="zh">团队产品</span></em></span>
+          <span class="r-rule"><span lang="en">Tests and a release gate before production; every deploy traceable to a commit.</span><span lang="zh">上生产之前要有测试和发布闸门；每次部署都能追溯到提交。</span></span>
+          <span class="r-now mono">→ IPOT Restaurant Platform</span>
+        </a></li><li class="reg-row reveal"><a href="archive.html#agent-prototypes">
+          <span class="r-no mono">A06</span>
+          <span class="r-yr mono">2025</span>
+          <span class="r-ti"><b><span lang="en">Generated apps</span><span lang="zh">生成出来的应用</span></b><em><span lang="en">AI-agent prototypes</span><span lang="zh">AI Agent 原型</span></em></span>
+          <span class="r-rule"><span lang="en">Write the failing test first, even when an agent writes the code.</span><span lang="zh">即使代码由 Agent 来写，也先写失败的测试。</span></span>
+          <span class="r-now mono">→ AI Governance Platform</span>
+        </a></li></ol>
+    <div class="cta left"><a class="btn" href="archive.html"><span lang="en">Open the archive →</span><span lang="zh">打开学习档案 →</span></a></div>
+  </section>
+
+  <section class="sec wrap" id="about" aria-labelledby="about-h">
+    <div class="sec-head"><span class="n">03</span><h2 id="about-h">— <span lang="en">The Engineer</span><span lang="zh">工程师</span></h2></div>
+    <div class="study">
+      <figure class="fig reveal">
+        <div class="plate" id="plate"><svg viewBox="0 0 400 500" role="img" aria-labelledby="plate-t">
+            <title id="plate-t">Section drawing: a message passes rules, then an explicit-yes gate, before any action is written to an audit ledger.</title>
+            <defs>
+              <pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="var(--line)" stroke-width=".5"/></pattern>
+              <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker>
+            </defs>
+            <rect width="400" height="500" fill="url(#g)"/>
+            <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" fill="var(--muted)" letter-spacing=".5">
+              <text x="20" y="28">SECTION B–B</text><text x="380" y="28" text-anchor="end">SCALE 1:1</text>
+            </g>
+            <g fill="none" stroke="var(--ink)" stroke-width="1.4">
+              <rect x="70" y="56" width="220" height="50"/>
+              <rect x="70" y="146" width="220" height="50"/>
+              <path d="M180 236 L250 276 L180 316 L110 276 Z" stroke="var(--red)" stroke-width="1.8"/>
+              <rect x="70" y="356" width="220" height="44"/>
+              <rect x="70" y="430" width="60" height="40"/><rect x="150" y="430" width="60" height="40"/><rect x="230" y="430" width="60" height="40"/>
+            </g>
+            <g stroke="var(--ink)" stroke-width="1.2" marker-end="url(#ar)">
+              <line x1="180" y1="106" x2="180" y2="144"/>
+              <line x1="180" y1="196" x2="180" y2="234"/>
+              <line x1="180" y1="316" x2="180" y2="354"/>
+              <line x1="180" y1="400" x2="180" y2="428"/>
+            </g>
+            <g stroke="var(--muted)" stroke-width="1"><line x1="130" y1="450" x2="148" y2="450"/><line x1="210" y1="450" x2="228" y2="450"/></g>
+            <g font-family="Archivo, sans-serif" fill="var(--ink)" text-anchor="middle">
+              <text x="180" y="78" font-size="13" font-weight="600">MESSAGE</text>
+              <text x="180" y="96" font-size="11" fill="var(--ink-2)">“Table for 4 tomorrow at 7”</text>
+              <text x="180" y="168" font-size="13" font-weight="600">RULES</text>
+              <text x="180" y="186" font-size="11" fill="var(--ink-2)">resolve fields · no model call</text>
+              <text x="180" y="273" font-size="13" font-weight="600" fill="var(--red)">EXPLICIT YES?</text>
+              <text x="180" y="290" font-size="10" fill="var(--ink-2)">else: ask</text>
+              <text x="180" y="376" font-size="13" font-weight="600">ACTION</text>
+              <text x="180" y="392" font-size="10.5" fill="var(--ink-2)" font-family="JetBrains Mono, monospace">create_reservation()</text>
+              <g font-size="9" font-family="JetBrains Mono, monospace" fill="var(--ink-2)"><text x="100" y="454">#a1f3</text><text x="180" y="454">#7c02</text><text x="260" y="454">#e9b4</text></g>
+            </g>
+            <!-- dimension line -->
+            <g stroke="var(--red)" stroke-width="1"><line x1="330" y1="56" x2="330" y2="400"/><line x1="324" y1="56" x2="336" y2="56"/><line x1="324" y1="400" x2="336" y2="400"/></g>
+            <text x="346" y="228" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--red)" transform="rotate(90 346 228)" text-anchor="middle">0 INVENTED VALUES</text>
+            <text x="34" y="452" font-family="JetBrains Mono, monospace" font-size="9" fill="var(--muted)" transform="rotate(-90 34 452)">LEDGER</text>
+          </svg></div>
+        <figcaption class="mono"><span>FIG. 01 — <span lang="en">The model proposes; the system decides</span><span lang="zh">模型提议，系统决定</span></span><span>York · MSc</span></figcaption>
+      </figure>
+      <div class="reveal">
+        <span class="kicker"><span lang="en">Profile</span><span lang="zh">简介</span></span>
+        <h3><span lang="en">Measured before it ships</span><span lang="zh">上线之前，先量清楚</span></h3>
+        <p class="quote"><span lang="en">“A model's answer is a proposal. What runs is decided by rules, tests and an explicit yes.”</span><span lang="zh">“模型的回答只是提议。真正执行什么，由规则、测试和一句明确的‘是’来决定。”</span></p>
+        <p><span lang="en">I build production Python services and evaluated LLM applications. At <b>Jackson Ventures</b> I shipped a reservation service real guests use, led the IPOT POS backend, rebuilt <b>Nalu</b> after its LLM pilot invented booking values, and built loan-draw review controls for <b>BloomFrontier</b>. Before that, at <b>Polygraf.ai</b>, I built PII detection and policy enforcement for text sent to AI tools.</span><span lang="zh">我做生产级 Python 服务和经过评估的 LLM 应用。在 <b>Jackson Ventures</b>，我上线了真实客人在用的预订服务，主导 IPOT 的 POS 后端，在 LLM 试点编造预订字段后重建了 <b>Nalu</b>，并为 <b>BloomFrontier</b> 构建提款审核控制。此前在 <b>Polygraf.ai</b>，我为发往 AI 工具的文本构建 PII 检测与策略执行。</span></p>
+        <p><span lang="en">Every number on this site names where it was measured. Where the code is private, the case page says so.</span><span lang="zh">本站每个数字都注明测量来源；代码不公开的，案例页会直接说明。</span></p>
+        <div class="stats"><div class="stat"><div class="st-num">33/39</div><div class="st-lab"><span lang="en">held-out cases fully correct · Nalu</span><span lang="zh">留出集全字段正确 · Nalu</span></div></div><div class="stat"><div class="st-num">264K</div><div class="st-lab"><span lang="en">postings collected · Sep 30 snapshot</span><span lang="zh">岗位采集量 · 9 月 30 日快照</span></div></div><div class="stat"><div class="st-num">136<small> ms</small></div><div class="st-lab"><span lang="en">p95 PII detection · local GPU</span><span lang="zh">PII 检测 p95 · 本地 GPU</span></div></div><div class="stat"><div class="st-num">243</div><div class="st-lab"><span lang="en">tests in my governance platform</span><span lang="zh">我的治理平台中的测试数</span></div></div></div>
+        <ul class="roles"><li><span class="when mono">Apr 2026 — now</span><div><b>AI Engineer · Jackson Ventures</b><span class="at"><span lang="en">IPOT restaurant platform · BloomFrontier lending · San Francisco Bay Area</span><span lang="zh">IPOT 餐饮平台 · BloomFrontier 借贷 · 旧金山湾区</span></span><ul><li><span lang="en">Built and deployed a FastAPI/PostgreSQL reservation service used by real guests: Twilio Verify OTP, SMS delivery tracking, self-service changes.</span><span lang="zh">构建并上线服务真实客人的 FastAPI/PostgreSQL 预订服务：Twilio Verify 验证码、短信送达跟踪、自助改期。</span></li><li><span lang="en">Rebuilt Nalu's bilingual booking flow with deterministic field resolution and explicit confirmation: 33/39 held-out cases fully correct; 35-case eval suite in CI.</span><span lang="zh">用确定性字段解析与明确确认重建 Nalu 双语预订流程：留出集 33/39 全字段正确；35 个评估用例接入 CI。</span></li><li><span lang="en">Led POS backend architecture: atomic settlement and refunds, sale-time price snapshots, audited voids.</span><span lang="zh">主导 POS 后端架构：原子结算与退款、售出时价格快照、可审计作废。</span></li><li><span lang="en">Built loan-draw review controls for BloomFrontier (in review): two-person approval, row locks, repeat-funding checks, hash-chained audit, outbox + Temporal recovery.</span><span lang="zh">为 BloomFrontier 构建提款审核控制（评审中）：双人审批、行锁、重复放款检查、哈希链审计、outbox + Temporal 恢复。</span></li></ul></div></li><li><span class="when mono">Oct 2025 — Jun 2026</span><div><b>AI Engineer Intern · Polygraf.ai</b><span class="at"><span lang="en">Remote, USA</span><span lang="zh">远程 · 美国</span></span><ul><li><span lang="en">PII detection with Presidio, transformer NER and validation rules; placeholder masking for LLM inputs; deterministic allow / mask / watch / block decisions.</span><span lang="zh">用 Presidio、Transformer NER 与校验规则做 PII 检测；LLM 输入占位符脱敏；确定性的放行 / 脱敏 / 观察 / 拦截。</span></li><li><span lang="en">React/TypeScript and FastAPI governance dashboard: policy, credential and incident workflows.</span><span lang="zh">React/TypeScript + FastAPI 治理后台：策略、凭据与事件流程。</span></li></ul></div></li><li><span class="when mono">2023 — 2025</span><div><b>MSc Computer Science with Artificial Intelligence</b><span class="at"><span lang="en">University of York, UK</span><span lang="zh">英国约克大学</span></span></div></li></ul>
+        <dl class="skills"><dt>AI / LLM</dt><dd>tool calling, model evaluation, RAG (pgvector), Ollama, Hugging Face Transformers, PII detection &amp; masking</dd><dt>Backend / Data</dt><dd>Python, TypeScript, SQL · FastAPI, SQLAlchemy, Alembic, PostgreSQL, Redis, SQLite/FTS5, Temporal</dd><dt>Reliability</dt><dd>transactions, row locks, transactional outbox, idempotency, RBAC, hash-chained audit trails</dd><dt>Delivery</dt><dd>Docker, AWS, Azure, OpenTofu, GitHub Actions, pytest, Playwright, Vitest · React, Next.js</dd><dt>Spoken</dt><dd>English, 普通话, 粤语, Español</dd></dl>
       </div>
     </div>
   </section>
 
-  <section aria-labelledby="work">
-    <h2 id="work">Work</h2>
-    <div class="role">
-      <b>AI Engineer · <a href="https://ipot.food/">IPOT (Jackson Ventures)</a>, restaurant-operations platform</b>
-      <span class="when">Apr 2026 – present · San Francisco Bay Area</span>
-      <ul>
-        <li>Rebuilt Nalu, a bilingual booking agent, after measuring the LLM-only pilot at 57% fully correct with invented values: rule-based field resolvers and an explicit confirmation gate. Held-out accuracy 85% (33/39), 0 invented values; a 35-case eval set gates CI; live replay 114 turns with 0 failures.</li>
-        <li>Built the Reservation API from the first commit, now in production with real guests: slot capacity, Twilio Verify OTP, SMS with self-service reschedule/cancel, guest self check-in, staff portal, UTM attribution feeding Google Ads offline conversions.</li>
-        <li>Own POS money movement: atomic bill settlement, tips, refunds and audited voids; revived a long-failing test suite and fixed diverged Alembic heads.</li>
-        <li>Audited a 46-item delivery tracker against the code: 6 authentication gaps and 3 routers never mounted. Added coding-agent hooks that hard-block production deploys and migrations.</li>
-      </ul>
-    </div>
-    <div class="role">
-      <b>AI Engineer Intern · <a href="https://www.polygraf.ai/">Polygraf.ai</a></b>
-      <span class="when">Oct 2025 – Jun 2026 · Remote</span>
-      <ul>
-        <li>Layered PII detector (Presidio, rules with check digits, a transformer NER model) for the English and Chinese text employees send to AI tools.</li>
-        <li>Policy engine as one pure function (allow / mask / watch / block) and a masked LLM chat where placeholders replace personal data.</li>
-        <li>Event pipeline on a Postgres transactional outbox with SKIP LOCKED workers, feeding an append-only, hash-chained audit trail with two-step enforcement.</li>
-      </ul>
-    </div>
-    <div class="role">
-      <b>AI-usage governance platform, independent rebuild</b>
-      <span class="when">Sep 2026 · Python, FastAPI, PostgreSQL, pgvector, WebGPU, AWS (OpenTofu)</span>
-      <ul>
-        <li>Rules plus openai/privacy-filter: p95 136 ms on a local GPU, rules alone p95 0.5 ms, on a 5,466-record bilingual benchmark gated in CI.</li>
-        <li>Outbox pipeline: 63 → 125 events/s from 1 → 3 workers with zero duplicates across 9,000 findings; found and fixed a lease-expiry race. 279 tests, 16 architecture decision records.</li>
-      </ul>
+  <section class="sec wrap" id="contact" aria-labelledby="contact-h">
+    <div class="sec-head"><span class="n">04</span><h2 id="contact-h">— <span lang="en">The Invitation</span><span lang="zh">邀请</span></h2></div>
+    <div class="invite reveal">
+      <span class="kicker"><span lang="en">Hiring for AI or backend engineering?</span><span lang="zh">在招 AI 或后端工程师？</span></span>
+      <div class="big"><span lang="en">Let's build<br>what <span class="red">ships</span></span><span lang="zh">一起做<br>能<span class="red">上线</span>的东西</span></div>
+      <a class="mail" href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a>
+      <div class="cta">
+        <a class="btn solid" href="mailto:huangkaihuan0216@gmail.com?subject=20-minute%20intro%20call"><span lang="en">Book a 20-min intro →</span><span lang="zh">约 20 分钟聊聊 →</span></a>
+        <a class="btn" href="resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a>
+        <a class="btn" href="https://github.com/kaihuan-huang">GitHub</a>
+      </div>
+      <p><span lang="en">San Francisco Bay Area · US permanent resident, no sponsorship needed.</span><span lang="zh">旧金山湾区 · 美国永久居民，无需工作签证担保。</span></p>
     </div>
   </section>
-
-  <section aria-labelledby="edu">
-    <h2 id="edu">Education</h2>
-    <dl>
-      <dt>2025</dt><dd>MSc Computer Science with Artificial Intelligence, University of York, UK</dd>
-      <dt>2022</dt><dd>Certificate in Full Stack Web Development, UC Berkeley Extension</dd>
-    </dl>
-  </section>
-
-  <section aria-labelledby="skills">
-    <h2 id="skills">Skills</h2>
-    <dl>
-      <dt>AI / LLM</dt><dd>tool-calling agents, confirmation gates, eval gates, PII masking, RAG (pgvector), Ollama, Claude Code</dd>
-      <dt>Controls</dt><dd>hash-chained audit trails, two-step enforcement, envelope encryption (KMS), idempotent writes</dd>
-      <dt>Languages &amp; backend</dt><dd>Python, TypeScript, SQL; FastAPI, SQLAlchemy 2.0, Alembic, PostgreSQL, Redis</dd>
-      <dt>Infra</dt><dd>AWS (ECS Fargate, RDS, KMS), OpenTofu, Docker, GitHub Actions, Twilio; React, Next.js</dd>
-      <dt>Spoken</dt><dd>English, Mandarin, Cantonese, Spanish</dd>
-    </dl>
-  </section>
-
-  <footer>
-    <a href="https://kaihuan-huang.github.io/refund-agent-demo/">Refund Agent</a> · <a href="https://kaihuan-huang.github.io/booking-agent-demo/">Booking Agent Demo</a> · <a href="https://kaihuan-huang.github.io/ledger-demo/">POS Platform</a> · <a href="https://kaihuan-huang.github.io/pii-detector-demo/">PII Detector Demo</a> · <a href="https://kaihuan-huang.github.io/llm-arch-viz/">LLM Architecture Cards</a> · <a href="https://github.com/kaihuan-huang">GitHub</a> · <a href="https://linkedin.com/in/kaihuanhuang/">LinkedIn</a>
-  </footer>
 </main>
+<footer class="foot wrap">
+  <div class="cols">
+    <div>
+      <div class="sign">Kaihuan Huang</div>
+      <div class="motto"><span lang="en">Measure first. Ship second. Keep the receipts.</span><span lang="zh">先测量，再上线，留好凭据。</span></div>
+    </div>
+    <div><h4>Index</h4><ul><li><a href="works/booking-agent.html">01 Booking Agent</a></li><li><a href="works/pos-platform.html">02 POS Platform</a></li><li><a href="works/refund-agent.html">03 Refund Agent</a></li><li><a href="works/pii-detector.html">04 PII Detector</a></li><li><a href="works/career-ops.html">05 Career OPS</a></li><li><a href="works/llm-arch-cards.html">06 LLM Arch Cards</a></li><li><a href="works/governance-platform.html">07 AI Governance Platform</a></li><li><a href="works/ipot.html">08 IPOT Restaurant Platform</a></li><li><a href="works/loan-draw-review.html">09 Loan-Draw Review Controls</a></li></ul></div>
+    <div><h4><span lang="en">Elsewhere</span><span lang="zh">其他</span></h4><ul>
+      <li><a href="https://github.com/kaihuan-huang">GitHub</a></li>
+      <li><a href="https://linkedin.com/in/kaihuanhuang/">LinkedIn</a></li>
+      <li><a href="resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a></li>
+      <li><a href="archive.html"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></a></li>
+      <li><a href="notes/"><span lang="en">Notes</span><span lang="zh">笔记</span></a></li>
+    </ul></div>
+    <div><h4><span lang="en">Contact</span><span lang="zh">联系</span></h4><ul>
+      <li><a href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a></li>
+      <li><span lang="en">San Francisco Bay Area</span><span lang="zh">旧金山湾区</span></li>
+    </ul></div>
+  </div>
+  <div class="base mono"><span>© <span id="year">2026</span> Kaihuan Huang</span><span>SFO 37.7749°N 122.4194°W</span></div>
+</footer>
 </body>
 </html>

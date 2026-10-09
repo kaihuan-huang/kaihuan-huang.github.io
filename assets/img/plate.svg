@@ -1,0 +1,40 @@
+<svg viewBox="0 0 400 500" role="img" aria-labelledby="plate-t">
+            <title id="plate-t">Section drawing: a message passes rules, then an explicit-yes gate, before any action is written to an audit ledger.</title>
+            <defs>
+              <pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="var(--line)" stroke-width=".5"/></pattern>
+              <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--ink)"/></marker>
+            </defs>
+            <rect width="400" height="500" fill="url(#g)"/>
+            <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="10" fill="var(--muted)" letter-spacing=".5">
+              <text x="20" y="28">SECTION B–B</text><text x="380" y="28" text-anchor="end">SCALE 1:1</text>
+            </g>
+            <g fill="none" stroke="var(--ink)" stroke-width="1.4">
+              <rect x="70" y="56" width="220" height="50"/>
+              <rect x="70" y="146" width="220" height="50"/>
+              <path d="M180 236 L250 276 L180 316 L110 276 Z" stroke="var(--red)" stroke-width="1.8"/>
+              <rect x="70" y="356" width="220" height="44"/>
+              <rect x="70" y="430" width="60" height="40"/><rect x="150" y="430" width="60" height="40"/><rect x="230" y="430" width="60" height="40"/>
+            </g>
+            <g stroke="var(--ink)" stroke-width="1.2" marker-end="url(#ar)">
+              <line x1="180" y1="106" x2="180" y2="144"/>
+              <line x1="180" y1="196" x2="180" y2="234"/>
+              <line x1="180" y1="316" x2="180" y2="354"/>
+              <line x1="180" y1="400" x2="180" y2="428"/>
+            </g>
+            <g stroke="var(--muted)" stroke-width="1"><line x1="130" y1="450" x2="148" y2="450"/><line x1="210" y1="450" x2="228" y2="450"/></g>
+            <g font-family="Archivo, sans-serif" fill="var(--ink)" text-anchor="middle">
+              <text x="180" y="78" font-size="13" font-weight="600">MESSAGE</text>
+              <text x="180" y="96" font-size="11" fill="var(--ink-2)">“Table for 4 tomorrow at 7”</text>
+              <text x="180" y="168" font-size="13" font-weight="600">RULES</text>
+              <text x="180" y="186" font-size="11" fill="var(--ink-2)">resolve fields · no model call</text>
+              <text x="180" y="273" font-size="13" font-weight="600" fill="var(--red)">EXPLICIT YES?</text>
+              <text x="180" y="290" font-size="10" fill="var(--ink-2)">else: ask</text>
+              <text x="180" y="376" font-size="13" font-weight="600">ACTION</text>
+              <text x="180" y="392" font-size="10.5" fill="var(--ink-2)" font-family="JetBrains Mono, monospace">create_reservation()</text>
+              <g font-size="9" font-family="JetBrains Mono, monospace" fill="var(--ink-2)"><text x="100" y="454">#a1f3</text><text x="180" y="454">#7c02</text><text x="260" y="454">#e9b4</text></g>
+            </g>
+            <!-- dimension line -->
+            <g stroke="var(--red)" stroke-width="1"><line x1="330" y1="56" x2="330" y2="400"/><line x1="324" y1="56" x2="336" y2="56"/><line x1="324" y1="400" x2="336" y2="400"/></g>
+            <text x="346" y="228" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--red)" transform="rotate(90 346 228)" text-anchor="middle">0 INVENTED VALUES</text>
+            <text x="34" y="452" font-family="JetBrains Mono, monospace" font-size="9" fill="var(--muted)" transform="rotate(-90 34 452)">LEDGER</text>
+          </svg>

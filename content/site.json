@@ -1,0 +1,1469 @@
+{
+  "_readme": "Single source for the site. Edit here, then run `python3 build.py`. Every metric carries its source; 'private' sources are named but not linked. Strings are trusted HTML.",
+  "person": {
+    "name_first": "Kaihuan",
+    "name_last": "Huang",
+    "email": "huangkaihuan0216@gmail.com",
+    "github": "https://github.com/kaihuan-huang",
+    "linkedin": "https://linkedin.com/in/kaihuanhuang/",
+    "location": {
+      "en": "San Francisco Bay Area",
+      "zh": "旧金山湾区"
+    },
+    "coords": "SFO 37.7749°N 122.4194°W",
+    "role_line": {
+      "en": "AI Engineer — production Python services and evaluated LLM applications.",
+      "zh": "AI 工程师 —— 生产级 Python 服务与经过评估的 LLM 应用。"
+    },
+    "dek": {
+      "en": "FastAPI, PostgreSQL, bilingual model evaluation and deterministic controls, turning operational workflows into AI features that hold up in production.",
+      "zh": "FastAPI、PostgreSQL、双语模型评估与确定性控制，把业务流程做成能在生产中站得住的 AI 功能。"
+    }
+  },
+  "works": [
+    {
+      "slug": "booking-agent",
+      "title": "Booking Agent",
+      "tag": "EN / 中文",
+      "dim": "33/39 held-out · 31 tests",
+      "img": "booking.jpg",
+      "alt": "Booking Agent demo: chat on the left, the fields the rules found on the right",
+      "type": {
+        "en": "Bilingual LLM booking agent · 2026",
+        "zh": "双语 LLM 预订助手 · 2026"
+      },
+      "pitch": {
+        "en": "Books only on an explicit yes. Rules, not the model, fill every booking field.",
+        "zh": "只有客人明确说“是”才下单；每个预订字段都由规则而不是模型填写。"
+      },
+      "demo": "https://kaihuan-huang.github.io/booking-agent-demo/",
+      "repo": "https://github.com/kaihuan-huang/booking-agent-demo",
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole engineer. Independent reimplementation of Nalu, the guest chat agent I rebuilt at IPOT",
+            "zh": "独立完成。对我在 IPOT 重建的客人助手 Nalu 的独立重写"
+          }
+        ],
+        [
+          "Stack",
+          "JavaScript · Ollama (optional) · Qwen2.5-7B-Instruct"
+        ],
+        [
+          "Data",
+          {
+            "en": "Synthetic conversations, fixed clock",
+            "zh": "合成对话，固定时钟"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Live demo · Nalu itself is in pre-launch testing",
+            "zh": "在线演示 · Nalu 本身处于预发布测试"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "An LLM-only pilot of Nalu got 17 of 30 messages fully right (57%) and invented booking values that guests never gave. A wrong party size or time is a real table problem on a Friday night.",
+        "zh": "Nalu 的纯 LLM 试点只有 17/30 条消息完全正确（57%），还会编造客人没给的预订值。人数或时间错了，周五晚上就是真实的桌位事故。"
+      },
+      "approach": [
+        {
+          "en": "Rules, not a model, read date, time, party size and name. Anything ambiguous (“at 7”) becomes a question.",
+          "zh": "日期、时间、人数和姓名由规则读取，不交给模型；任何含糊处（“7 点”）都变成追问。"
+        },
+        {
+          "en": "One action, <code>create_reservation</code>, runs only after a bare, explicit yes. “ok” or “好” asks again. The result stays <em>pending</em> until the restaurant confirms.",
+          "zh": "唯一的动作 <code>create_reservation</code> 只在明确的“是”之后执行；“ok”“好”会再问一次。结果在餐厅确认前保持 <em>pending</em>。"
+        },
+        {
+          "en": "With Ollama running locally, the page asks your own model to read the same conversation and marks where it guessed.",
+          "zh": "本地运行 Ollama 时，页面会让你自己的模型读同一段对话，并标出它猜测的地方。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Guest message",
+          "zh": "客人消息"
+        },
+        {
+          "en": "Rules read fields",
+          "zh": "规则读字段"
+        },
+        {
+          "en": "Ask if unclear",
+          "zh": "不清楚就问"
+        },
+        {
+          "en": "Explicit yes?",
+          "zh": "明确说“是”？",
+          "gate": true
+        },
+        {
+          "en": "create_reservation · pending",
+          "zh": "create_reservation · 待确认"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "17/30 → 33/39",
+          "l": {
+            "en": "model-only pilot vs rules + gate, held-out (57% → 85%)",
+            "zh": "纯模型试点 vs 规则 + 闸门，留出集（57% → 85%）"
+          },
+          "src": "booking-agent-demo/index.html",
+          "url": "https://github.com/kaihuan-huang/booking-agent-demo/blob/main/index.html"
+        },
+        {
+          "v": "0",
+          "l": {
+            "en": "invented values on the held-out set",
+            "zh": "留出集上编造的值"
+          },
+          "src": "booking-agent-demo/README.md",
+          "url": "https://github.com/kaihuan-huang/booking-agent-demo/blob/main/README.md"
+        },
+        {
+          "v": "31",
+          "l": {
+            "en": "synthetic conversations run as tests in the browser",
+            "zh": "在浏览器中作为测试运行的合成对话"
+          },
+          "src": "booking-agent-demo/evals.js",
+          "url": "https://github.com/kaihuan-huang/booking-agent-demo/blob/main/evals.js"
+        },
+        {
+          "v": "114 / 0",
+          "l": {
+            "en": "live replay turns / failures on Nalu (23 conversations × 3 runs)",
+            "zh": "Nalu 实时回放轮数 / 失败数（23 段对话 × 3 次）"
+          },
+          "src": "booking-agent-demo/index.html",
+          "url": "https://github.com/kaihuan-huang/booking-agent-demo/blob/main/index.html"
+        }
+      ],
+      "limits": [
+        {
+          "en": "The 33/39 and replay numbers were measured on Nalu, not on this demo; the demo reproduces the design on synthetic data.",
+          "zh": "33/39 和回放数据测自 Nalu，而不是本演示；演示用合成数据复现同一设计。"
+        },
+        {
+          "en": "The model comparison needs a local Ollama, so most visitors see only the rules path.",
+          "zh": "模型对比需要本地 Ollama，大多数访客只能看到规则路径。"
+        }
+      ],
+      "extra_links": [
+        [
+          "Model architecture card",
+          "https://kaihuan-huang.github.io/booking-agent-demo/model-architecture.html"
+        ]
+      ]
+    },
+    {
+      "slug": "pos-platform",
+      "title": "POS Platform",
+      "tag": "Router → Service → Model",
+      "dim": "29 tests · atomic settle",
+      "img": "pos.jpg",
+      "alt": "POS platform demo: cashier terminal, kitchen display and guest phone",
+      "type": {
+        "en": "Restaurant backend · 2026",
+        "zh": "餐厅 POS 后端 · 2026"
+      },
+      "pitch": {
+        "en": "Run a shift and watch every tap become one transaction. Refunds wait for a manager.",
+        "zh": "跑一班营业，看每次点击变成一笔事务；退款要经理批准。"
+      },
+      "demo": "https://kaihuan-huang.github.io/ledger-demo/",
+      "repo": "https://github.com/kaihuan-huang/ledger-demo",
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole engineer of this demo. Modelled on the POS backend I led at IPOT (a team-built platform)",
+            "zh": "本演示由我独立完成；原型是我在 IPOT 主导的 POS 后端（团队共建）"
+          }
+        ],
+        [
+          "Stack",
+          "JavaScript · in-page FastAPI-style services · WebSocket rooms"
+        ],
+        [
+          "Data",
+          {
+            "en": "Synthetic menu, tables and payments",
+            "zh": "合成菜单、桌位与付款"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Live demo",
+            "zh": "在线演示"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "Settling a bill used to take four separate API calls. If the process died between them, a table could be marked paid with no payment row, or paid twice on retry.",
+        "zh": "结账原本要四次独立 API 调用；进程在中间崩溃，就可能出现“已付款却没有付款记录”，或者重试时重复收款。"
+      },
+      "approach": [
+        {
+          "en": "<code>POST /orders/{id}/settle</code> does payment, tip, close and table release in one transaction. A side-by-side lets you kill the process at any step and compare.",
+          "zh": "<code>POST /orders/{id}/settle</code> 在一个事务里完成付款、小费、结单和清台；可以在任意一步“杀掉进程”对比新旧做法。"
+        },
+        {
+          "en": "Menu prices are snapshotted at sale time, so a price change never rewrites an open bill. Voids are logged; refunds over the limit wait for a manager.",
+          "zh": "售出时快照菜品价格，改价不会改写未结账单；作废留痕；超额退款等经理批准。"
+        },
+        {
+          "en": "Nalu sits at the edge: bookings go to the Reservation API with an <code>Idempotency-Key</code>; a retry replays, a different payload gets 409.",
+          "zh": "Nalu 在边缘：预订带 <code>Idempotency-Key</code> 发往 Reservation API；重试会重放结果，不同请求体返回 409。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Tap",
+          "zh": "点击"
+        },
+        {
+          "en": "Router",
+          "zh": "路由"
+        },
+        {
+          "en": "Service",
+          "zh": "服务"
+        },
+        {
+          "en": "One transaction",
+          "zh": "单一事务",
+          "gate": true
+        },
+        {
+          "en": "Rows written · traced",
+          "zh": "写入行 · 可追踪"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "29",
+          "l": {
+            "en": "tests, run in the browser or in Node",
+            "zh": "个测试，可在浏览器或 Node 运行"
+          },
+          "src": "ledger-demo/pos-tests.js",
+          "url": "https://github.com/kaihuan-huang/ledger-demo/blob/main/pos-tests.js"
+        },
+        {
+          "v": "12 / 0",
+          "l": {
+            "en": "refused requests in “Try to break it” / rows they write",
+            "zh": "“试着弄坏它”中被拒绝的请求 / 写入行数"
+          },
+          "src": "ledger-demo/README.md",
+          "url": "https://github.com/kaihuan-huang/ledger-demo/blob/main/README.md"
+        },
+        {
+          "v": "40 s",
+          "l": {
+            "en": "guided tour that plays a whole shift",
+            "zh": "播放整班营业的导览"
+          },
+          "src": "ledger-demo/index.html",
+          "url": "https://github.com/kaihuan-huang/ledger-demo/blob/main/index.html"
+        }
+      ],
+      "limits": [
+        {
+          "en": "Uses IPOT's design tokens and wordmark; licensed typefaces are replaced with Google Fonts.",
+          "zh": "使用 IPOT 的设计令牌与字标；授权字体以 Google Fonts 替代。"
+        },
+        {
+          "en": "Services run in the page, not against a real database; the transaction boundaries mirror the production design.",
+          "zh": "服务在页面内运行而非真实数据库；事务边界与生产设计一致。"
+        }
+      ],
+      "extra_links": [
+        [
+          "Tamper-evident ledger page",
+          "https://kaihuan-huang.github.io/ledger-demo/ledger.html"
+        ]
+      ]
+    },
+    {
+      "slug": "refund-agent",
+      "title": "Refund Agent",
+      "tag": "tool calls",
+      "dim": "16 tests · approval gate",
+      "img": "refund.jpg",
+      "alt": "Refund Agent demo: proposed refund awaiting human approval",
+      "type": {
+        "en": "Tool-calling agent · 2026",
+        "zh": "工具调用 Agent · 2026"
+      },
+      "pitch": {
+        "en": "The model proposes, it cannot pay. Fixed checks, human approval, hash-chained ledger.",
+        "zh": "模型只能提议、不能付款：固定校验、人工批准、哈希链账本。"
+      },
+      "demo": "https://kaihuan-huang.github.io/refund-agent-demo/",
+      "repo": "https://github.com/kaihuan-huang/refund-agent-demo",
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole engineer",
+            "zh": "独立完成"
+          }
+        ],
+        [
+          "Stack",
+          "JavaScript · Ollama · qwen2.5:7b (recorded runs)"
+        ],
+        [
+          "Data",
+          {
+            "en": "Synthetic customers and payments",
+            "zh": "合成客户与付款"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Live demo",
+            "zh": "在线演示"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "Letting an LLM handle refunds is useful until it refunds the whole charge for one cold dish, or tells the customer the money is on its way before anyone approved it.",
+        "zh": "让 LLM 处理退款很有用，直到它为一道凉了的菜退掉整单，或者在没人批准前就告诉客户“钱已退”。"
+      },
+      "approach": [
+        {
+          "en": "Tools are split: <code>find_my_payments</code> and <code>get_bill</code> read; <code>propose_refund</code> only queues. Identity comes from the session, so the model cannot reach another customer.",
+          "zh": "工具分权：<code>find_my_payments</code>、<code>get_bill</code> 只读；<code>propose_refund</code> 只入队。身份取自会话，模型碰不到其他客户。"
+        },
+        {
+          "en": "Every proposal passes fixed checks (owner, whole cents, still refundable, a reason). Over $50 needs a manager; review flags point at odd amounts.",
+          "zh": "每个提议都过固定校验（归属、整分、可退余额、理由）。超过 $50 需经理；审核标记指出异常金额。"
+        },
+        {
+          "en": "A reply that claims the refund is done before approval is replaced with a fixed template.",
+          "zh": "在批准前声称“已退款”的回复会被替换为固定模板。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Customer",
+          "zh": "客户"
+        },
+        {
+          "en": "LLM proposes",
+          "zh": "LLM 提议"
+        },
+        {
+          "en": "Fixed checks",
+          "zh": "固定校验"
+        },
+        {
+          "en": "Human approves?",
+          "zh": "人工批准？",
+          "gate": true
+        },
+        {
+          "en": "Hash-chained ledger",
+          "zh": "哈希链账本"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "16",
+          "l": {
+            "en": "tests, including a replay of every recorded run",
+            "zh": "个测试，含每段录制运行的回放"
+          },
+          "src": "refund-agent-demo/tests.js",
+          "url": "https://github.com/kaihuan-huang/refund-agent-demo/blob/main/tests.js"
+        },
+        {
+          "v": "$50",
+          "l": {
+            "en": "threshold above which a manager must approve",
+            "zh": "超过此金额必须经理批准"
+          },
+          "src": "refund-agent-demo/README.md",
+          "url": "https://github.com/kaihuan-huang/refund-agent-demo/blob/main/README.md"
+        }
+      ],
+      "limits": [
+        {
+          "en": "Recordings come from one model (qwen2.5:7b); there is no over-refund rate across many runs yet.",
+          "zh": "录制只来自一个模型（qwen2.5:7b）；尚无多次运行下的超额退款率。"
+        }
+      ],
+      "extra_links": []
+    },
+    {
+      "slug": "pii-detector",
+      "title": "PII Detector",
+      "tag": "WebGPU",
+      "dim": "0 network requests",
+      "img": "pii.jpg",
+      "alt": "PII Detector demo: text with detected cards, emails and keys highlighted",
+      "type": {
+        "en": "In-browser privacy model · 2026",
+        "zh": "浏览器内隐私模型 · 2026"
+      },
+      "pitch": {
+        "en": "Finds cards, emails, phones and API keys before text reaches a model.",
+        "zh": "在文本进入模型之前，找出卡号、邮箱、电话和 API 密钥。"
+      },
+      "demo": "https://kaihuan-huang.github.io/pii-detector-demo/",
+      "repo": "https://github.com/kaihuan-huang/pii-detector-demo",
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole engineer. The browser demo of the detector from my governance platform",
+            "zh": "独立完成；是我治理平台中检测器的浏览器版演示"
+          }
+        ],
+        [
+          "Stack",
+          "JavaScript · WebGPU · openai/privacy-filter (Apache-2.0) · FastAPI service"
+        ],
+        [
+          "Data",
+          {
+            "en": "5,466 synthetic bilingual records",
+            "zh": "5,466 条合成双语记录"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Live demo · detector service in a private repo",
+            "zh": "在线演示 · 检测服务在私有仓库"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "Employees paste customer data into AI tools. Masking has to happen before the text leaves the device, and it has to work for Chinese text as well as English.",
+        "zh": "员工会把客户数据贴进 AI 工具。脱敏必须在文本离开设备之前完成，而且中文和英文都要能用。"
+      },
+      "approach": [
+        {
+          "en": "Rules first: card numbers must pass Luhn, so an order number is never called a card. Repeated values keep the same placeholder.",
+          "zh": "规则优先：卡号必须通过 Luhn 校验，订单号不会被当成卡号；重复的值保持同一个占位符。"
+        },
+        {
+          "en": "An optional local model adds names, addresses and dates, running on WebGPU after a one-time download; the page counts network requests during detection.",
+          "zh": "可选的本地模型补充姓名、地址和日期，一次下载后在 WebGPU 上运行；页面统计检测期间的网络请求数。"
+        },
+        {
+          "en": "Found that Presidio's <code>\\b</code> patterns never match an ID written straight after Chinese text, and replaced them with boundary-safe patterns plus check digits.",
+          "zh": "发现 Presidio 的 <code>\\b</code> 模式匹配不到紧跟中文的证件号，改为边界安全的模式并加校验位。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Text",
+          "zh": "文本"
+        },
+        {
+          "en": "Rules + Luhn",
+          "zh": "规则 + Luhn"
+        },
+        {
+          "en": "Local model",
+          "zh": "本地模型"
+        },
+        {
+          "en": "Leaves device?",
+          "zh": "离开设备？",
+          "gate": true
+        },
+        {
+          "en": "Masked placeholders → LLM",
+          "zh": "占位符 → LLM"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "0 → 100%",
+          "l": {
+            "en": "Chinese national-ID recall after boundary-safe rules (cards 23% → 91%)",
+            "zh": "边界安全规则后的中文身份证召回率（卡号 23% → 91%）"
+          },
+          "src": "bilingual-pii-detector/README.md",
+          "url": ""
+        },
+        {
+          "v": "136 ms",
+          "l": {
+            "en": "p95 per record, rules + model, local NVIDIA GB10 (rules alone 0.5 ms)",
+            "zh": "每条记录 p95，规则 + 模型，本地 NVIDIA GB10（仅规则 0.5 ms）"
+          },
+          "src": "governance-platform/evals/results",
+          "url": ""
+        },
+        {
+          "v": "0",
+          "l": {
+            "en": "network requests during in-browser detection",
+            "zh": "浏览器内检测期间的网络请求"
+          },
+          "src": "pii-detector-demo/index.html",
+          "url": "https://github.com/kaihuan-huang/pii-detector-demo/blob/main/index.html"
+        },
+        {
+          "v": "30",
+          "l": {
+            "en": "detector service tests (pytest)",
+            "zh": "检测服务测试（pytest）"
+          },
+          "src": "governance-platform/apps/detector/tests",
+          "url": ""
+        }
+      ],
+      "limits": [
+        {
+          "en": "Chinese person names reach 39% recall and addresses 67%; no openly licensed Chinese NER model had training data I could verify.",
+          "zh": "中文人名召回 39%、地址 67%；没有找到训练数据可核实的开源中文 NER 模型。"
+        },
+        {
+          "en": "The corpus is synthetic, so the numbers compare configurations, not production accuracy. The model download is about 840 MB and needs Chrome or Edge.",
+          "zh": "语料是合成的，数字用于比较配置而非生产准确率。模型约 840 MB，需要 Chrome 或 Edge。"
+        }
+      ],
+      "video": {
+        "src": "https://kaihuan-huang.github.io/pii-detector-demo/media/local-run.mp4",
+        "poster": "https://kaihuan-huang.github.io/pii-detector-demo/media/local-run.jpg",
+        "cap": {
+          "en": "Screen recording · the privacy model running locally in the browser",
+          "zh": "录屏 · 隐私模型在浏览器本地运行"
+        }
+      },
+      "extra_links": [
+        [
+          "Model architecture card",
+          "https://kaihuan-huang.github.io/pii-detector-demo/model-architecture.html"
+        ]
+      ]
+    },
+    {
+      "slug": "career-ops",
+      "title": "Career OPS",
+      "tag": "live · Azure",
+      "dim": "264,148 postings",
+      "img": "careerops.jpg",
+      "alt": "Career OPS dashboard: open roles with source filters",
+      "type": {
+        "en": "Job-market data platform · 2026",
+        "zh": "求职市场数据平台 · 2026"
+      },
+      "pitch": {
+        "en": "A traceable market feed from employer ATS APIs, extending open-source career-ops.",
+        "zh": "基于雇主 ATS API 的可追溯岗位数据流，扩展自开源 career-ops。"
+      },
+      "demo": "https://kai-careerops.westus2.cloudapp.azure.com",
+      "repo": "",
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Built the market-feed pipeline, resume tooling and public release on top of open-source <a href=\"https://github.com/santifer/career-ops\">santifer/career-ops</a> (MIT)",
+            "zh": "在开源 <a href=\"https://github.com/santifer/career-ops\">santifer/career-ops</a>（MIT）之上构建岗位数据管道、简历工具与公开发布"
+          }
+        ],
+        [
+          "Stack",
+          "Python · FastAPI · SQLite/FTS5 · Next.js · TypeScript · Azure VM · Caddy"
+        ],
+        [
+          "Data",
+          {
+            "en": "Public job postings from employers' own hiring systems",
+            "zh": "来自雇主自有招聘系统的公开岗位"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Read-only public dashboard on my Azure VM",
+            "zh": "部署在我自己 Azure 虚拟机上的只读公开看板"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "A third-party job feed labelled rows as “recent”, but only 214 of 1,375 (16%) were actually posted in the last three days.",
+        "zh": "第三方岗位源把数据标为“最近”，但 1,375 条里只有 214 条（16%）真的是近三天发布的。"
+      },
+      "approach": [
+        {
+          "en": "Collect straight from employers' ATS APIs (Greenhouse, Lever, Ashby and more), keeping source URLs and which date field each timestamp came from.",
+          "zh": "直接从雇主 ATS API（Greenhouse、Lever、Ashby 等）采集，保留来源链接和每个时间戳来自哪个日期字段。"
+        },
+        {
+          "en": "Never delete: a posting closes only after it is missing twice in a row, and every status change is kept.",
+          "zh": "永不删除：连续两次缺失才关闭岗位，每次状态变化都保留。"
+        },
+        {
+          "en": "Before release, every public field passes known-field rules, the bilingual PII detector and a fail-closed scan.",
+          "zh": "发布前，每个公开字段都要过已知字段规则、双语 PII 检测器和失败即拒绝的扫描。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Employer ATS APIs",
+          "zh": "雇主 ATS API"
+        },
+        {
+          "en": "Collector",
+          "zh": "采集器"
+        },
+        {
+          "en": "SQLite · never delete",
+          "zh": "SQLite · 不删除"
+        },
+        {
+          "en": "Privacy gate",
+          "zh": "隐私闸门",
+          "gate": true
+        },
+        {
+          "en": "Public dashboard",
+          "zh": "公开看板"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "264,148",
+          "l": {
+            "en": "postings in the Sep 30 native-source snapshot",
+            "zh": "9 月 30 日原生来源快照中的岗位数"
+          },
+          "src": "career-ops (private)",
+          "url": ""
+        },
+        {
+          "v": "16%",
+          "l": {
+            "en": "of a third-party feed's “recent” rows were actually recent (214 / 1,375)",
+            "zh": "第三方源“最近”数据中真正最近的比例（214 / 1,375）"
+          },
+          "src": "career-ops intent/m0-results.md (private)",
+          "url": ""
+        },
+        {
+          "v": "5",
+          "l": {
+            "en": "issues the release privacy gate caught before launch",
+            "zh": "发布隐私闸门在上线前发现的问题"
+          },
+          "src": "career-ops showcase/privacy_incidents.json (private)",
+          "url": ""
+        },
+        {
+          "v": "439",
+          "l": {
+            "en": "pipeline tests in the parts I wrote",
+            "zh": "我编写部分的管道测试数"
+          },
+          "src": "career-ops/pipeline/tests (private)",
+          "url": ""
+        }
+      ],
+      "limits": [
+        {
+          "en": "Built on someone else's project: the dashboard shell is upstream; my part is the market feed, pipeline and release.",
+          "zh": "建立在他人项目之上：看板框架来自上游，我负责岗位数据源、管道与发布。"
+        },
+        {
+          "en": "It is a public demo site, not a production service.",
+          "zh": "这是公开演示站，不是生产服务。"
+        }
+      ],
+      "extra_links": [
+        [
+          "Public market snapshot",
+          "https://kaihuan-huang.github.io/career-ops-demo/"
+        ],
+        [
+          "Privacy gate write-up",
+          "https://kai-careerops.westus2.cloudapp.azure.com/privacy"
+        ]
+      ]
+    },
+    {
+      "slug": "llm-arch-cards",
+      "title": "LLM Arch Cards",
+      "tag": "MIT",
+      "dim": "config only · 0 weights",
+      "img": "llmarch.jpg",
+      "alt": "LLM Architecture Cards: attention layout and parameter split of an open-weight model",
+      "type": {
+        "en": "Model internals · 2026",
+        "zh": "模型内部结构 · 2026"
+      },
+      "pitch": {
+        "en": "What is inside an open-weight model, read from its config and checked against the Hub.",
+        "zh": "只读配置文件，拆解开源模型的内部结构，并与 Hub 交叉核对。"
+      },
+      "demo": "https://kaihuan-huang.github.io/llm-arch-viz/",
+      "repo": "https://github.com/kaihuan-huang/llm-arch-viz",
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole engineer · MIT licence",
+            "zh": "独立完成 · MIT 许可"
+          }
+        ],
+        [
+          "Stack",
+          "Python · PyTorch meta device · transformers · huggingface_hub"
+        ],
+        [
+          "Data",
+          {
+            "en": "Model configs only; no weights downloaded",
+            "zh": "只用模型配置，不下载权重"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Live cards for five models",
+            "zh": "五个模型的在线卡片"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "Choosing a model for a GPU box means knowing its attention layout, KV-cache cost and real parameter count, before spending an hour downloading weights.",
+        "zh": "为一台 GPU 机器选模型，需要在花一小时下载权重之前，先知道它的注意力结构、KV 缓存成本和真实参数量。"
+      },
+      "approach": [
+        {
+          "en": "Instantiate the model on torch's <code>meta</code> device (shapes only), so a 70B model takes seconds and zero disk.",
+          "zh": "在 torch 的 <code>meta</code> 设备上实例化（只有形状），70B 模型也只需几秒、零磁盘。"
+        },
+        {
+          "en": "Render attention kind, FFN or MoE, layer schedule, one decoder layer with weight shapes, and memory arithmetic for bf16 / int8 / int4.",
+          "zh": "渲染注意力类型、FFN 或 MoE、层调度、带权重形状的单个解码层，以及 bf16 / int8 / int4 的内存估算。"
+        },
+        {
+          "en": "Cross-check the parameter total against the Hub's safetensors metadata and explain any delta.",
+          "zh": "与 Hub 的 safetensors 元数据交叉核对参数总量，并解释差异。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "HF config",
+          "zh": "HF 配置"
+        },
+        {
+          "en": "meta device",
+          "zh": "meta 设备"
+        },
+        {
+          "en": "Module tree",
+          "zh": "模块树"
+        },
+        {
+          "en": "Matches the Hub?",
+          "zh": "与 Hub 一致？",
+          "gate": true
+        },
+        {
+          "en": "Architecture card",
+          "zh": "架构卡片"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "5",
+          "l": {
+            "en": "published model cards",
+            "zh": "已发布的模型卡片"
+          },
+          "src": "llm-arch-viz/README.md",
+          "url": "https://github.com/kaihuan-huang/llm-arch-viz/blob/main/README.md"
+        },
+        {
+          "v": "0 B",
+          "l": {
+            "en": "weights downloaded per card",
+            "zh": "每张卡片下载的权重"
+          },
+          "src": "llm-arch-viz/llm_arch_viz.py",
+          "url": "https://github.com/kaihuan-huang/llm-arch-viz/blob/main/llm_arch_viz.py"
+        }
+      ],
+      "limits": [
+        {
+          "en": "Memory figures are arithmetic, not measurements. No automated tests yet.",
+          "zh": "内存数字是计算值而非实测；尚无自动化测试。"
+        }
+      ],
+      "extra_links": []
+    }
+  ],
+  "deep": [
+    {
+      "slug": "governance-platform",
+      "title": "AI Governance Platform",
+      "kicker": {
+        "en": "Independent rebuild · private repo",
+        "zh": "独立重建 · 私有仓库"
+      },
+      "type": {
+        "en": "Privacy & policy platform · Sep 2026",
+        "zh": "隐私与策略平台 · 2026 年 9 月"
+      },
+      "pitch": {
+        "en": "Detect personal data in what employees send to AI tools, decide allow / mask / watch / block, and keep an audit trail no one can quietly edit.",
+        "zh": "检测员工发往 AI 工具内容中的个人数据，决定放行 / 脱敏 / 观察 / 拦截，并保留无法被悄悄修改的审计记录。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole engineer, 100% of commits. A clean-room rebuild of the kind of system I worked on at Polygraf.ai",
+            "zh": "独立完成，100% 提交。对我在 Polygraf.ai 参与过的同类系统做的净室重建"
+          }
+        ],
+        [
+          "Stack",
+          "Python · FastAPI · PostgreSQL/pgvector · Redis · React · Docker · OpenTofu (AWS design)"
+        ],
+        [
+          "Status",
+          {
+            "en": "Code private; the detector guards the live Career OPS release",
+            "zh": "代码私有；检测器守护在线 Career OPS 的发布"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "AI-usage governance needs three things to hold at once: detection that works in English and Chinese, policy decisions that are deterministic, and an audit history that survives worker crashes and retries.",
+        "zh": "AI 使用治理需要同时成立三件事：中英文都可用的检测、确定性的策略判定、以及在 worker 崩溃和重试后依然正确的审计历史。"
+      },
+      "approach": [
+        {
+          "en": "Policy engine as one pure function over the event and policy set, so every decision is reproducible.",
+          "zh": "策略引擎是对事件与策略集的一个纯函数，每次判定都可复现。"
+        },
+        {
+          "en": "Ingestion through a Postgres transactional outbox; workers claim events with <code>SKIP LOCKED</code> and record findings and incidents in a hash-chained history.",
+          "zh": "通过 Postgres 事务性 outbox 接入；worker 用 <code>SKIP LOCKED</code> 领取事件，把发现与事件写入哈希链历史。"
+        },
+        {
+          "en": "Found and fixed a lease-expiry race: a stalled worker could finish an event another worker had already processed. It now locks the row and proceeds only while the status is still processing.",
+          "zh": "发现并修复租约过期竞态：卡住的 worker 可能重复处理别人已完成的事件。现在会锁行，且仅在状态仍为 processing 时继续。"
+        },
+        {
+          "en": "Credentials use envelope encryption; 17 architecture decision records document each choice.",
+          "zh": "凭据使用信封加密；17 份架构决策记录说明每个选择。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "AI-tool event",
+          "zh": "AI 工具事件"
+        },
+        {
+          "en": "Outbox",
+          "zh": "Outbox"
+        },
+        {
+          "en": "Worker · row lock",
+          "zh": "Worker · 行锁"
+        },
+        {
+          "en": "Policy decides",
+          "zh": "策略判定",
+          "gate": true
+        },
+        {
+          "en": "Incident + audit chain",
+          "zh": "事件 + 审计链"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "213",
+          "l": {
+            "en": "API tests (pytest, collected)",
+            "zh": "API 测试（pytest 收集）"
+          },
+          "src": "governance-platform/apps/api/tests (private)",
+          "url": ""
+        },
+        {
+          "v": "30",
+          "l": {
+            "en": "detector tests",
+            "zh": "检测器测试"
+          },
+          "src": "governance-platform/apps/detector/tests (private)",
+          "url": ""
+        },
+        {
+          "v": "17",
+          "l": {
+            "en": "architecture decision records",
+            "zh": "架构决策记录"
+          },
+          "src": "governance-platform/docs/adr (private)",
+          "url": ""
+        },
+        {
+          "v": "5,466",
+          "l": {
+            "en": "synthetic bilingual records in the CI benchmark",
+            "zh": "CI 基准中的合成双语记录"
+          },
+          "src": "governance-platform/evals (private)",
+          "url": ""
+        }
+      ],
+      "limits": [
+        {
+          "en": "AWS infrastructure is designed in OpenTofu, not deployed. Throughput has only been measured locally.",
+          "zh": "AWS 基础设施以 OpenTofu 设计，未部署；吞吐量仅在本地测量。"
+        }
+      ],
+      "link": [
+        "Privacy gate on the live site",
+        "https://kai-careerops.westus2.cloudapp.azure.com/privacy"
+      ]
+    },
+    {
+      "slug": "ipot",
+      "title": "IPOT Restaurant Platform",
+      "kicker": {
+        "en": "Jackson Ventures · Apr 2026 — now",
+        "zh": "Jackson Ventures · 2026 年 4 月至今"
+      },
+      "type": {
+        "en": "Production · restaurant operations",
+        "zh": "生产环境 · 餐饮运营"
+      },
+      "pitch": {
+        "en": "A reservation service real guests use, the POS money path, and Nalu, the bilingual booking agent.",
+        "zh": "真实客人在用的预订服务、POS 资金链路，以及双语预订助手 Nalu。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "AI Engineer. Reservation API from the first commit; led POS backend architecture; rebuilt Nalu",
+            "zh": "AI 工程师。从第一个提交开始构建 Reservation API；主导 POS 后端架构；重建 Nalu"
+          }
+        ],
+        [
+          "Stack",
+          "Python · FastAPI · PostgreSQL · Alembic · Twilio Verify · Ollama · AWS"
+        ],
+        [
+          "Status",
+          {
+            "en": "Reservation API in production · Nalu in pre-launch testing",
+            "zh": "Reservation API 已上线 · Nalu 预发布测试中"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "A growing restaurant group needed bookings, payments and guest messaging that do not break on retries, double taps or a model that guesses.",
+        "zh": "一个成长中的餐饮集团，需要在重试、重复点击和模型乱猜时都不出错的预订、支付与客人消息。"
+      },
+      "approach": [
+        {
+          "en": "Reservation API: capacity-based booking, Twilio Verify phone OTP, SMS with delivery-status tracking, token-based self-service reschedule and cancel.",
+          "zh": "Reservation API：按容量预订、Twilio Verify 手机验证码、带送达状态跟踪的短信、基于令牌的自助改期与取消。"
+        },
+        {
+          "en": "POS: atomic settlement and refunds, sale-time price snapshots, audited voids; revived a long-failing test suite and fixed diverged Alembic heads.",
+          "zh": "POS：原子结算与退款、售出时价格快照、可审计作废；修复长期失败的测试套件与分叉的 Alembic heads。"
+        },
+        {
+          "en": "Nalu: deterministic field resolution and an explicit-yes gate after the LLM pilot invented values; a 35-case conversational suite runs in CI.",
+          "zh": "Nalu：LLM 试点编造字段后，改为确定性字段解析加“明确说是”闸门；35 个对话用例在 CI 中运行。"
+        },
+        {
+          "en": "Google Ads and Meta daily spend importers for the revenue agent.",
+          "zh": "为收入 Agent 编写 Google Ads 与 Meta 每日花费导入器。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Guest · QR · Nalu",
+          "zh": "客人 · 扫码 · Nalu"
+        },
+        {
+          "en": "Reservation API",
+          "zh": "Reservation API"
+        },
+        {
+          "en": "Twilio Verify",
+          "zh": "Twilio 验证"
+        },
+        {
+          "en": "One transaction",
+          "zh": "单一事务",
+          "gate": true
+        },
+        {
+          "en": "PostgreSQL",
+          "zh": "PostgreSQL"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "33/39",
+          "l": {
+            "en": "Nalu held-out cases fully correct, 0 invented values",
+            "zh": "Nalu 留出集全字段正确，0 编造"
+          },
+          "src": "IPOT nalu-api (private)",
+          "url": ""
+        },
+        {
+          "v": "35",
+          "l": {
+            "en": "conversational eval cases gating CI",
+            "zh": "在 CI 中把关的对话评估用例"
+          },
+          "src": "IPOT nalu-api (private)",
+          "url": ""
+        },
+        {
+          "v": "73 / 80",
+          "l": {
+            "en": "my commits on the Reservation API",
+            "zh": "我在 Reservation API 上的提交数"
+          },
+          "src": "IPOT reservation-api git log (private)",
+          "url": ""
+        }
+      ],
+      "limits": [
+        {
+          "en": "Employer code is private. The POS and booking demos are independent reimplementations on synthetic data.",
+          "zh": "雇主代码不公开；POS 与预订演示是基于合成数据的独立重写。"
+        }
+      ],
+      "link": [
+        "Try the POS reimplementation",
+        "https://kaihuan-huang.github.io/ledger-demo/"
+      ]
+    },
+    {
+      "slug": "loan-draw-review",
+      "title": "Loan-Draw Review Controls",
+      "kicker": {
+        "en": "BloomFrontier · Jackson Ventures · 2026",
+        "zh": "BloomFrontier · Jackson Ventures · 2026"
+      },
+      "type": {
+        "en": "Fintech lending · built, in review",
+        "zh": "金融科技借贷 · 已完成，评审中"
+      },
+      "pitch": {
+        "en": "Money leaves only after two people sign off, the same draw cannot be funded twice, and every step lands in a verifiable audit chain.",
+        "zh": "资金只在两人签字后放出，同一笔提款不能重复放款，每一步都写入可验证的审计链。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "AI Engineer on a team. I wrote the review controls and workflow reliability layer; the AI flagging pipeline is teammates' work",
+            "zh": "团队中的 AI 工程师。我编写审核控制与工作流可靠性层；AI 标记管道由同事完成"
+          }
+        ],
+        [
+          "Stack",
+          "Python · FastAPI · PostgreSQL · SQLAlchemy · Alembic · Temporal"
+        ],
+        [
+          "Status",
+          {
+            "en": "Built and tested; pull requests open / in draft",
+            "zh": "已构建并测试；PR 开放 / 草稿中"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "Construction-loan draws are paid in stages. An AI check can flag a missing invoice, but the decision to wire money has to stay with people, and a retry or a race must never fund a draw twice.",
+        "zh": "建筑贷款按阶段放款。AI 可以标记缺失的发票，但汇款决定必须留在人手里，重试或竞态也绝不能让同一笔提款放两次。"
+      },
+      "approach": [
+        {
+          "en": "Two-person (maker-checker) approval for higher-risk draws, behind a feature flag.",
+          "zh": "高风险提款采用双人（制单-复核）审批，置于功能开关之后。"
+        },
+        {
+          "en": "Loan-level PostgreSQL row locks, a repeat-funding check and a partial unique index on the wire reference.",
+          "zh": "贷款级 PostgreSQL 行锁、重复放款检查，以及电汇编号上的部分唯一索引。"
+        },
+        {
+          "en": "Hash-chained audit records with a verification routine.",
+          "zh": "带验证程序的哈希链审计记录。"
+        },
+        {
+          "en": "Transactional outbox and Temporal recovery for draw verification, with a partial unique index that prevents two verification runs at once.",
+          "zh": "为提款核验加入事务性 outbox 与 Temporal 恢复，并用部分唯一索引防止两次核验同时运行。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Draw request",
+          "zh": "提款申请"
+        },
+        {
+          "en": "AI checks (team)",
+          "zh": "AI 检查（团队）"
+        },
+        {
+          "en": "Review queue",
+          "zh": "审核队列"
+        },
+        {
+          "en": "Maker + checker?",
+          "zh": "制单 + 复核？",
+          "gate": true
+        },
+        {
+          "en": "Fund + audit chain",
+          "zh": "放款 + 审计链"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "+4,745",
+          "l": {
+            "en": "lines across 65 files in my review-controls and reliability branches",
+            "zh": "我在审核控制与可靠性分支中新增的行数（65 个文件）"
+          },
+          "src": "bloomfrontier-api git (private)",
+          "url": ""
+        },
+        {
+          "v": "616",
+          "l": {
+            "en": "tests in the repository on the reliability branch (team total)",
+            "zh": "可靠性分支上仓库的测试总数（团队合计）"
+          },
+          "src": "bloomfrontier-api/tests (private)",
+          "url": ""
+        }
+      ],
+      "limits": [
+        {
+          "en": "Not merged yet. Employer code is private; this page describes the design only.",
+          "zh": "尚未合并。雇主代码不公开，本页只描述设计。"
+        }
+      ],
+      "link": null
+    }
+  ],
+  "stats": [
+    {
+      "v": "33/39",
+      "l": {
+        "en": "held-out cases fully correct · Nalu",
+        "zh": "留出集全字段正确 · Nalu"
+      }
+    },
+    {
+      "v": "264K",
+      "l": {
+        "en": "postings collected · Sep 30 snapshot",
+        "zh": "岗位采集量 · 9 月 30 日快照"
+      }
+    },
+    {
+      "v": "136<small> ms</small>",
+      "l": {
+        "en": "p95 PII detection · local GPU",
+        "zh": "PII 检测 p95 · 本地 GPU"
+      }
+    },
+    {
+      "v": "243",
+      "l": {
+        "en": "tests in my governance platform",
+        "zh": "我的治理平台中的测试数"
+      }
+    }
+  ],
+  "roles": [
+    {
+      "when": "Apr 2026 — now",
+      "title": "AI Engineer · Jackson Ventures",
+      "at": {
+        "en": "IPOT restaurant platform · BloomFrontier lending · San Francisco Bay Area",
+        "zh": "IPOT 餐饮平台 · BloomFrontier 借贷 · 旧金山湾区"
+      },
+      "items": [
+        {
+          "en": "Built and deployed a FastAPI/PostgreSQL reservation service used by real guests: Twilio Verify OTP, SMS delivery tracking, self-service changes.",
+          "zh": "构建并上线服务真实客人的 FastAPI/PostgreSQL 预订服务：Twilio Verify 验证码、短信送达跟踪、自助改期。"
+        },
+        {
+          "en": "Rebuilt Nalu's bilingual booking flow with deterministic field resolution and explicit confirmation: 33/39 held-out cases fully correct; 35-case eval suite in CI.",
+          "zh": "用确定性字段解析与明确确认重建 Nalu 双语预订流程：留出集 33/39 全字段正确；35 个评估用例接入 CI。"
+        },
+        {
+          "en": "Led POS backend architecture: atomic settlement and refunds, sale-time price snapshots, audited voids.",
+          "zh": "主导 POS 后端架构：原子结算与退款、售出时价格快照、可审计作废。"
+        },
+        {
+          "en": "Built loan-draw review controls for BloomFrontier (in review): two-person approval, row locks, repeat-funding checks, hash-chained audit, outbox + Temporal recovery.",
+          "zh": "为 BloomFrontier 构建提款审核控制（评审中）：双人审批、行锁、重复放款检查、哈希链审计、outbox + Temporal 恢复。"
+        }
+      ]
+    },
+    {
+      "when": "Oct 2025 — Jun 2026",
+      "title": "AI Engineer Intern · Polygraf.ai",
+      "at": {
+        "en": "Remote, USA",
+        "zh": "远程 · 美国"
+      },
+      "items": [
+        {
+          "en": "PII detection with Presidio, transformer NER and validation rules; placeholder masking for LLM inputs; deterministic allow / mask / watch / block decisions.",
+          "zh": "用 Presidio、Transformer NER 与校验规则做 PII 检测；LLM 输入占位符脱敏；确定性的放行 / 脱敏 / 观察 / 拦截。"
+        },
+        {
+          "en": "React/TypeScript and FastAPI governance dashboard: policy, credential and incident workflows.",
+          "zh": "React/TypeScript + FastAPI 治理后台：策略、凭据与事件流程。"
+        }
+      ]
+    },
+    {
+      "when": "2023 — 2025",
+      "title": "MSc Computer Science with Artificial Intelligence",
+      "at": {
+        "en": "University of York, UK",
+        "zh": "英国约克大学"
+      },
+      "items": []
+    }
+  ],
+  "skills": [
+    [
+      "AI / LLM",
+      "tool calling, model evaluation, RAG (pgvector), Ollama, Hugging Face Transformers, PII detection &amp; masking"
+    ],
+    [
+      "Backend / Data",
+      "Python, TypeScript, SQL · FastAPI, SQLAlchemy, Alembic, PostgreSQL, Redis, SQLite/FTS5, Temporal"
+    ],
+    [
+      "Reliability",
+      "transactions, row locks, transactional outbox, idempotency, RBAC, hash-chained audit trails"
+    ],
+    [
+      "Delivery",
+      "Docker, AWS, Azure, OpenTofu, GitHub Actions, pytest, Playwright, Vitest · React, Next.js"
+    ],
+    [
+      "Spoken",
+      "English, 普通话, 粤语, Español"
+    ]
+  ],
+  "archive_intro": {
+    "en": "Earlier projects that are not portfolio pieces on their own: tutorials, coursework, hackathons and prototypes. Each one taught me a rule I still build by, and each rule points to the work where it shows today.",
+    "zh": "单独拿出来不够格当作品的早期项目：教程、课程、黑客松和原型。每一个都教会了我一条至今仍在用的规则，每条规则都指向今天体现它的作品。"
+  },
+  "archive": [
+    {
+      "id": "first-llm-apps",
+      "years": "2022–23",
+      "kind": {
+        "en": "Self-started",
+        "zh": "自发项目"
+      },
+      "title": {
+        "en": "First LLM apps",
+        "zh": "第一批 LLM 应用"
+      },
+      "repos": [
+        "AI-Content-Generator",
+        "Agent-AI-Post-Generator",
+        "Agent-AI-Generator-Version2",
+        "AutomaticChapterDetection-"
+      ],
+      "stack": "Python · Flask · Django · OpenAI text-davinci-003 · AssemblyAI",
+      "then": {
+        "en": "Content generators that sent one prompt to GPT-3 and printed the answer, and a tool that transcribed audio with AssemblyAI to find chapter breaks.",
+        "zh": "把一个提示词发给 GPT-3 再打印结果的内容生成器，以及用 AssemblyAI 转写音频来找章节分界的工具。"
+      },
+      "learned": {
+        "en": "A prompt that works in a demo is not a feature. There was no test set, so I could not tell a better prompt from a luckier one, and API keys lived in the code.",
+        "zh": "在演示里能跑的提示词不等于功能。没有测试集，就分不清是提示词更好还是运气更好；API 密钥还写在代码里。"
+      },
+      "rule": {
+        "en": "Measure on a held-out set before claiming it works; keep secrets out of the repo and scan before every push.",
+        "zh": "先在留出集上测量再下结论；密钥不进仓库，每次推送前扫描。"
+      },
+      "now": "booking-agent"
+    },
+    {
+      "id": "york-msc",
+      "years": "2023–25",
+      "kind": {
+        "en": "MSc coursework",
+        "zh": "硕士课程"
+      },
+      "title": {
+        "en": "York MSc in AI",
+        "zh": "约克大学 AI 硕士"
+      },
+      "repos": [
+        "AAI-York",
+        "AIML-York"
+      ],
+      "stack": "Python · Jupyter · scikit-learn",
+      "then": {
+        "en": "Applied AI and machine-learning modules at the University of York, worked as Colab notebooks on real datasets such as renewable energy consumption.",
+        "zh": "约克大学的应用 AI 与机器学习课程，在 Colab notebook 里处理可再生能源消耗等真实数据集。"
+      },
+      "learned": {
+        "en": "Evaluation design matters more than the model: split the data before you look at it, report per-class results, and say what the numbers do not cover.",
+        "zh": "评估设计比模型更重要：先切分数据再看数据，按类别报告结果，并说明数字没覆盖什么。"
+      },
+      "rule": {
+        "en": "Report recall and precision per category and per language, and state the limits next to the numbers.",
+        "zh": "按类别、按语言报告召回率和精确率，并把局限写在数字旁边。"
+      },
+      "now": "pii-detector"
+    },
+    {
+      "id": "hackathons",
+      "years": "2023",
+      "kind": {
+        "en": "Hackathons & weekend builds",
+        "zh": "黑客松与周末作品"
+      },
+      "title": {
+        "en": "Weekend products",
+        "zh": "周末产品"
+      },
+      "repos": [
+        "Light-Up",
+        "Gen-AI-Hack-II",
+        "LegalEase-AI"
+      ],
+      "stack": "React · Next.js · TypeScript · Jupyter · ElevenLabs · Luma",
+      "then": {
+        "en": "Light-Up, a concept for transparent charity donations; Gen-AI Hack II, voice and 3D generation experiments; LegalEase AI, a legal-help chatbot for US users.",
+        "zh": "Light-Up：让慈善捐款更透明的产品概念；Gen-AI Hack II：语音与 3D 生成实验；LegalEase AI：面向美国用户的法律问答机器人。"
+      },
+      "learned": {
+        "en": "A chatbot that sounds confident about the law is a liability. Shipping fast is useful for finding the problem, not for deciding what the model may claim.",
+        "zh": "对法律问题说得很自信的聊天机器人是一种风险。快速做出来有助于发现问题，但不能由此决定模型可以声称什么。"
+      },
+      "rule": {
+        "en": "The model may propose; only a checked, approved action may be described as done.",
+        "zh": "模型可以提议；只有经过校验和批准的动作才能说“已完成”。"
+      },
+      "now": "refund-agent"
+    },
+    {
+      "id": "rebuilds",
+      "years": "2023–24",
+      "kind": {
+        "en": "Learning by rebuilding",
+        "zh": "照着重建来学"
+      },
+      "title": {
+        "en": "Inside the models",
+        "zh": "拆开模型看"
+      },
+      "repos": [
+        "Self-Driving-Car-Neural-Networks-and-Machine-Learning",
+        "Image_AI",
+        "otto-recommender-system"
+      ],
+      "stack": "JavaScript · Python · ImageAI · Kaggle",
+      "then": {
+        "en": "Followed Radu Mariescu-Istodor's self-driving car course (sensors and a neural network in plain JavaScript), ran object-detection experiments on top of the ImageAI library, and explored the OTTO session-based recommender challenge.",
+        "zh": "跟着 Radu Mariescu-Istodor 的自动驾驶课程用纯 JavaScript 实现传感器和神经网络；在 ImageAI 库上做目标检测实验；研究 OTTO 基于会话的推荐赛题。"
+      },
+      "learned": {
+        "en": "Writing a network by hand made shapes, weights and memory concrete, which is what I check first when picking a model today. Tutorials are for learning; they are credited, not presented as my work.",
+        "zh": "手写一个网络让形状、权重和内存变得具体，这正是我今天选模型时首先检查的东西。教程用来学习，要注明出处，不当成自己的作品。"
+      },
+      "rule": {
+        "en": "Know a model's shapes and memory cost before downloading it.",
+        "zh": "下载模型之前，先弄清它的形状和内存成本。"
+      },
+      "now": "llm-arch-cards"
+    },
+    {
+      "id": "django-ai-app",
+      "years": "2023–24",
+      "kind": {
+        "en": "Team product",
+        "zh": "团队产品"
+      },
+      "title": {
+        "en": "Django AI Web App",
+        "zh": "Django AI 网站"
+      },
+      "repos": [
+        "assistant_ai"
+      ],
+      "stack": "Python · Django · JavaScript · shell deploy script",
+      "then": {
+        "en": "A Django web app with a dashboard and landing pages for AI chat workflows, built with contract developers and deployed to a server by script.",
+        "zh": "一个面向 AI 助手流程的 Django 网站，含后台和落地页，与外包开发者合作完成，用脚本部署到服务器。"
+      },
+      "learned": {
+        "en": "With several people pushing to one server, the deploy script was the only process. Nothing stopped a broken change, and nobody could say what was live.",
+        "zh": "几个人往同一台服务器推代码时，部署脚本就是唯一的流程。没有东西能拦住坏改动，也没人说得清线上是什么版本。"
+      },
+      "rule": {
+        "en": "Tests and a release gate before production; every deploy traceable to a commit.",
+        "zh": "上生产之前要有测试和发布闸门；每次部署都能追溯到提交。"
+      },
+      "now": "ipot"
+    },
+    {
+      "id": "agent-prototypes",
+      "years": "2025",
+      "kind": {
+        "en": "AI-agent prototypes",
+        "zh": "AI Agent 原型"
+      },
+      "title": {
+        "en": "Generated apps",
+        "zh": "生成出来的应用"
+      },
+      "repos": [
+        "HR_AI",
+        "Messages"
+      ],
+      "stack": "TypeScript · React · Drizzle · Replit agent",
+      "then": {
+        "en": "An AI companion chat app and a messaging app, built in days with Replit's coding agent.",
+        "zh": "用 Replit 的编程 Agent 几天内做出的 AI 陪伴聊天应用和消息应用。"
+      },
+      "learned": {
+        "en": "Generated code arrives fast and without tests, so no one can change it safely a week later. The speed is real; the missing tests are the cost.",
+        "zh": "生成的代码来得快，但没有测试，一周后谁也不敢改。速度是真的，缺失的测试就是代价。"
+      },
+      "rule": {
+        "en": "Write the failing test first, even when an agent writes the code.",
+        "zh": "即使代码由 Agent 来写，也先写失败的测试。"
+      },
+      "now": "governance-platform"
+    }
+  ]
+}
