@@ -4,8 +4,8 @@
   --ink:#16130e;--ink-2:#3a352c;--muted:#6e685d;
   --line:rgba(22,19,14,.16);--grid:rgba(22,19,14,.045);
   --red:#c4301f;
-  --display:"Anton",Impact,"Noto Sans SC",sans-serif;
-  --sans:"Archivo","Noto Sans SC",system-ui,-apple-system,sans-serif;
+  --display:"Anton",Impact,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  --sans:"Archivo",system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -51,9 +51,10 @@ html[data-lang="en"] [lang="zh"],html[data-lang="zh"] [lang="en"]{display:none!i
   transition:opacity .6s ease,visibility .6s;
 }
 .intro.gone{opacity:0;visibility:hidden}
-.intro .in-stage{text-align:center;display:flex;flex-direction:column;gap:22px;align-items:center;padding:16px}
-.intro .in-name{font-family:var(--display);text-transform:uppercase;font-size:clamp(34px,6vw,72px);letter-spacing:.14em;line-height:1}
-.intro .in-term{font-family:var(--mono);font-size:clamp(12px,1.4vw,14px);color:var(--ink-2);min-height:1.6em}
+.no-intro .intro{display:none}
+.intro .in-stage{contain:layout;text-align:center;display:flex;flex-direction:column;gap:22px;align-items:center;padding:16px}
+.intro .in-name{font-family:var(--display);text-transform:uppercase;font-size:clamp(34px,6vw,72px);letter-spacing:.14em;line-height:1;height:1em;white-space:nowrap}
+.intro .in-term{font-family:var(--mono);font-size:clamp(12px,1.4vw,14px);color:var(--ink-2);height:1.6em;line-height:1.6em;width:min(66ch,92vw);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:clip}
 .intro .in-term::after{content:"▍";color:var(--red);animation:blink 1s steps(1) infinite;margin-left:2px}
 .intro .in-hint{font-size:11px;letter-spacing:.34em;text-transform:uppercase;display:flex;align-items:center;gap:12px;animation:pulse 2.2s ease-in-out infinite}
 .intro .in-hint::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)}
@@ -180,7 +181,7 @@ dl.skills dd{margin:0;color:var(--ink-2)}
 /* ---------- footer ---------- */
 .foot{border-top:1px solid var(--line);margin-top:96px;padding-top:40px;padding-bottom:48px;font-size:14px}
 .foot .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px}
-.foot h4{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 12px}
+.foot .foot-h{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 12px}
 .foot ul{list-style:none;margin:0;padding:0}
 .foot li{margin-bottom:6px}
 .foot a{text-decoration:none}

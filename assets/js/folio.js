@@ -10,11 +10,14 @@
     root.setAttribute('data-lang', l);
     root.setAttribute('lang', l === 'zh' ? 'zh-CN' : 'en');
     var b = document.getElementById('lang-btn');
-    if (b) b.textContent = l === 'zh' ? 'EN' : '中';
+    if (b) {
+      b.textContent = l === 'zh' ? 'EN' : '中';
+      b.setAttribute('aria-label', l === 'zh' ? 'EN · Switch to English' : '中 · 切换到中文');
+    }
   }
   applyLang(lang);
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function init() {
     applyLang(lang);
     document.getElementById('lang-btn').addEventListener('click', function () {
       lang = lang === 'zh' ? 'en' : 'zh';
@@ -36,7 +39,7 @@
         var typer = setInterval(function () {
           term.textContent = line.slice(0, ++i);
           if (i >= line.length) clearInterval(typer);
-        }, 34);
+        }, 22);
         var close = function () {
           if (done) return; done = true;
           clearInterval(typer);
@@ -46,7 +49,7 @@
         };
         intro.addEventListener('click', close);
         document.addEventListener('keydown', close);
-        setTimeout(close, 3400);
+        setTimeout(close, 2000);
       }
     }
 
@@ -69,18 +72,6 @@
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menu.classList.contains('open')) setMenu(false); });
 
-    // ---------- portrait: use assets/img/portrait.jpg if it exists, else the drawn plate ----------
-    var plate = document.getElementById('plate');
-    if (plate) {
-      var img = new Image();
-      img.onload = function () {
-        img.alt = 'Kaihuan Huang';
-        plate.innerHTML = '';
-        plate.appendChild(img);
-      };
-      img.src = 'assets/img/portrait.jpg';
-    }
-
     // ---------- reveal on scroll ----------
     var els = document.querySelectorAll('.reveal');
     if (!('IntersectionObserver' in window) || reduced) {
@@ -96,5 +87,6 @@
 
     var y = document.getElementById('year');
     if (y) y.textContent = new Date().getFullYear();
-  });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
