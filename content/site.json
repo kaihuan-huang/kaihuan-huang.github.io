@@ -990,8 +990,8 @@
           "zh": "POS：原子结算与退款、售出时价格快照、可审计作废；修复长期失败的测试套件与分叉的 Alembic heads。"
         },
         {
-          "en": "Nalu: deterministic field resolution and an explicit-yes gate after the LLM pilot invented values; a 35-case conversational suite runs in CI.",
-          "zh": "Nalu：LLM 试点编造字段后，改为确定性字段解析加“明确说是”闸门；35 个对话用例在 CI 中运行。"
+          "en": "Nalu: deterministic field resolution and an explicit-yes gate after the LLM pilot invented values.",
+          "zh": "Nalu：LLM 试点编造字段后，改为确定性字段解析加“明确说是”闸门。"
         },
         {
           "en": "Google Ads and Meta daily spend importers for the revenue agent.",
@@ -1032,15 +1032,6 @@
           "url": ""
         },
         {
-          "v": "35",
-          "l": {
-            "en": "conversational eval cases gating CI",
-            "zh": "在 CI 中把关的对话评估用例"
-          },
-          "src": "IPOT nalu-api (private)",
-          "url": ""
-        },
-        {
           "v": "73 / 80",
           "l": {
             "en": "my commits on the Reservation API",
@@ -1069,8 +1060,8 @@
         "zh": "BloomFrontier · Jackson Ventures · 2026"
       },
       "type": {
-        "en": "Fintech lending · built, in review",
-        "zh": "金融科技借贷 · 已完成，评审中"
+        "en": "Fintech lending · merged Oct 2026",
+        "zh": "金融科技借贷 · 2026 年 10 月合并"
       },
       "pitch": {
         "en": "Money leaves only after two people sign off, the same draw cannot be funded twice, and every step lands in a verifiable audit chain.",
@@ -1080,19 +1071,19 @@
         [
           "Role",
           {
-            "en": "AI Engineer on a team. I wrote the review controls and workflow reliability layer; the AI flagging pipeline is teammates' work",
-            "zh": "团队中的 AI 工程师。我编写审核控制与工作流可靠性层；AI 标记管道由同事完成"
+            "en": "AI Engineer on a team. I wrote the review controls, workflow reliability and release-safety layers (5 pull requests); the AI flagging pipeline is teammates' work",
+            "zh": "团队中的 AI 工程师。我编写审核控制、工作流可靠性与发布安全层（5 个 PR）；AI 标记管道由同事完成"
           }
         ],
         [
           "Stack",
-          "Python · FastAPI · PostgreSQL · SQLAlchemy · Alembic · Temporal"
+          "Python · FastAPI · PostgreSQL · SQLAlchemy · Alembic · Temporal · Docker · GitHub Actions"
         ],
         [
           "Status",
           {
-            "en": "Built and tested; pull requests open / in draft",
-            "zh": "已构建并测试；PR 开放 / 草稿中"
+            "en": "Merged to main on Oct 9, 2026; not yet deployed to production",
+            "zh": "2026 年 10 月 9 日合并到 main；尚未部署到生产"
           }
         ]
       ],
@@ -1116,6 +1107,10 @@
         {
           "en": "Transactional outbox and Temporal recovery for draw verification, with a partial unique index that prevents two verification runs at once.",
           "zh": "为提款核验加入事务性 outbox 与 Temporal 恢复，并用部分唯一索引防止两次核验同时运行。"
+        },
+        {
+          "en": "A release gate that replaced a deploy workflow which hid failed migrations: verified backup, preflight checks, migration, health check and rollback, plus a regression gate that blocks any new test failure.",
+          "zh": "发布闸门：替换了一个会隐藏迁移失败的部署流程——先做经过验证的备份、预检、迁移、健康检查，失败即回滚；另有回归闸门，任何新增的测试失败都会被拦下。"
         }
       ],
       "flow": [
@@ -1143,28 +1138,46 @@
       ],
       "metrics": [
         {
-          "v": "+4,745",
+          "v": "5",
           "l": {
-            "en": "lines across 65 files in my review-controls and reliability branches",
-            "zh": "我在审核控制与可靠性分支中新增的行数（65 个文件）"
+            "en": "pull requests merged: release gate, dependency fixes, loan notifications, approvals and audit, verification reliability",
+            "zh": "个 PR 已合并：发布闸门、依赖修复、贷款通知、审批与审计、核验可靠性"
           },
-          "src": "bloomfrontier-api git (private)",
+          "src": "jacksonventures-dev/bloomfrontier-api #38–#44 (private)",
           "url": ""
         },
         {
-          "v": "616",
+          "v": "103",
           "l": {
-            "en": "tests in the repository on the reliability branch (team total)",
-            "zh": "可靠性分支上仓库的测试总数（团队合计）"
+            "en": "financial tests on real PostgreSQL 16, including concurrent approvals",
+            "zh": "个在真实 PostgreSQL 16 上运行的资金测试，含并发审批"
           },
-          "src": "bloomfrontier-api/tests (private)",
+          "src": "bloomfrontier-api PR #39 (private)",
+          "url": ""
+        },
+        {
+          "v": "4/4",
+          "l": {
+            "en": "Docker release rehearsals: failed migration, unbootable API, failing preflight, non-UTC database",
+            "zh": "次 Docker 发布演练通过：迁移失败、API 起不来、预检报错、非 UTC 数据库"
+          },
+          "src": "bloomfrontier-api PR #38 (private)",
+          "url": ""
+        },
+        {
+          "v": "911",
+          "l": {
+            "en": "tests passing on a trial merge of all five pull requests (team suite)",
+            "zh": "个测试在五个 PR 的试合并上通过（团队测试集）"
+          },
+          "src": "bloomfrontier-api review evidence (private)",
           "url": ""
         }
       ],
       "limits": [
         {
-          "en": "Not merged yet. Employer code is private; this page describes the design only.",
-          "zh": "尚未合并。雇主代码不公开，本页只描述设计。"
+          "en": "Not yet deployed, and dual approval stays off until the loan portal supports a pending-approval state. Employer code is private; this page describes the design only.",
+          "zh": "尚未部署；在贷款门户支持“待审批”状态前，双人审批保持关闭。雇主代码不公开，本页只描述设计。"
         }
       ],
       "link": null
@@ -1214,16 +1227,16 @@
           "zh": "构建并上线服务真实客人的 FastAPI/PostgreSQL 预订服务：Twilio Verify 验证码、短信送达跟踪、自助改期。"
         },
         {
-          "en": "Rebuilt Nalu's bilingual booking flow with deterministic field resolution and explicit confirmation: 33/39 held-out cases fully correct; 35-case eval suite in CI.",
-          "zh": "用确定性字段解析与明确确认重建 Nalu 双语预订流程：留出集 33/39 全字段正确；35 个评估用例接入 CI。"
+          "en": "Rebuilt Nalu's bilingual booking flow with deterministic field resolution and explicit confirmation: 33/39 held-out cases fully correct.",
+          "zh": "用确定性字段解析与明确确认重建 Nalu 双语预订流程：留出集 33/39 全字段正确。"
         },
         {
           "en": "Led POS backend architecture: atomic settlement and refunds, sale-time price snapshots, audited voids.",
           "zh": "主导 POS 后端架构：原子结算与退款、售出时价格快照、可审计作废。"
         },
         {
-          "en": "Built loan-draw review controls for BloomFrontier (in review): two-person approval, row locks, repeat-funding checks, hash-chained audit, outbox + Temporal recovery.",
-          "zh": "为 BloomFrontier 构建提款审核控制（评审中）：双人审批、行锁、重复放款检查、哈希链审计、outbox + Temporal 恢复。"
+          "en": "Built and merged loan-draw review controls for BloomFrontier: two-person approval, row locks, repeat-funding checks, hash-chained audit, outbox + Temporal recovery, and a release gate with rollback.",
+          "zh": "为 BloomFrontier 构建并合并提款审核控制：双人审批、行锁、重复放款检查、哈希链审计、outbox + Temporal 恢复，以及带回滚的发布闸门。"
         }
       ]
     },
