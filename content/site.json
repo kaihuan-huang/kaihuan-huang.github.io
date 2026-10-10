@@ -379,7 +379,7 @@
       ],
       "metrics": [
         {
-          "v": "16",
+          "v": "15",
           "l": {
             "en": "tests, including a replay of every recorded run",
             "zh": "个测试，含每段录制运行的回放"
@@ -939,6 +939,525 @@
       "link": [
         "Privacy gate on the live site",
         "https://kai-careerops.westus2.cloudapp.azure.com/privacy"
+      ],
+      "diagrams": [
+        {
+          "id": "gov-sys",
+          "title": {
+            "en": "System overview",
+            "zh": "系统结构"
+          },
+          "caption": {
+            "en": "Drawn from the source architecture board",
+            "zh": "依据源码架构看板绘制"
+          },
+          "nodes": [
+            {
+              "id": "ui",
+              "r": 0,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Admin UI · React",
+                "zh": "管理端 · React"
+              }
+            },
+            {
+              "id": "mc",
+              "r": 0,
+              "c": 2,
+              "t": "end",
+              "l": {
+                "en": "Machine client · API key",
+                "zh": "机器客户端 · API key"
+              }
+            },
+            {
+              "id": "api",
+              "r": 1,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "API · routes, JWT + RBAC",
+                "zh": "API · 路由、JWT + RBAC"
+              }
+            },
+            {
+              "id": "svc",
+              "r": 2,
+              "c": 0,
+              "t": "step",
+              "l": {
+                "en": "Domain services · users, policies, vault, files",
+                "zh": "业务服务 · 用户、策略、凭据、文件"
+              }
+            },
+            {
+              "id": "pol",
+              "r": 2,
+              "c": 1,
+              "t": "gate",
+              "l": {
+                "en": "Policy evaluator · pure function",
+                "zh": "策略评估 · 纯函数"
+              }
+            },
+            {
+              "id": "ai",
+              "r": 2,
+              "c": 2,
+              "t": "step",
+              "l": {
+                "en": "Chat + retrieval · off by default",
+                "zh": "对话 + 检索 · 默认关闭"
+              }
+            },
+            {
+              "id": "pg",
+              "r": 3,
+              "c": 0,
+              "t": "store",
+              "l": {
+                "en": "PostgreSQL 16 + pgvector",
+                "zh": "PostgreSQL 16 + pgvector"
+              }
+            },
+            {
+              "id": "wk",
+              "r": 3,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Ingest worker · SKIP LOCKED + lease",
+                "zh": "接收 worker · SKIP LOCKED + 租约"
+              }
+            },
+            {
+              "id": "det",
+              "r": 3,
+              "c": 2,
+              "t": "step",
+              "l": {
+                "en": "Detector service · offsets only",
+                "zh": "检测服务 · 只返回位置"
+              }
+            },
+            {
+              "id": "llm",
+              "r": 4,
+              "c": 2,
+              "t": "end",
+              "l": {
+                "en": "LLM provider · masked prompt only",
+                "zh": "LLM 服务 · 只收到脱敏后的提示"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "ui",
+              "api",
+              {
+                "en": "REST + JWT",
+                "zh": "REST + JWT"
+              }
+            ],
+            [
+              "mc",
+              "api",
+              {
+                "en": "/ingest",
+                "zh": "/ingest"
+              }
+            ],
+            [
+              "api",
+              "svc"
+            ],
+            [
+              "api",
+              "pol"
+            ],
+            [
+              "api",
+              "ai"
+            ],
+            [
+              "svc",
+              "pg"
+            ],
+            [
+              "pol",
+              "wk",
+              {
+                "en": "decides",
+                "zh": "判定"
+              }
+            ],
+            [
+              "ai",
+              "det",
+              {
+                "en": "preview + recheck",
+                "zh": "预览 + 复查"
+              }
+            ],
+            [
+              "det",
+              "llm",
+              {
+                "en": "masked",
+                "zh": "脱敏后"
+              }
+            ],
+            [
+              "wk",
+              "pg",
+              {
+                "en": "findings + audit",
+                "zh": "发现 + 审计"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "gov-evt",
+          "title": {
+            "en": "One event, start to finish",
+            "zh": "一条事件的完整处理"
+          },
+          "caption": {
+            "en": "Retries never write a finding twice",
+            "zh": "重试不会重复写入"
+          },
+          "nodes": [
+            {
+              "id": "cl",
+              "r": 0,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Client reports a finding",
+                "zh": "客户端上报发现"
+              }
+            },
+            {
+              "id": "post",
+              "r": 0,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "POST /ingest/events",
+                "zh": "POST /ingest/events"
+              }
+            },
+            {
+              "id": "rc",
+              "r": 0,
+              "c": 2,
+              "t": "end",
+              "l": {
+                "en": "202 Accepted · receipt",
+                "zh": "202 已接收 · 回执"
+              }
+            },
+            {
+              "id": "q",
+              "r": 1,
+              "c": 1,
+              "t": "store",
+              "l": {
+                "en": "Queue · unique client event id",
+                "zh": "队列 · 客户端事件 ID 唯一"
+              }
+            },
+            {
+              "id": "claim",
+              "r": 2,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Worker claims a batch · lease",
+                "zh": "worker 领取一批 · 租约"
+              }
+            },
+            {
+              "id": "ev",
+              "r": 3,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Evaluate current rules",
+                "zh": "按当前规则评估"
+              }
+            },
+            {
+              "id": "retry",
+              "r": 3,
+              "c": 0,
+              "t": "gate",
+              "l": {
+                "en": "Attempts left?",
+                "zh": "还有重试次数？"
+              }
+            },
+            {
+              "id": "tx",
+              "r": 4,
+              "c": 1,
+              "t": "gate",
+              "l": {
+                "en": "One transaction: findings, incident, hash chain",
+                "zh": "单一事务：发现、事件、哈希链"
+              }
+            },
+            {
+              "id": "done",
+              "r": 4,
+              "c": 2,
+              "t": "end",
+              "l": {
+                "en": "Done · visible in the console",
+                "zh": "完成 · 控制台可见"
+              }
+            },
+            {
+              "id": "fail",
+              "r": 4,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Failed · attempts exhausted",
+                "zh": "失败 · 次数用尽"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "cl",
+              "post",
+              {
+                "en": "hashes + offsets",
+                "zh": "哈希 + 位置"
+              }
+            ],
+            [
+              "post",
+              "rc",
+              {
+                "en": "after commit",
+                "zh": "提交后"
+              }
+            ],
+            [
+              "post",
+              "q",
+              {
+                "en": "idempotent insert",
+                "zh": "幂等写入"
+              }
+            ],
+            [
+              "q",
+              "claim"
+            ],
+            [
+              "claim",
+              "ev"
+            ],
+            [
+              "ev",
+              "tx"
+            ],
+            [
+              "tx",
+              "done"
+            ],
+            [
+              "ev",
+              "retry",
+              {
+                "en": "error · rollback",
+                "zh": "出错 · 回滚"
+              }
+            ],
+            [
+              "retry",
+              "q",
+              {
+                "en": "yes · backoff",
+                "zh": "是 · 退避"
+              }
+            ],
+            [
+              "retry",
+              "fail",
+              {
+                "en": "no",
+                "zh": "否"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "gov-ai",
+          "title": {
+            "en": "What may reach a model",
+            "zh": "什么能到达模型"
+          },
+          "caption": {
+            "en": "Indexing and retrieval have different trust boundaries",
+            "zh": "索引和检索的信任边界不同"
+          },
+          "nodes": [
+            {
+              "id": "pr",
+              "r": 0,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Prompt",
+                "zh": "用户输入"
+              }
+            },
+            {
+              "id": "pv",
+              "r": 1,
+              "c": 0,
+              "t": "step",
+              "l": {
+                "en": "Detect + policy · masked preview",
+                "zh": "检测 + 策略 · 脱敏预览"
+              }
+            },
+            {
+              "id": "sd",
+              "r": 2,
+              "c": 0,
+              "t": "step",
+              "l": {
+                "en": "Explicit send · server rechecks",
+                "zh": "明确发送 · 服务器复查"
+              }
+            },
+            {
+              "id": "au",
+              "r": 3,
+              "c": 0,
+              "t": "gate",
+              "l": {
+                "en": "Permission + quota · key from vault",
+                "zh": "权限 + 额度 · 凭据库取 key"
+              }
+            },
+            {
+              "id": "lm",
+              "r": 4,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Model provider",
+                "zh": "模型服务"
+              }
+            },
+            {
+              "id": "fi",
+              "r": 0,
+              "c": 1,
+              "t": "store",
+              "l": {
+                "en": "Original files",
+                "zh": "原始文件"
+              }
+            },
+            {
+              "id": "em",
+              "r": 1,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Trusted embedding host",
+                "zh": "可信 embedding 服务"
+              }
+            },
+            {
+              "id": "vx",
+              "r": 2,
+              "c": 1,
+              "t": "store",
+              "l": {
+                "en": "pgvector · vectors + hashes",
+                "zh": "pgvector · 向量 + 哈希"
+              }
+            },
+            {
+              "id": "rt",
+              "r": 3,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Retrieve · visibility + hash check",
+                "zh": "检索 · 可见性 + 哈希校验"
+              }
+            },
+            {
+              "id": "mk",
+              "r": 4,
+              "c": 1,
+              "t": "gate",
+              "l": {
+                "en": "Mask by policy",
+                "zh": "按策略脱敏"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "pr",
+              "pv"
+            ],
+            [
+              "pv",
+              "sd"
+            ],
+            [
+              "sd",
+              "au"
+            ],
+            [
+              "au",
+              "lm"
+            ],
+            [
+              "fi",
+              "em",
+              {
+                "en": "index",
+                "zh": "索引"
+              }
+            ],
+            [
+              "em",
+              "vx"
+            ],
+            [
+              "vx",
+              "rt"
+            ],
+            [
+              "rt",
+              "mk"
+            ],
+            [
+              "mk",
+              "lm",
+              {
+                "en": "context",
+                "zh": "上下文"
+              }
+            ]
+          ]
+        }
       ]
     },
     {
@@ -1050,6 +1569,332 @@
       "link": [
         "Try the POS reimplementation",
         "https://kaihuan-huang.github.io/ledger-demo/"
+      ],
+      "diagrams": [
+        {
+          "id": "ipot-nalu",
+          "title": {
+            "en": "Nalu: a booking needs an explicit yes",
+            "zh": "Nalu：预订必须得到明确的“是”"
+          },
+          "caption": {
+            "en": "Simplified for a public page",
+            "zh": "公开版简化图"
+          },
+          "nodes": [
+            {
+              "id": "rq",
+              "r": 0,
+              "c": 1,
+              "t": "end",
+              "l": {
+                "en": "Guest message",
+                "zh": "客人消息"
+              }
+            },
+            {
+              "id": "fx",
+              "r": 1,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Rules read and validate fields · no model",
+                "zh": "规则读取并校验字段 · 不用模型"
+              }
+            },
+            {
+              "id": "sl",
+              "r": 2,
+              "c": 1,
+              "t": "gate",
+              "l": {
+                "en": "Fields valid and slot free?",
+                "zh": "字段有效且有空位？"
+              }
+            },
+            {
+              "id": "ask",
+              "r": 2,
+              "c": 0,
+              "t": "step",
+              "l": {
+                "en": "Ask or correct",
+                "zh": "追问或更正"
+              }
+            },
+            {
+              "id": "sm",
+              "r": 3,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Show the booking summary",
+                "zh": "展示预订摘要"
+              }
+            },
+            {
+              "id": "cf",
+              "r": 4,
+              "c": 1,
+              "t": "gate",
+              "l": {
+                "en": "Explicit yes to this summary?",
+                "zh": "对这份摘要明确说“是”？"
+              }
+            },
+            {
+              "id": "nw",
+              "r": 4,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "No booking written",
+                "zh": "不写入预订"
+              }
+            },
+            {
+              "id": "cl",
+              "r": 5,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Claim once · same idempotency key",
+                "zh": "只领取一次 · 同一幂等键"
+              }
+            },
+            {
+              "id": "api",
+              "r": 6,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Reservation API decides",
+                "zh": "Reservation API 决定状态"
+              }
+            },
+            {
+              "id": "ok",
+              "r": 6,
+              "c": 2,
+              "t": "end",
+              "l": {
+                "en": "Confirmed",
+                "zh": "已确认"
+              }
+            },
+            {
+              "id": "pd",
+              "r": 6,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Received, pending",
+                "zh": "已收到，待确认"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "rq",
+              "fx"
+            ],
+            [
+              "fx",
+              "sl"
+            ],
+            [
+              "sl",
+              "ask",
+              {
+                "en": "no",
+                "zh": "否"
+              }
+            ],
+            [
+              "ask",
+              "fx",
+              {
+                "en": "retry",
+                "zh": "重试"
+              }
+            ],
+            [
+              "sl",
+              "sm",
+              {
+                "en": "yes",
+                "zh": "是"
+              }
+            ],
+            [
+              "sm",
+              "cf"
+            ],
+            [
+              "cf",
+              "nw",
+              {
+                "en": "no / vague",
+                "zh": "否 / 含糊"
+              }
+            ],
+            [
+              "cf",
+              "cl",
+              {
+                "en": "yes",
+                "zh": "是"
+              }
+            ],
+            [
+              "cl",
+              "api"
+            ],
+            [
+              "api",
+              "ok"
+            ],
+            [
+              "api",
+              "pd"
+            ]
+          ]
+        },
+        {
+          "id": "ipot-pos",
+          "title": {
+            "en": "Dine-in to a settled bill",
+            "zh": "从堂食到结清账单"
+          },
+          "caption": {
+            "en": "Simplified for a public page",
+            "zh": "公开版简化图"
+          },
+          "nodes": [
+            {
+              "id": "qr",
+              "r": 0,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Scan table QR",
+                "zh": "扫桌码"
+              }
+            },
+            {
+              "id": "id",
+              "r": 0,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Verify guest",
+                "zh": "验证顾客"
+              }
+            },
+            {
+              "id": "ss",
+              "r": 0,
+              "c": 2,
+              "t": "step",
+              "l": {
+                "en": "Open or reuse table session",
+                "zh": "打开或沿用桌台会话"
+              }
+            },
+            {
+              "id": "od",
+              "r": 1,
+              "c": 2,
+              "t": "step",
+              "l": {
+                "en": "Order · validated against menu",
+                "zh": "下单 · 按菜单校验"
+              }
+            },
+            {
+              "id": "kd",
+              "r": 1,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Kitchen rounds · new items only",
+                "zh": "厨房分轮 · 只发新菜"
+              }
+            },
+            {
+              "id": "st",
+              "r": 2,
+              "c": 2,
+              "t": "gate",
+              "l": {
+                "en": "Settle: payment, tip, close, table in one transaction",
+                "zh": "结账：付款、小费、结单、清台在一个事务里"
+              }
+            },
+            {
+              "id": "fr",
+              "r": 3,
+              "c": 2,
+              "t": "end",
+              "l": {
+                "en": "Table free",
+                "zh": "桌台空出"
+              }
+            },
+            {
+              "id": "rv",
+              "r": 2,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Refund or void · audited",
+                "zh": "退款或作废 · 留审计"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "qr",
+              "id"
+            ],
+            [
+              "id",
+              "ss"
+            ],
+            [
+              "ss",
+              "od"
+            ],
+            [
+              "od",
+              "kd",
+              {
+                "en": "auto-fire",
+                "zh": "自动出单"
+              }
+            ],
+            [
+              "od",
+              "st",
+              {
+                "en": "checkout",
+                "zh": "结账"
+              }
+            ],
+            [
+              "st",
+              "fr"
+            ],
+            [
+              "st",
+              "rv",
+              {
+                "en": "later",
+                "zh": "之后"
+              }
+            ]
+          ]
+        }
       ]
     },
     {
@@ -1178,6 +2023,260 @@
         {
           "en": "Not yet deployed, and dual approval stays off until the loan portal supports a pending-approval state. Employer code is private; this page describes the design only.",
           "zh": "尚未部署；在贷款门户支持“待审批”状态前，双人审批保持关闭。雇主代码不公开，本页只描述设计。"
+        }
+      ],
+      "link": null
+    },
+    {
+      "slug": "reea",
+      "title": "REEA",
+      "kicker": {
+        "en": "Founding engineer · 2023–24",
+        "zh": "创始工程师 · 2023–24"
+      },
+      "type": {
+        "en": "AI real-estate platform · 2023–24",
+        "zh": "AI 房地产平台 · 2023–24"
+      },
+      "pitch": {
+        "en": "A real-estate platform for buyers, sellers and agents: listings and search, plus a GPT-3 tool that writes listing content.",
+        "zh": "面向买家、卖家和经纪人的房地产平台：房源与搜索，外加 AI 撰写的房源内容。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Founding engineer. Built the platform, worked with contract developers, and contributed to the product plan and pitch deck",
+            "zh": "创始工程师。搭建平台，与外包开发者协作，参与产品规划和融资演示稿"
+          }
+        ],
+        [
+          "Stack",
+          "Python · Django 4.1 · django-allauth · OpenAI GPT-3 API · SQLite / PostgreSQL"
+        ],
+        [
+          "Status",
+          {
+            "en": "Early-stage product; code private; not running today",
+            "zh": "早期产品；代码私有；目前未运行"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "Buyers struggle to pin down what they want and get little personal attention from agents, while listings and paperwork stay scattered. The bet: AI tools could make the process faster and more transparent for buyers, sellers and agents.",
+        "zh": "买家很难说清自己想要什么，也很少得到经纪人的个别关注；房源和文件又分散各处。我们的判断是：AI 工具能让买家、卖家和经纪人都更快、更透明。"
+      },
+      "approach": [
+        {
+          "en": "A Django platform with accounts (sign-up, login, password reset), structured property listings (type, status, rooms, amenities, price, video) and search.",
+          "zh": "Django 平台：账户（注册、登录、找回密码）、结构化房源（类型、状态、房间、设施、价格、视频）和搜索。"
+        },
+        {
+          "en": "An AI content studio: three GPT-3 steps — topic ideas, section titles, section write-ups — with a monthly word allowance per subscriber.",
+          "zh": "AI 内容工作台：GPT-3 分三步生成——选题、章节标题、章节正文——每个订阅用户有每月字数额度。"
+        },
+        {
+          "en": "Product work alongside the code: competitor research, a B2B white-label versus B2C model, and the pitch deck.",
+          "zh": "代码之外的产品工作：竞品研究、B2B 白标与 B2C 两种模式，以及融资演示稿。"
+        },
+        {
+          "en": "Built with contract developers; I wrote 68 of the 95 commits.",
+          "zh": "与外包开发者共同完成；95 个提交中 68 个由我编写。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Buyer · seller · agent",
+          "zh": "买家 · 卖家 · 经纪人"
+        },
+        {
+          "en": "Listings + search",
+          "zh": "房源 + 搜索"
+        },
+        {
+          "en": "AI content studio",
+          "zh": "AI 内容工作台"
+        },
+        {
+          "en": "Word allowance?",
+          "zh": "字数额度？",
+          "gate": true
+        },
+        {
+          "en": "GPT-3 API",
+          "zh": "GPT-3 API"
+        }
+      ],
+      "diagrams": [
+        {
+          "id": "reea-map",
+          "title": {
+            "en": "Platform map",
+            "zh": "平台结构"
+          },
+          "caption": {
+            "en": "Reconstructed from the repository",
+            "zh": "依据代码仓库还原"
+          },
+          "nodes": [
+            {
+              "id": "us",
+              "r": 0,
+              "c": 1,
+              "t": "end",
+              "l": {
+                "en": "Buyers · sellers · agents",
+                "zh": "买家 · 卖家 · 经纪人"
+              }
+            },
+            {
+              "id": "web",
+              "r": 1,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Django web platform",
+                "zh": "Django 网站平台"
+              }
+            },
+            {
+              "id": "acc",
+              "r": 2,
+              "c": 0,
+              "t": "step",
+              "l": {
+                "en": "Accounts · django-allauth",
+                "zh": "账户 · django-allauth"
+              }
+            },
+            {
+              "id": "lst",
+              "r": 2,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Listings, add property, search",
+                "zh": "房源、发布、搜索"
+              }
+            },
+            {
+              "id": "ai",
+              "r": 2,
+              "c": 2,
+              "t": "step",
+              "l": {
+                "en": "AI content studio · ideas → sections → write-up",
+                "zh": "AI 内容工作台 · 选题 → 章节 → 正文"
+              }
+            },
+            {
+              "id": "db",
+              "r": 3,
+              "c": 1,
+              "t": "store",
+              "l": {
+                "en": "Property and profile data",
+                "zh": "房源与用户资料"
+              }
+            },
+            {
+              "id": "al",
+              "r": 3,
+              "c": 2,
+              "t": "gate",
+              "l": {
+                "en": "Monthly word allowance?",
+                "zh": "每月字数额度？"
+              }
+            },
+            {
+              "id": "gpt",
+              "r": 4,
+              "c": 2,
+              "t": "end",
+              "l": {
+                "en": "OpenAI GPT-3 completion API",
+                "zh": "OpenAI GPT-3 补全接口"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "us",
+              "web"
+            ],
+            [
+              "web",
+              "acc"
+            ],
+            [
+              "web",
+              "lst"
+            ],
+            [
+              "web",
+              "ai"
+            ],
+            [
+              "lst",
+              "db"
+            ],
+            [
+              "acc",
+              "db"
+            ],
+            [
+              "ai",
+              "al"
+            ],
+            [
+              "al",
+              "gpt",
+              {
+                "en": "yes",
+                "zh": "是"
+              }
+            ]
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "v": "68 / 95",
+          "l": {
+            "en": "commits mine, with contract developers",
+            "zh": "个提交由我完成，其余来自外包开发者"
+          },
+          "src": "assistant_ai git log (private)",
+          "url": ""
+        },
+        {
+          "v": "3",
+          "l": {
+            "en": "GPT-3 steps from topic to finished section",
+            "zh": "个 GPT-3 步骤，从选题到成稿"
+          },
+          "src": "assistant_ai dashboard/functions.py (private)",
+          "url": ""
+        },
+        {
+          "v": "15",
+          "l": {
+            "en": "months of commits, Jan 2023 to Apr 2024",
+            "zh": "个月的提交记录，2023 年 1 月至 2024 年 4 月"
+          },
+          "src": "assistant_ai git log (private)",
+          "url": ""
+        }
+      ],
+      "limits": [
+        {
+          "en": "Generation was prompt-only, with no test set, and deploys were a script with no tests. My later work replaced both habits with eval gates and release gates.",
+          "zh": "生成只靠提示词，没有测试集；部署只是一段没有测试的脚本。我后来的工作用评估闸门和发布闸门取代了这两个习惯。"
+        },
+        {
+          "en": "No usage data was recorded, and the product is not running today.",
+          "zh": "没有记录使用数据，产品目前也不在运行。"
         }
       ],
       "link": null
@@ -1424,8 +2523,8 @@
         "zh": "团队产品"
       },
       "title": {
-        "en": "Django AI Web App",
-        "zh": "Django AI 网站"
+        "en": "REEA · Django AI web app",
+        "zh": "REEA · Django AI 网站"
       },
       "repos": [
         "assistant_ai"
@@ -1443,7 +2542,8 @@
         "en": "Tests and a release gate before production; every deploy traceable to a commit.",
         "zh": "上生产之前要有测试和发布闸门；每次部署都能追溯到提交。"
       },
-      "now": "ipot"
+      "now": "ipot",
+      "case": "reea"
     },
     {
       "id": "agent-prototypes",
