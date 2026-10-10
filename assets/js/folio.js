@@ -60,13 +60,29 @@
 
     var menu = document.getElementById('menu');
     var openBtn = document.getElementById('menu-btn');
+    var behind = [document.getElementById('main'), document.querySelector('.foot'), nav.querySelector('.wrap')];
     var setMenu = function (open) {
       menu.classList.toggle('open', open);
       menu.setAttribute('aria-hidden', open ? 'false' : 'true');
       openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
       document.body.style.overflow = open ? 'hidden' : '';
+      behind.forEach(function (el) { if (el) el.inert = open; });
       if (open) menu.querySelector('a').focus(); else openBtn.focus();
     };
+    // keep Tab inside the open menu
+    menu.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab') return;
+      var f = menu.querySelectorAll('a, button');
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    // mark the current page in the menu
+    var here = location.pathname.replace(/index\.html$/, '');
+    menu.querySelectorAll('a').forEach(function (a) {
+      var p = new URL(a.href, location.href).pathname.replace(/index\.html$/, '');
+      if (p === here && !a.hash) a.setAttribute('aria-current', 'page');
+    });
     openBtn.addEventListener('click', function () { setMenu(true); });
     document.getElementById('menu-close').addEventListener('click', function () { setMenu(false); });
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
