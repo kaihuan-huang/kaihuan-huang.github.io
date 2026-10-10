@@ -355,6 +355,22 @@ code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);padding:1
   .sa-side{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:12px}
 }
 
+/* ---------- refinements ---------- */
+/* anchors land below the fixed nav */
+[id]{scroll-margin-top:84px}
+/* touch screens cannot hover: show the measurements and colour by default */
+@media (hover:none){
+  .dim .d-line{transform:none;color:var(--red)}
+  .dim .d-txt{opacity:1;color:var(--red)}
+  .frame .v-dim{transform:none;background:var(--red)}
+  .frame img{filter:none}
+}
+/* moving content pauses while the reader points at or focuses it (WCAG 2.2.2) */
+.mq:hover .mq-track,.mq:focus-within .mq-track{animation-play-state:paused}
+/* current page in the menu */
+.menu a[aria-current="page"] .m-title{color:var(--red)}
+.menu a[aria-current="page"] .m-num::after{content:" ●";color:var(--red)}
+
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease}
 .reveal.in{opacity:1;transform:none}

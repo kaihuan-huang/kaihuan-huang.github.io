@@ -6,7 +6,9 @@
 Writes index.html, resume.html and works/<slug>.html. Standard library only.
 Content strings are trusted HTML written by the site owner.
 """
+import html as _html
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -14,7 +16,14 @@ C = json.loads((ROOT / "content" / "site.json").read_text(encoding="utf-8"))
 P = C["person"]
 FONTS = ("https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600"
          "&family=JetBrains+Mono:wght@400;500&display=swap")
-VER = "4"
+VER = "5"
+SITE = "https://kaihuan-huang.github.io/"
+ZH = {  # labels that live in build.py, not in site.json
+    "Role": "角色", "Stack": "技术栈", "Data": "数据", "Status": "状态",
+    "Model architecture card": "模型架构卡片", "Tamper-evident ledger page": "防篡改账本页",
+    "Public market snapshot": "公开市场快照", "Privacy gate write-up": "隐私闸门说明",
+    "Privacy gate on the live site": "线上站点的隐私闸门", "Try the POS reimplementation": "试用 POS 重写版",
+}
 
 
 def bi(v):
@@ -24,11 +33,22 @@ def bi(v):
     return v
 
 
+def tr(s):
+    """Plain English label -> bilingual spans when a translation exists."""
+    return bi({"en": s, "zh": ZH[s]}) if s in ZH else s
+
+
+def attr(s):
+    """Text for an HTML attribute: tags stripped, entities escaped."""
+    return _html.escape(re.sub(r"<[^>]+>", "", s), quote=True)
+
+
 def nn(i):
     return f"{i:02d}"
 
 
-def head(title, desc, base, og_img="assets/img/og.png"):
+def head(title, desc, base, path="", og_img="assets/img/og.png", jsonld=""):
+    title, desc, url = attr(title), attr(desc), SITE + path
     return f"""<!doctype html>
 <html lang="en" data-lang="en">
 <head>
@@ -36,10 +56,12 @@ def head(title, desc, base, og_img="assets/img/og.png"):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<link rel="canonical" href="{url}">
 <meta property="og:type" content="website">
+<meta property="og:url" content="{url}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="https://kaihuan-huang.github.io/{og_img}">
+<meta property="og:image" content="{SITE}{og_img}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f4f0e8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#14120f" media="(prefers-color-scheme: dark)">
@@ -49,9 +71,9 @@ def head(title, desc, base, og_img="assets/img/og.png"):
 <link rel="stylesheet" href="{FONTS}" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="{FONTS}"></noscript>
 <link rel="stylesheet" href="{base}assets/css/folio.css?v={VER}">
-<script>(function(){{var r=document.documentElement,l=null,s=null;try{{l=localStorage.getItem('kh-lang');s=sessionStorage.getItem('kh-intro')}}catch(e){{}}r.setAttribute('data-lang',l||((navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en'));if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('no-intro')}})();</script>
+<script>(function(){{var r=document.documentElement,l=null,s=null;try{{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='zh')localStorage.setItem('kh-lang',q);l=localStorage.getItem('kh-lang');s=sessionStorage.getItem('kh-intro')}}catch(e){{}}r.setAttribute('data-lang',l||((navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en'));if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('no-intro')}})();</script>
 <script src="{base}assets/js/folio.js?v={VER}" defer></script>
-</head>
+{jsonld}</head>
 <body>
 <a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="zh">跳到正文</span></a>
 """
@@ -62,14 +84,14 @@ def all_items():
 
 
 def nav(base):
-    rows = [f'<li><a href="{base}index.html#top"><span class="m-num">00</span><span class="m-title">{bi({"en": "Home", "zh": "首页"})}</span><span class="m-tag">Start</span></a></li>']
+    rows = [f'<li><a href="{base}index.html#top"><span class="m-num">00</span><span class="m-title">{bi({"en": "Home", "zh": "首页"})}</span><span class="m-tag">{bi({"en": "Start", "zh": "开始"})}</span></a></li>']
     for i, (_, w) in enumerate(all_items(), 1):
         rows.append(f'<li><a href="{base}works/{w["slug"]}.html"><span class="m-num">{nn(i)}</span><span class="m-title">{w["title"]}</span><span class="m-tag">{bi(w["type"])}</span></a></li>')
     n = len(all_items())
-    rows.append(f'<li><a href="{base}resume.html"><span class="m-num">{nn(n + 1)}</span><span class="m-title">{bi({"en": "Résumé", "zh": "简历"})}</span><span class="m-tag">Web · print</span></a></li>')
+    rows.append(f'<li><a href="{base}resume.html"><span class="m-num">{nn(n + 1)}</span><span class="m-title">{bi({"en": "Résumé", "zh": "简历"})}</span><span class="m-tag">{bi({"en": "Web · print", "zh": "网页 · 可打印"})}</span></a></li>')
     rows.append(f'<li><a href="{base}archive.html"><span class="m-num">A</span><span class="m-title">{bi({"en": "Learning Archive", "zh": "学习档案"})}</span><span class="m-tag">2023 — 2025</span></a></li>')
-    rows.append(f'<li><a href="{base}notes/"><span class="m-num">{nn(n + 2)}</span><span class="m-title">{bi({"en": "Notes", "zh": "笔记"})}</span><span class="m-tag">Writing</span></a></li>')
-    rows.append(f'<li><a href="{base}index.html#contact"><span class="m-num">{nn(n + 3)}</span><span class="m-title">{bi({"en": "Contact", "zh": "联系"})}</span><span class="m-tag">Say hi</span></a></li>')
+    rows.append(f'<li><a href="{base}notes/"><span class="m-num">{nn(n + 2)}</span><span class="m-title">{bi({"en": "Notes", "zh": "笔记"})}</span><span class="m-tag">{bi({"en": "Writing", "zh": "文章"})}</span></a></li>')
+    rows.append(f'<li><a href="{base}index.html#contact"><span class="m-num">{nn(n + 3)}</span><span class="m-title">{bi({"en": "Contact", "zh": "联系"})}</span><span class="m-tag">{bi({"en": "Say hi", "zh": "打个招呼"})}</span></a></li>')
     return f"""<nav class="nav" id="nav" aria-label="Main">
   <div class="wrap">
     <a class="brand" href="{base}index.html"><span class="stamp">KH</span><span class="b-txt">{P['name_first']} {P['name_last']} — Folio</span></a>
@@ -80,7 +102,7 @@ def nav(base):
     </div>
   </div>
 </nav>
-<div class="menu" id="menu" aria-hidden="true">
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
   <button class="pill menu-close" id="menu-close" type="button">{bi({"en": "Close", "zh": "关闭"})}</button>
   <div class="wrap">
     <ol>
@@ -100,7 +122,7 @@ def footer(base):
       <div class="sign">{P['name_first']} {P['name_last']}</div>
       <div class="motto">{bi({"en": "Measure first. Ship second. Keep the receipts.", "zh": "先测量，再上线，留好凭据。"})}</div>
     </div>
-    <div><p class="foot-h">Index</p><ul>{idx}</ul></div>
+    <div><p class="foot-h">{bi({"en": "Index", "zh": "目录"})}</p><ul>{idx}</ul></div>
     <div><p class="foot-h">{bi({"en": "Elsewhere", "zh": "其他"})}</p><ul>
       <li><a href="{P['github']}">GitHub</a></li>
       <li><a href="{P['linkedin']}">LinkedIn</a></li>
@@ -182,7 +204,7 @@ def build_index():
     mq = "".join(f'<span class="mq-item">{x}</span>' for x in mq_words) * 2
 
     html = head(f"{P['name_first']} {P['name_last']} · AI Engineer",
-                "Kaihuan Huang, AI engineer: production Python services and evaluated LLM applications. Live demos with source, tests and measured results.", "")
+                "Kaihuan Huang, AI engineer: production Python services and evaluated LLM applications. Live demos with source, tests and measured results.", "", "", jsonld=JSONLD)
     html += f"""
 <div class="intro" id="intro" aria-hidden="true">
   <div class="in-stage">
@@ -286,7 +308,7 @@ def build_index():
 # ---------------- case pages ----------------
 
 def build_case(i, kind, w, prev, nxt):
-    spec = "".join(f"<dt>{k}</dt><dd>{bi(v)}</dd>" for k, v in w["spec"])
+    spec = "".join(f"<dt>{tr(k)}</dt><dd>{bi(v)}</dd>" for k, v in w["spec"])
     approach = "".join(f"<li>{bi(a)}</li>" for a in w["approach"])
     metrics = "".join(metric(m) for m in w["metrics"])
     limits = "".join(f"<li>{bi(x)}</li>" for x in w["limits"])
@@ -299,13 +321,13 @@ def build_case(i, kind, w, prev, nxt):
         if w.get("repo"):
             btns += f'<a class="btn" href="{w["repo"]}">{bi({"en": "Source", "zh": "源码"})}</a>'
         for t, u in w.get("extra_links", []):
-            btns += f'<a class="btn" href="{u}">{t}</a>'
+            btns += f'<a class="btn" href="{u}">{tr(t)}</a>'
         kicker = w["tag"]
     else:
         hero = f'<figure class="case-hero plate-flow"><div class="sheet">{flow(w["flow"], big=True)}<div class="sheet-foot mono"><span>SECTION · {w["title"].upper()}</span><span>{bi({"en": "Design view · code private", "zh": "设计视图 · 代码私有"})}</span></div></div></figure>'
         btns = ""
         if w.get("link"):
-            btns = f'<a class="btn solid" href="{w["link"][1]}">{w["link"][0]} →</a>'
+            btns = f'<a class="btn solid" href="{w["link"][1]}">{tr(w["link"][0])} →</a>'
         kicker = bi(w["kicker"])
     pager = f"""<nav class="pager wrap mono" aria-label="More work">
     <a href="{prev['slug']}.html">← {prev['title']}</a>
@@ -322,7 +344,8 @@ def build_case(i, kind, w, prev, nxt):
     secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
     secs.append(({"en": "Limits, stated plainly", "zh": "局限，直说"}, f'<ul class="limits">{limits}</ul>'))
     body = "".join(f'<section class="case-sec"><h2 class="case-h"><span class="mono">{nn(k)}</span>{bi(h)}</h2>{c}</section>' for k, (h, c) in enumerate(secs, 1))
-    html = head(f"{w['title']} · {P['name_first']} {P['name_last']}", w["pitch"]["en"], "../")
+    og = f"assets/img/works/{w['img']}" if kind == "w" else "assets/img/og.png"
+    html = head(f"{w['title']} · {P['name_first']} {P['name_last']}", w["pitch"]["en"], "../", f"works/{w['slug']}.html", og)
     html += nav("../")
     html += f"""<main id="main" class="case">
   <header class="wrap case-head">
@@ -398,7 +421,7 @@ def build_archive():
         <div class="sa-foot mono"><span>{bi({"en": "Repos", "zh": "仓库"})}: {repos}</span><a href="works/{a['now']}.html">{bi({"en": "Shows today in", "zh": "今天体现在"})} {slug_title(a['now'])} →</a></div>
       </div>
     </article>"""
-    html = head(f"Learning Archive · {P['name_first']} {P['name_last']}", "Earlier projects and the engineering rules they left behind.", "")
+    html = head(f"Learning Archive · {P['name_first']} {P['name_last']}", "Earlier projects and the engineering rules they left behind.", "", "archive.html")
     html += nav("")
     html += f"""<main id="main" class="case">
   <header class="wrap case-head">
@@ -427,7 +450,7 @@ def build_resume():
         url = w.get("demo") or f"https://kaihuan-huang.github.io/works/{w['slug']}.html"
         proj += f'<div class="r-role"><div class="r-top"><b><a href="{url}">{w["title"]}</a></b><span class="mono">{bi(w["type"])}</span></div><div class="r-at">{bi(w["pitch"])}</div></div>'
     skills = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in C["skills"])
-    html = head(f"Résumé · {P['name_first']} {P['name_last']}", "Résumé of Kaihuan Huang, AI engineer.", "")
+    html = head(f"Résumé · {P['name_first']} {P['name_last']}", "Résumé of Kaihuan Huang, AI engineer.", "", "resume.html")
     html += nav("")
     html += f"""<main id="main" class="resume wrap">
   <div class="r-actions no-print"><button class="btn solid" type="button" onclick="window.print()">{bi({"en": "Print / save as PDF", "zh": "打印 / 存为 PDF"})}</button></div>
@@ -445,6 +468,12 @@ def build_resume():
     (ROOT / "resume.html").write_text(html, encoding="utf-8")
 
 
+JSONLD = '<script type="application/ld+json">' + json.dumps({
+    "@context": "https://schema.org", "@type": "Person", "name": "Kaihuan Huang", "jobTitle": "AI Engineer",
+    "url": SITE, "email": "mailto:" + P["email"], "address": {"@type": "PostalAddress", "addressRegion": "CA", "addressCountry": "US"},
+    "alumniOf": "University of York", "sameAs": [P["github"], P["linkedin"]],
+    "knowsAbout": ["Python", "FastAPI", "PostgreSQL", "LLM evaluation", "PII detection", "Temporal"],
+}, ensure_ascii=False) + "</script>\n"
 PLATE_SVG = (ROOT / "assets" / "img" / "plate.svg").read_text(encoding="utf-8")
 PORTRAIT = ('<img src="assets/img/portrait.jpg" alt="Kaihuan Huang" width="800" height="1000">'
             if (ROOT / "assets" / "img" / "portrait.jpg").exists() else PLATE_SVG)
@@ -458,4 +487,8 @@ if __name__ == "__main__":
         build_case(i, kind, w, prev, nxt)
     build_resume()
     build_archive()
+    urls = ["", "archive.html", "resume.html", "notes/"] + [f"works/{w['slug']}.html" for _, w in items]
+    (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+                                      + "".join(f"  <url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n", encoding="utf-8")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n", encoding="utf-8")
     print(f"built index.html, resume.html and {len(items)} case pages")
