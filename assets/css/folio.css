@@ -217,7 +217,8 @@ dl.skills dd{margin:0;color:var(--ink-2)}
 }
 
 /* ---------- behind the wall ---------- */
-.deeps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.deeps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.deeps>.deep:last-child:nth-child(odd){grid-column:1/-1}
 .deep a{display:flex;flex-direction:column;gap:8px;height:100%;text-decoration:none;border:1px solid var(--line);background:var(--matte);padding:20px 20px 18px;transition:border-color .3s,transform .3s}
 .deep a:hover,.deep a:focus-visible{border-color:var(--ink);transform:translateY(-3px)}
 .deep .w-label{color:var(--muted);display:flex;justify-content:space-between;gap:8px;margin:0}
@@ -370,6 +371,38 @@ code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);padding:1
 /* current page in the menu */
 .menu a[aria-current="page"] .m-title{color:var(--red)}
 .menu a[aria-current="page"] .m-num::after{content:" ●";color:var(--red)}
+
+/* ---------- architecture diagrams ---------- */
+.dg-fig{margin:0 0 36px}
+.dg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);
+  background:repeating-linear-gradient(0deg,var(--grid) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,var(--grid) 0 1px,transparent 1px 28px),var(--matte)}
+.dg{display:block;max-width:100%;height:auto;min-width:640px;font-family:var(--sans)}
+.dg-b{fill:var(--matte);stroke:var(--ink);stroke-width:1.2}
+.dg-gate{stroke:var(--red);stroke-width:1.6;stroke-dasharray:5 4}
+.dg-end{fill:var(--paper-2)}
+.dg-store{fill:var(--paper-2)}
+.dg-line{stroke:var(--ink);stroke-width:1;fill:none}
+.dg-t{font-size:12.5px;fill:var(--ink)}
+.dg-tg{fill:var(--red);font-weight:600}
+.dg-e{fill:none;stroke:var(--ink-2);stroke-width:1.1}
+.dg-dash{stroke-dasharray:4 4}
+.dg-ah{fill:var(--ink-2)}
+.dg-l{font-family:var(--mono);font-size:10px;fill:var(--muted);paint-order:stroke;stroke:var(--matte);stroke-width:4px;stroke-linejoin:round}
+.dg-fig figcaption{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);margin-top:8px}
+
+/* ---------- recognition ---------- */
+.awards{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.awards li{display:flex;gap:14px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line);font-size:clamp(17px,1.7vw,20px)}
+.awards li::before{content:"✦";color:var(--red);font-size:.8em}
+
+/* ---------- YouTube facade: the player loads only after a click ---------- */
+.yt{position:relative;display:block;aspect-ratio:16/9;background:#000;border:1px solid var(--line);overflow:hidden;text-decoration:none}
+.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;transition:opacity .3s}
+.yt:hover img,.yt:focus-visible img{opacity:1}
+.yt-play{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;background:var(--red);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.yt-play::after{content:"";position:absolute;left:29px;top:22px;border-style:solid;border-width:14px 0 14px 22px;border-color:transparent transparent transparent #fff}
+.yt-label{position:absolute;left:12px;bottom:10px;color:#fff;background:rgba(0,0,0,.55);padding:3px 8px}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease}

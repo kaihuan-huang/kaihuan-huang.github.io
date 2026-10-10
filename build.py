@@ -252,7 +252,7 @@ def build_index():
   <div class="mq" aria-hidden="true"><div class="mq-track">{mq}</div></div>
 
   <section class="sec wrap" id="deep" aria-labelledby="deep-h">
-    <div class="sec-head"><span class="n">01</span><h2 id="deep-h">— {bi({"en": "Behind the wall", "zh": "墙后的工作"})}</h2><span class="sec-note mono">{bi({"en": "Production &amp; private code · design and results only", "zh": "生产与私有代码 · 只展示设计与结果"})}</span></div>
+    <div class="sec-head"><span class="n">01</span><h2 id="deep-h">— {bi({"en": "Behind the wall", "zh": "墙后的工作"})}</h2><span class="sec-note mono">{bi({"en": "Production, private and in-progress work", "zh": "生产环境、私有代码与进行中的项目"})}</span></div>
     <div class="deeps">
 {deeps}
     </div>
@@ -305,6 +305,98 @@ def build_index():
     (ROOT / "index.html").write_text(html, encoding="utf-8")
 
 
+
+# ---------------- diagrams (drawn at build time, standard library only) ----------------
+
+DG_W, DG_H, DG_GX, DG_GY, DG_PAD = 200, 66, 104, 52, 24
+
+
+def _wrap(text, width):
+    """Greedy wrap by display width (CJK counts double)."""
+    def w(s):
+        return sum(2 if ord(ch) > 0x2E80 else 1 for ch in s)
+    lines, cur = [], ""
+    tokens = re.findall(r"[⺀-鿿豈-﫿＀-￯]|[^\s⺀-鿿]+\s*|\s+", text)
+    for tok in tokens:
+        if tok in "、，。；：）」』！？":   # never start a line with closing punctuation
+            cur += tok
+            continue
+        if w(cur + tok.rstrip()) > width and cur:
+            lines.append(cur.rstrip())
+            cur = tok.lstrip()
+        else:
+            cur += tok
+    if cur.strip():
+        lines.append(cur.rstrip())
+    return lines[:3]
+
+
+def _box_text(cx, cy, label, cls=""):
+    out = []
+    for lang in ("en", "zh"):
+        lines = _wrap(label[lang], 26 if lang == "en" else 22)
+        y0 = cy - (len(lines) - 1) * 8 + 4
+        tsp = "".join(f'<tspan x="{cx:.0f}" y="{y0 + k * 16:.0f}">{_html.escape(s)}</tspan>' for k, s in enumerate(lines))
+        out.append(f'<text lang="{lang}" class="dg-t{cls}" text-anchor="middle">{tsp}</text>')
+    return "".join(out)
+
+
+def diagram(d):
+    nodes = {n["id"]: n for n in d["nodes"]}
+    cols = max(n["c"] for n in d["nodes"]) + 1
+    rows = max(n["r"] for n in d["nodes"]) + 1
+    W = DG_PAD * 2 + cols * DG_W + (cols - 1) * DG_GX
+    H = DG_PAD * 2 + rows * DG_H + (rows - 1) * DG_GY
+    pos = {k: (DG_PAD + n["c"] * (DG_W + DG_GX) + DG_W / 2, DG_PAD + n["r"] * (DG_H + DG_GY) + DG_H / 2) for k, n in nodes.items()}
+    mid = f'ar-{d["id"]}'
+    parts = [f'<defs><marker id="{mid}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-ah"/></marker></defs>']
+    labels = []
+    hw, hh = DG_W / 2, DG_H / 2
+    for e in d["edges"]:
+        a, z = e[0], e[1]
+        lab = e[2] if len(e) > 2 else None
+        dash = " dg-dash" if len(e) > 3 and e[3] == "dash" else ""
+        (x1, y1), (x2, y2) = pos[a], pos[z]
+        if abs(y1 - y2) < 1:                      # same row: side to side
+            sx, ex = (x1 + hw, x2 - hw) if x2 > x1 else (x1 - hw, x2 + hw)
+            path, lx, ly = f"M{sx:.0f} {y1:.0f}H{ex:.0f}", (sx + ex) / 2, y1 - 9
+        elif y2 > y1:                             # downwards: elbow through the row gap
+            sy, ey = y1 + hh, y2 - hh
+            my = sy + DG_GY / 2
+            path = f"M{x1:.0f} {sy:.0f}V{my:.0f}H{x2:.0f}V{ey:.0f}" if abs(x1 - x2) > 1 else f"M{x1:.0f} {sy:.0f}V{ey:.0f}"
+            lx, ly = (x1 + x2) / 2 if abs(x1 - x2) > 1 else x1 + 8, my - 5 if abs(x1 - x2) > 1 else (sy + ey) / 2 + 4
+        else:                                     # upwards (retry / loop): out of the left side, up, back in
+            side = -1 if x2 <= x1 else 1
+            sx = x1 + side * hw
+            gx = min(x1, x2) - hw - DG_GX / 2 if side < 0 else max(x1, x2) + hw + DG_GX / 2
+            ex = x2 + side * hw
+            path = f"M{sx:.0f} {y1:.0f}H{gx:.0f}V{y2:.0f}H{ex:.0f}"
+            lx, ly = gx, (y1 + y2) / 2
+        parts.append(f'<path d="{path}" class="dg-e{dash}" marker-end="url(#{mid})"/>')
+        if lab:
+            labels.append((lx, ly, lab))
+    for k, n in nodes.items():
+        cx, cy = pos[k]
+        x, y, kind = cx - hw, cy - hh, n.get("t", "step")
+        if kind == "store":
+            parts.append(f'<rect x="{x:.0f}" y="{y:.0f}" width="{DG_W}" height="{DG_H}" rx="14" class="dg-b dg-store"/>'
+                         f'<path d="M{x + 10:.0f} {y + 9:.0f}H{x + DG_W - 10:.0f}" class="dg-line"/>')
+        elif kind == "gate":
+            parts.append(f'<rect x="{x:.0f}" y="{y:.0f}" width="{DG_W}" height="{DG_H}" class="dg-b dg-gate"/>')
+        elif kind == "end":
+            parts.append(f'<rect x="{x:.0f}" y="{y:.0f}" width="{DG_W}" height="{DG_H}" rx="33" class="dg-b dg-end"/>')
+        else:
+            parts.append(f'<rect x="{x:.0f}" y="{y:.0f}" width="{DG_W}" height="{DG_H}" class="dg-b"/>')
+        parts.append(_box_text(cx, cy, n["l"], " dg-tg" if kind == "gate" else ""))
+    for lx, ly, lab in labels:
+        for lang in ("en", "zh"):
+            s = _html.escape(lab[lang])
+            parts.append(f'<text lang="{lang}" x="{lx:.0f}" y="{ly:.0f}" class="dg-l" text-anchor="middle">{s}</text>')
+    title = _html.escape(d["title"]["en"])
+    svg = f'<svg viewBox="0 0 {W} {H}" width="{W}" role="img" aria-label="{title}" class="dg">{"".join(parts)}</svg>'
+    return (f'<figure class="dg-fig"><div class="dg-scroll">{svg}</div>'
+            f'<figcaption class="mono"><span>{bi(d["title"])}</span><span>{bi(d["caption"])}</span></figcaption></figure>')
+
 # ---------------- case pages ----------------
 
 def build_case(i, kind, w, prev, nxt):
@@ -324,7 +416,12 @@ def build_case(i, kind, w, prev, nxt):
             btns += f'<a class="btn" href="{u}">{tr(t)}</a>'
         kicker = w["tag"]
     else:
-        hero = f'<figure class="case-hero plate-flow"><div class="sheet">{flow(w["flow"], big=True)}<div class="sheet-foot mono"><span>SECTION · {w["title"].upper()}</span><span>{bi({"en": "Design view · code private", "zh": "设计视图 · 代码私有"})}</span></div></div></figure>'
+        if w.get("img"):
+            hero = f"""<figure class="case-hero">
+      <div class="frame"><img src="../assets/img/works/{w['img']}" alt="{attr(w.get('alt', w['title']))}" width="860" height="536"></div>
+    </figure>"""
+        else:
+            hero = f'<figure class="case-hero plate-flow"><div class="sheet">{flow(w["flow"], big=True)}<div class="sheet-foot mono"><span>SECTION · {w["title"].upper()}</span><span>{bi(w.get("sheet_note", {"en": "Design view · code private", "zh": "设计视图 · 代码私有"}))}</span></div></div></figure>'
         btns = ""
         if w.get("link"):
             btns = f'<a class="btn solid" href="{w["link"][1]}">{tr(w["link"][0])} →</a>'
@@ -335,16 +432,28 @@ def build_case(i, kind, w, prev, nxt):
     <a href="{nxt['slug']}.html">{nxt['title']} →</a>
   </nav>"""
     secs = [({"en": "Problem", "zh": "问题"}, f'<p class="lead">{bi(w["problem"])}</p>')]
+    if w.get("awards"):
+        secs.append(({"en": "Recognition", "zh": "获奖"}, '<ul class="awards">' + "".join(f"<li>{bi(x)}</li>" for x in w["awards"]) + "</ul>"))
     if kind == "w":
         secs.append(({"en": "Flow", "zh": "流程"}, flow(w["flow"])))
     secs.append(({"en": "What I built", "zh": "我做了什么"}, f'<ul class="approach">{approach}</ul>'))
+    if w.get("diagrams"):
+        secs.append(({"en": "Architecture", "zh": "架构"}, "".join(diagram(dg) for dg in w["diagrams"])))
+    if w.get("youtube"):
+        y = w["youtube"]
+        secs.append(({"en": "Watch the concept", "zh": "看概念视频"},
+                     f'<figure class="case-video"><a class="yt" href="https://www.youtube.com/watch?v={y["id"]}" data-yt="{y["id"]}">'
+                     f'<img src="https://i.ytimg.com/vi/{y["id"]}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">'
+                     f'<span class="yt-play" aria-hidden="true"></span><span class="yt-label mono">{bi({"en": "Play on YouTube", "zh": "在 YouTube 播放"})}</span></a>'
+                     f'<figcaption class="mono">{bi(y["cap"])}</figcaption></figure>'))
     if w.get("video"):
         v = w["video"]
         secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls muted playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
-    secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
+    if w["metrics"]:
+        secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
     secs.append(({"en": "Limits, stated plainly", "zh": "局限，直说"}, f'<ul class="limits">{limits}</ul>'))
     body = "".join(f'<section class="case-sec"><h2 class="case-h"><span class="mono">{nn(k)}</span>{bi(h)}</h2>{c}</section>' for k, (h, c) in enumerate(secs, 1))
-    og = f"assets/img/works/{w['img']}" if kind == "w" else "assets/img/og.png"
+    og = f"assets/img/works/{w['img']}" if w.get("img") else "assets/img/og.png"
     html = head(f"{w['title']} · {P['name_first']} {P['name_last']}", w["pitch"]["en"], "../", f"works/{w['slug']}.html", og)
     html += nav("../")
     html += f"""<main id="main" class="case">
@@ -404,6 +513,12 @@ def timeline():
     return f'<ol class="timeline" aria-label="Timeline">{lis}</ol>'
 
 
+def case_link(a):
+    if not a.get("case"):
+        return ""
+    return f'<a href="works/{a["case"]}.html">{bi({"en": "Read the case", "zh": "阅读案例"})} {slug_title(a["case"])} →</a>'
+
+
 def build_archive():
     sheets = ""
     for k, a in enumerate(C["archive"], 1):
@@ -418,7 +533,7 @@ def build_archive():
           <dt>{bi({"en": "What it taught me", "zh": "学到的"})}</dt><dd>{bi(a['learned'])}</dd>
           <dt class="red">{bi({"en": "The rule", "zh": "规则"})}</dt><dd class="sa-rule">{bi(a['rule'])}</dd>
         </dl>
-        <div class="sa-foot mono"><span>{bi({"en": "Repos", "zh": "仓库"})}: {repos}</span><a href="works/{a['now']}.html">{bi({"en": "Shows today in", "zh": "今天体现在"})} {slug_title(a['now'])} →</a></div>
+        <div class="sa-foot mono"><span>{bi({"en": "Repos", "zh": "仓库"})}: {repos}</span>{case_link(a)}<a href="works/{a['now']}.html">{bi({"en": "Shows today in", "zh": "今天体现在"})} {slug_title(a['now'])} →</a></div>
       </div>
     </article>"""
     html = head(f"Learning Archive · {P['name_first']} {P['name_last']}", "Earlier projects and the engineering rules they left behind.", "", "archive.html")
