@@ -2282,15 +2282,15 @@
       "link": null
     },
     {
-      "slug": "light-up",
-      "title": "Light-Up",
+      "slug": "lightup",
+      "title": "LightUp",
       "kicker": {
-        "en": "Concept 2023 · restarted 2026",
-        "zh": "2023 年构想 · 2026 年重启"
+        "en": "Concept 2023 · prototype 2024 · restarted 2026",
+        "zh": "2023 年构想 · 2024 年原型 · 2026 年重启"
       },
       "type": {
-        "en": "Charity giving platform · in development",
-        "zh": "慈善捐赠平台 · 开发中"
+        "en": "Charity giving platform · Gold, London Design Award",
+        "zh": "慈善捐赠平台 · 伦敦设计奖金奖"
       },
       "pitch": {
         "en": "Giving that shows its impact: match donors to causes, tell each donor whose life their gift changed, and connect the charities behind it.",
@@ -2307,8 +2307,8 @@
         [
           "Stack",
           {
-            "en": "2023: React prototype",
-            "zh": "2023 年：React 原型"
+            "en": "2023: React prototype · 2024: high-fidelity mobile prototype and concept video",
+            "zh": "2023 年：React 原型 · 2024 年：高保真移动端原型与概念视频"
           }
         ],
         [
@@ -2320,8 +2320,8 @@
         ]
       ],
       "problem": {
-        "en": "Donors rarely see what their gift did, choosing a cause is guesswork, and small charities work alone. In 2023 the three things that would fix this — a personal impact story for every donor, matching donors to causes, and a way to connect charities — needed AI that could not yet do them well. It can now, so I kept the project.",
-        "zh": "捐款人很少知道自己的捐款带来了什么，选择项目全凭感觉，小型慈善机构也各自为战。2023 年能解决这些问题的三件事——给每位捐款人一份个性化的影响故事、为捐款人匹配项目、把慈善机构连接起来——都需要当时的 AI 还做不好的能力。现在可以了，所以我留下了这个项目。"
+        "en": "Young donors want giving that shows real impact, and charities struggle to keep them engaged. Donors rarely know where their money goes, who it reaches, or what it changes. In 2023 the three things that would fix this — a personal impact story for every donor, matching donors to causes, and a way to connect charities — needed AI that could not yet do them well. It can now, so I kept the project.",
+        "zh": "年轻捐款人想要看得见真实影响的捐赠，公益组织却很难留住他们。捐款人很少知道钱去了哪里、帮到了谁、改变了什么。2023 年能解决这些问题的三件事——给每位捐款人一份个性化的影响故事、为捐款人匹配项目、把慈善机构连接起来——都需要当时的 AI 还做不好的能力。现在可以了，所以我留下了这个项目。"
       },
       "approach": [
         {
@@ -2329,16 +2329,16 @@
           "zh": "2023 年：确定产品构想，开始做 React 原型。"
         },
         {
-          "en": "Personal impact stories for each donor, written from what the charity actually reports.",
-          "zh": "为每位捐款人生成个性化的影响故事，内容依据慈善机构的实际报告。"
+          "en": "2024: a high-fidelity mobile prototype and concept video — a map of funded projects, beneficiary profiles, a donation flow, letters with voice messages and photos from the people helped, and home-screen widgets.",
+          "zh": "2024 年：高保真移动端原型和概念视频——受资助项目地图、受助人主页、捐款流程、受助人寄来的附语音和照片的信，以及手机桌面小组件。"
         },
         {
-          "en": "Matching donors to causes from their stated interests and values.",
-          "zh": "根据捐款人填写的兴趣和价值观匹配项目。"
+          "en": "2026: make the impact letters personal at scale, written from what the charity actually reports.",
+          "zh": "2026 年：让影响来信规模化地个性化，内容依据慈善机构的实际报告。"
         },
         {
-          "en": "A shared directory so charities can find and work with each other.",
-          "zh": "一个共享目录，让慈善机构能互相发现、彼此协作。"
+          "en": "Match donors to causes from their stated interests and values, and give charities a shared directory to find and work with each other.",
+          "zh": "根据捐款人填写的兴趣和价值观匹配项目，并为慈善机构提供一个共享目录，方便互相发现、彼此协作。"
         }
       ],
       "flow": [
@@ -2504,15 +2504,34 @@
           "zh": "目前还没有上线，也没有测量数据；有了结果才会写在这里。"
         },
         {
-          "en": "The 2023 prototype code was not kept in the repository.",
-          "zh": "2023 年的原型代码没有保留在仓库里。"
+          "en": "The 2024 prototype is a design, not a working app; the 2023 React code was not kept in the repository.",
+          "zh": "2024 年的原型是设计稿，不是可用的应用；2023 年的 React 代码没有保留在仓库里。"
         }
       ],
       "link": null,
       "sheet_note": {
         "en": "Planned design · in development",
         "zh": "规划设计 · 开发中"
-      }
+      },
+      "youtube": {
+        "id": "Ylx-flD1pOg",
+        "cap": {
+          "en": "Concept video · March 2024 · 1:44",
+          "zh": "概念视频 · 2024 年 3 月 · 1 分 44 秒"
+        }
+      },
+      "img": "lightup.jpg",
+      "alt": "LightUp mobile app, watch and home-screen widgets showing a donor's map of funded projects and a letter from a beneficiary",
+      "awards": [
+        {
+          "en": "Gold Winner — London Design Award",
+          "zh": "金奖 —— 伦敦设计奖（London Design Award）"
+        },
+        {
+          "en": "Nominated — UX Design Award 2024",
+          "zh": "提名 —— 2024 年 UX Design Award"
+        }
+      ]
     }
   ],
   "stats": [
@@ -2704,8 +2723,8 @@
       ],
       "stack": "React · Jupyter · ElevenLabs · Luma",
       "then": {
-        "en": "Light-Up, a concept for transparent charity donations; Gen-AI Hack II, voice and 3D generation experiments.",
-        "zh": "Light-Up：让慈善捐款更透明的产品概念；Gen-AI Hack II：语音与 3D 生成实验。"
+        "en": "LightUp, a concept for transparent charity donations; Gen-AI Hack II, voice and 3D generation experiments.",
+        "zh": "LightUp：让慈善捐款更透明的产品概念；Gen-AI Hack II：语音与 3D 生成实验。"
       },
       "learned": {
         "en": "A weekend demo proves the idea and hides the edge cases. What the demo does not handle is where the real work starts.",
@@ -2716,7 +2735,7 @@
         "zh": "把它处理不了的写清楚，放在它能做的旁边。"
       },
       "now": "career-ops",
-      "case": "light-up"
+      "case": "lightup"
     },
     {
       "id": "rebuilds",

@@ -88,6 +88,19 @@
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menu.classList.contains('open')) setMenu(false); });
 
+    // ---------- YouTube: swap the thumbnail for the player on click ----------
+    document.querySelectorAll('a.yt[data-yt]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var f = document.createElement('iframe');
+        f.src = 'https://www.youtube-nocookie.com/embed/' + a.getAttribute('data-yt') + '?autoplay=1&rel=0';
+        f.title = 'Light-Up concept video';
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.allowFullscreen = true;
+        a.replaceWith(f);
+      });
+    });
+
     // ---------- reveal on scroll ----------
     var els = document.querySelectorAll('.reveal');
     if (!('IntersectionObserver' in window) || reduced) {

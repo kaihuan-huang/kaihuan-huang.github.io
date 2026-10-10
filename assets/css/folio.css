@@ -390,6 +390,20 @@ code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);padding:1
 .dg-l{font-family:var(--mono);font-size:10px;fill:var(--muted);paint-order:stroke;stroke:var(--matte);stroke-width:4px;stroke-linejoin:round}
 .dg-fig figcaption{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);margin-top:8px}
 
+/* ---------- recognition ---------- */
+.awards{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.awards li{display:flex;gap:14px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line);font-size:clamp(17px,1.7vw,20px)}
+.awards li::before{content:"✦";color:var(--red);font-size:.8em}
+
+/* ---------- YouTube facade: the player loads only after a click ---------- */
+.yt{position:relative;display:block;aspect-ratio:16/9;background:#000;border:1px solid var(--line);overflow:hidden;text-decoration:none}
+.yt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;transition:opacity .3s}
+.yt:hover img,.yt:focus-visible img{opacity:1}
+.yt-play{position:absolute;left:50%;top:50%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;background:var(--red);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.yt-play::after{content:"";position:absolute;left:29px;top:22px;border-style:solid;border-width:14px 0 14px 22px;border-color:transparent transparent transparent #fff}
+.yt-label{position:absolute;left:12px;bottom:10px;color:#fff;background:rgba(0,0,0,.55);padding:3px 8px}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease}
 .reveal.in{opacity:1;transform:none}

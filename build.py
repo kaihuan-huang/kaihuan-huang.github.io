@@ -416,7 +416,12 @@ def build_case(i, kind, w, prev, nxt):
             btns += f'<a class="btn" href="{u}">{tr(t)}</a>'
         kicker = w["tag"]
     else:
-        hero = f'<figure class="case-hero plate-flow"><div class="sheet">{flow(w["flow"], big=True)}<div class="sheet-foot mono"><span>SECTION · {w["title"].upper()}</span><span>{bi(w.get("sheet_note", {"en": "Design view · code private", "zh": "设计视图 · 代码私有"}))}</span></div></div></figure>'
+        if w.get("img"):
+            hero = f"""<figure class="case-hero">
+      <div class="frame"><img src="../assets/img/works/{w['img']}" alt="{attr(w.get('alt', w['title']))}" width="860" height="536"></div>
+    </figure>"""
+        else:
+            hero = f'<figure class="case-hero plate-flow"><div class="sheet">{flow(w["flow"], big=True)}<div class="sheet-foot mono"><span>SECTION · {w["title"].upper()}</span><span>{bi(w.get("sheet_note", {"en": "Design view · code private", "zh": "设计视图 · 代码私有"}))}</span></div></div></figure>'
         btns = ""
         if w.get("link"):
             btns = f'<a class="btn solid" href="{w["link"][1]}">{tr(w["link"][0])} →</a>'
@@ -427,11 +432,20 @@ def build_case(i, kind, w, prev, nxt):
     <a href="{nxt['slug']}.html">{nxt['title']} →</a>
   </nav>"""
     secs = [({"en": "Problem", "zh": "问题"}, f'<p class="lead">{bi(w["problem"])}</p>')]
+    if w.get("awards"):
+        secs.append(({"en": "Recognition", "zh": "获奖"}, '<ul class="awards">' + "".join(f"<li>{bi(x)}</li>" for x in w["awards"]) + "</ul>"))
     if kind == "w":
         secs.append(({"en": "Flow", "zh": "流程"}, flow(w["flow"])))
     secs.append(({"en": "What I built", "zh": "我做了什么"}, f'<ul class="approach">{approach}</ul>'))
     if w.get("diagrams"):
         secs.append(({"en": "Architecture", "zh": "架构"}, "".join(diagram(dg) for dg in w["diagrams"])))
+    if w.get("youtube"):
+        y = w["youtube"]
+        secs.append(({"en": "Watch the concept", "zh": "看概念视频"},
+                     f'<figure class="case-video"><a class="yt" href="https://www.youtube.com/watch?v={y["id"]}" data-yt="{y["id"]}">'
+                     f'<img src="https://i.ytimg.com/vi/{y["id"]}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">'
+                     f'<span class="yt-play" aria-hidden="true"></span><span class="yt-label mono">{bi({"en": "Play on YouTube", "zh": "在 YouTube 播放"})}</span></a>'
+                     f'<figcaption class="mono">{bi(y["cap"])}</figcaption></figure>'))
     if w.get("video"):
         v = w["video"]
         secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls muted playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
@@ -439,7 +453,7 @@ def build_case(i, kind, w, prev, nxt):
         secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
     secs.append(({"en": "Limits, stated plainly", "zh": "局限，直说"}, f'<ul class="limits">{limits}</ul>'))
     body = "".join(f'<section class="case-sec"><h2 class="case-h"><span class="mono">{nn(k)}</span>{bi(h)}</h2>{c}</section>' for k, (h, c) in enumerate(secs, 1))
-    og = f"assets/img/works/{w['img']}" if kind == "w" else "assets/img/og.png"
+    og = f"assets/img/works/{w['img']}" if w.get("img") else "assets/img/og.png"
     html = head(f"{w['title']} · {P['name_first']} {P['name_last']}", w["pitch"]["en"], "../", f"works/{w['slug']}.html", og)
     html += nav("../")
     html += f"""<main id="main" class="case">
