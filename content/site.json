@@ -2280,6 +2280,239 @@
         }
       ],
       "link": null
+    },
+    {
+      "slug": "light-up",
+      "title": "Light-Up",
+      "kicker": {
+        "en": "Concept 2023 · restarted 2026",
+        "zh": "2023 年构想 · 2026 年重启"
+      },
+      "type": {
+        "en": "Charity giving platform · in development",
+        "zh": "慈善捐赠平台 · 开发中"
+      },
+      "pitch": {
+        "en": "Giving that shows its impact: match donors to causes, tell each donor whose life their gift changed, and connect the charities behind it.",
+        "zh": "让捐款看得见影响：为捐款人匹配项目，告诉每位捐款人他的捐助改变了谁，并把背后的慈善机构连接起来。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Founder and engineer",
+            "zh": "发起人兼工程师"
+          }
+        ],
+        [
+          "Stack",
+          {
+            "en": "2023: React prototype",
+            "zh": "2023 年：React 原型"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Concept from November 2023; restarted in 2026 and in development",
+            "zh": "2023 年 11 月提出构想；2026 年重启，开发中"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "Donors rarely see what their gift did, choosing a cause is guesswork, and small charities work alone. In 2023 the three things that would fix this — a personal impact story for every donor, matching donors to causes, and a way to connect charities — needed AI that could not yet do them well. It can now, so I kept the project.",
+        "zh": "捐款人很少知道自己的捐款带来了什么，选择项目全凭感觉，小型慈善机构也各自为战。2023 年能解决这些问题的三件事——给每位捐款人一份个性化的影响故事、为捐款人匹配项目、把慈善机构连接起来——都需要当时的 AI 还做不好的能力。现在可以了，所以我留下了这个项目。"
+      },
+      "approach": [
+        {
+          "en": "2023: defined the concept and started a React prototype.",
+          "zh": "2023 年：确定产品构想，开始做 React 原型。"
+        },
+        {
+          "en": "Personal impact stories for each donor, written from what the charity actually reports.",
+          "zh": "为每位捐款人生成个性化的影响故事，内容依据慈善机构的实际报告。"
+        },
+        {
+          "en": "Matching donors to causes from their stated interests and values.",
+          "zh": "根据捐款人填写的兴趣和价值观匹配项目。"
+        },
+        {
+          "en": "A shared directory so charities can find and work with each other.",
+          "zh": "一个共享目录，让慈善机构能互相发现、彼此协作。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Donor",
+          "zh": "捐款人"
+        },
+        {
+          "en": "Match causes",
+          "zh": "匹配项目"
+        },
+        {
+          "en": "Gift",
+          "zh": "捐款"
+        },
+        {
+          "en": "Charity reports",
+          "zh": "机构报告"
+        },
+        {
+          "en": "Story checked?",
+          "zh": "故事核对过？",
+          "gate": true
+        }
+      ],
+      "diagrams": [
+        {
+          "id": "lu-plan",
+          "title": {
+            "en": "Planned design",
+            "zh": "规划中的设计"
+          },
+          "caption": {
+            "en": "2026 plan, not yet built",
+            "zh": "2026 年规划，尚未建成"
+          },
+          "nodes": [
+            {
+              "id": "dn",
+              "r": 0,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Donor · interests and values",
+                "zh": "捐款人 · 兴趣与价值观"
+              }
+            },
+            {
+              "id": "mt",
+              "r": 0,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Match causes",
+                "zh": "匹配项目"
+              }
+            },
+            {
+              "id": "gf",
+              "r": 0,
+              "c": 2,
+              "t": "step",
+              "l": {
+                "en": "Gift",
+                "zh": "捐款"
+              }
+            },
+            {
+              "id": "ch",
+              "r": 1,
+              "c": 2,
+              "t": "step",
+              "l": {
+                "en": "Charity reports what the gift funded",
+                "zh": "机构报告捐款用途"
+              }
+            },
+            {
+              "id": "st",
+              "r": 1,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Draft an impact story from the report",
+                "zh": "依据报告起草影响故事"
+              }
+            },
+            {
+              "id": "ok",
+              "r": 1,
+              "c": 0,
+              "t": "gate",
+              "l": {
+                "en": "Matches the report?",
+                "zh": "与报告一致？"
+              }
+            },
+            {
+              "id": "dl",
+              "r": 2,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Story delivered to the donor",
+                "zh": "把故事交给捐款人"
+              }
+            },
+            {
+              "id": "dir",
+              "r": 2,
+              "c": 2,
+              "t": "store",
+              "l": {
+                "en": "Shared charity directory",
+                "zh": "慈善机构共享目录"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "dn",
+              "mt"
+            ],
+            [
+              "mt",
+              "gf"
+            ],
+            [
+              "gf",
+              "ch"
+            ],
+            [
+              "ch",
+              "st"
+            ],
+            [
+              "st",
+              "ok"
+            ],
+            [
+              "ok",
+              "dl",
+              {
+                "en": "yes",
+                "zh": "是"
+              }
+            ],
+            [
+              "ch",
+              "dir",
+              {
+                "en": "listed",
+                "zh": "收录"
+              }
+            ]
+          ]
+        }
+      ],
+      "metrics": [],
+      "limits": [
+        {
+          "en": "Nothing has shipped or been measured yet; results will appear here only once they exist.",
+          "zh": "目前还没有上线，也没有测量数据；有了结果才会写在这里。"
+        },
+        {
+          "en": "The 2023 prototype code was not kept in the repository.",
+          "zh": "2023 年的原型代码没有保留在仓库里。"
+        }
+      ],
+      "link": null,
+      "sheet_note": {
+        "en": "Planned design · in development",
+        "zh": "规划设计 · 开发中"
+      }
     }
   ],
   "stats": [
@@ -2482,7 +2715,8 @@
         "en": "Write down what it does not handle, next to what it does.",
         "zh": "把它处理不了的写清楚，放在它能做的旁边。"
       },
-      "now": "career-ops"
+      "now": "career-ops",
+      "case": "light-up"
     },
     {
       "id": "rebuilds",

@@ -252,7 +252,7 @@ def build_index():
   <div class="mq" aria-hidden="true"><div class="mq-track">{mq}</div></div>
 
   <section class="sec wrap" id="deep" aria-labelledby="deep-h">
-    <div class="sec-head"><span class="n">01</span><h2 id="deep-h">— {bi({"en": "Behind the wall", "zh": "墙后的工作"})}</h2><span class="sec-note mono">{bi({"en": "Production &amp; private code · design and results only", "zh": "生产与私有代码 · 只展示设计与结果"})}</span></div>
+    <div class="sec-head"><span class="n">01</span><h2 id="deep-h">— {bi({"en": "Behind the wall", "zh": "墙后的工作"})}</h2><span class="sec-note mono">{bi({"en": "Production, private and in-progress work", "zh": "生产环境、私有代码与进行中的项目"})}</span></div>
     <div class="deeps">
 {deeps}
     </div>
@@ -416,7 +416,7 @@ def build_case(i, kind, w, prev, nxt):
             btns += f'<a class="btn" href="{u}">{tr(t)}</a>'
         kicker = w["tag"]
     else:
-        hero = f'<figure class="case-hero plate-flow"><div class="sheet">{flow(w["flow"], big=True)}<div class="sheet-foot mono"><span>SECTION · {w["title"].upper()}</span><span>{bi({"en": "Design view · code private", "zh": "设计视图 · 代码私有"})}</span></div></div></figure>'
+        hero = f'<figure class="case-hero plate-flow"><div class="sheet">{flow(w["flow"], big=True)}<div class="sheet-foot mono"><span>SECTION · {w["title"].upper()}</span><span>{bi(w.get("sheet_note", {"en": "Design view · code private", "zh": "设计视图 · 代码私有"}))}</span></div></div></figure>'
         btns = ""
         if w.get("link"):
             btns = f'<a class="btn solid" href="{w["link"][1]}">{tr(w["link"][0])} →</a>'
@@ -435,7 +435,8 @@ def build_case(i, kind, w, prev, nxt):
     if w.get("video"):
         v = w["video"]
         secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls muted playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
-    secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
+    if w["metrics"]:
+        secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
     secs.append(({"en": "Limits, stated plainly", "zh": "局限，直说"}, f'<ul class="limits">{limits}</ul>'))
     body = "".join(f'<section class="case-sec"><h2 class="case-h"><span class="mono">{nn(k)}</span>{bi(h)}</h2>{c}</section>' for k, (h, c) in enumerate(secs, 1))
     og = f"assets/img/works/{w['img']}" if kind == "w" else "assets/img/og.png"
