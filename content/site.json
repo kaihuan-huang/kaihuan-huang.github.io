@@ -12,12 +12,12 @@
     },
     "coords": "SFO 37.7749°N 122.4194°W",
     "role_line": {
-      "en": "AI Engineer — production Python services and evaluated LLM applications.",
-      "zh": "AI 工程师 —— 生产级 Python 服务与经过评估的 LLM 应用。"
+      "en": "Backend / AI Engineer — financial APIs, AI-assisted reviews and data pipelines.",
+      "zh": "后端 / AI 工程师 —— 资金类 API、AI 辅助审核与数据管道。"
     },
     "dek": {
-      "en": "FastAPI, PostgreSQL, bilingual model evaluation and deterministic controls, turning operational workflows into AI features that hold up in production.",
-      "zh": "FastAPI、PostgreSQL、双语模型评估与确定性控制，把业务流程做成能在生产中站得住的 AI 功能。"
+      "en": "FastAPI and PostgreSQL in production, with AWS and Azure deployments, transaction controls, release safety and asynchronous workflows.",
+      "zh": "生产环境中的 FastAPI 与 PostgreSQL，涵盖 AWS 和 Azure 部署、事务控制、发布安全与异步工作流。"
     }
   },
   "works": [
@@ -561,12 +561,12 @@
       "img": "careerops.jpg",
       "alt": "Career OPS dashboard: open roles with source filters",
       "type": {
-        "en": "Job-market data platform · 2026",
-        "zh": "求职市场数据平台 · 2026"
+        "en": "Job intelligence and interview platform · 2026",
+        "zh": "求职情报与面试平台 · 2026"
       },
       "pitch": {
-        "en": "A traceable market feed from employer ATS APIs, extending open-source career-ops.",
-        "zh": "基于雇主 ATS API 的可追溯岗位数据流，扩展自开源 career-ops。"
+        "en": "A traceable job-market feed from employer ATS APIs, plus résumé-aware interview practice, built on open-source career-ops.",
+        "zh": "基于雇主 ATS API 的可追溯岗位数据流，加上结合简历的面试练习，构建于开源 career-ops 之上。"
       },
       "demo": "https://kai-careerops.westus2.cloudapp.azure.com",
       "repo": "",
@@ -613,6 +613,10 @@
         {
           "en": "Before release, every public field passes known-field rules, the bilingual PII detector and a fail-closed scan.",
           "zh": "发布前，每个公开字段都要过已知字段规则、双语 PII 检测器和失败即拒绝的扫描。"
+        },
+        {
+          "en": "Résumé-aware interview practice that runs locally, with a check that every claim in an answer is backed by a real story from the résumé.",
+          "zh": "在本地运行、结合简历的面试练习，并检查答案中的每条说法都能在简历的真实经历里找到依据。"
         }
       ],
       "flow": [
@@ -855,6 +859,10 @@
         {
           "en": "Policy engine as one pure function over the event and policy set, so every decision is reproducible.",
           "zh": "策略引擎是对事件与策略集的一个纯函数，每次判定都可复现。"
+        },
+        {
+          "en": "Separate governance and PII-detection APIs with role-based access; audit records keep categories, hashes and offsets, never the raw input text.",
+          "zh": "治理 API 与 PII 检测 API 分开部署，按角色控制访问；审计记录只保留类别、哈希和位置，从不保存原始输入文本。"
         },
         {
           "en": "Ingestion through a Postgres transactional outbox; workers claim events with <code>SKIP LOCKED</code> and record findings and incidents in a hash-chained history.",
@@ -2569,25 +2577,45 @@
       "when": "Apr 2026 — now",
       "title": "AI Engineer · Jackson Ventures",
       "at": {
-        "en": "IPOT restaurant platform · BloomFrontier lending · San Francisco Bay Area",
-        "zh": "IPOT 餐饮平台 · BloomFrontier 借贷 · 旧金山湾区"
+        "en": "BloomFrontier fintech lending · IPOT restaurant platform · revenue analytics · San Francisco Bay Area",
+        "zh": "BloomFrontier 金融科技借贷 · IPOT 餐饮平台 · 营收分析 · 旧金山湾区"
       },
       "items": [
         {
-          "en": "Built and deployed a FastAPI/PostgreSQL reservation service used by real guests: Twilio Verify OTP, SMS delivery tracking, self-service changes.",
-          "zh": "构建并上线服务真实客人的 FastAPI/PostgreSQL 预订服务：Twilio Verify 验证码、短信送达跟踪、自助改期。"
+          "en": "Building BloomFrontier's AI-assisted loan-draw review (FastAPI/PostgreSQL): missing or flagged documents go to loan officers instead of being approved automatically.",
+          "zh": "构建 BloomFrontier 的 AI 辅助提款审核（FastAPI/PostgreSQL）：缺失或被标记的文件转给信贷员，而不是自动通过。"
         },
         {
-          "en": "Rebuilt Nalu's bilingual booking flow with deterministic field resolution and explicit confirmation: 33/39 held-out cases fully correct.",
-          "zh": "用确定性字段解析与明确确认重建 Nalu 双语预订流程：留出集 33/39 全字段正确。"
+          "en": "Two-person approval for higher-risk draws behind a feature flag, with loan-level row locks, repeat-funding checks and hash-chained audit records; 103 financial tests on real PostgreSQL.",
+          "zh": "高风险提款采用双人审批（功能开关控制），配合贷款级行锁、重复放款检查和哈希链审计记录；103 个资金测试在真实 PostgreSQL 上运行。"
         },
         {
-          "en": "Led POS backend architecture: atomic settlement and refunds, sale-time price snapshots, audited voids.",
-          "zh": "主导 POS 后端架构：原子结算与退款、售出时价格快照、可审计作废。"
+          "en": "Transactional outbox and Temporal recovery for draw verification: retries, a watchdog that hands stuck runs to manual review, and a constraint against overlapping runs.",
+          "zh": "为提款核验加入事务性 outbox 与 Temporal 恢复：自动重试、把卡住的任务转人工的看门狗，以及防止重复运行的约束。"
         },
         {
-          "en": "Built and merged loan-draw review controls for BloomFrontier: two-person approval, row locks, repeat-funding checks, hash-chained audit, outbox + Temporal recovery, and a release gate with rollback.",
-          "zh": "为 BloomFrontier 构建并合并提款审核控制：双人审批、行锁、重复放款检查、哈希链审计、outbox + Temporal 恢复，以及带回滚的发布闸门。"
+          "en": "A release gate that replaced a deploy workflow which hid failed migrations: verified backup, preflight checks, health check and rollback; 4/4 Docker rehearsals.",
+          "zh": "发布闸门取代了会隐藏迁移失败的部署流程：经过验证的备份、预检、健康检查与回滚；Docker 演练 4/4 通过。"
+        },
+        {
+          "en": "Rebuilt Nalu's bilingual booking flow with deterministic field resolution and explicit confirmation: 33/39 held-out cases fully correct, 0 invented values.",
+          "zh": "用确定性字段解析与明确确认重建 Nalu 双语预订流程：留出集 33/39 全字段正确，0 编造。"
+        },
+        {
+          "en": "POS settlement and refund APIs for an AWS-hosted restaurant stack: atomic transactions, sale-time price snapshots and logged voids.",
+          "zh": "为部署在 AWS 上的餐厅系统构建 POS 结算与退款 API：原子事务、售出时价格快照、作废留痕。"
+        },
+        {
+          "en": "Reservation APIs used by real guests: Twilio OTP, token-based self-service changes and SMS delivery-status tracking.",
+          "zh": "真实客人在用的预订 API：Twilio 验证码、基于令牌的自助改期，以及短信送达状态跟踪。"
+        },
+        {
+          "en": "Turned Chowbus sales statements into daily revenue records: 36 of 40 months reconcile to the statement totals; the rest are rejected, not guessed.",
+          "zh": "把 Chowbus 销售对账单转为每日营收记录：40 个月中 36 个月与对账单合计一致，其余被拒收，不做猜测。"
+        },
+        {
+          "en": "Google Ads and Meta spend importers feeding the revenue agent's code-based financial calculations.",
+          "zh": "编写 Google Ads 与 Meta 花费导入器，供收入 Agent 做基于代码的财务计算。"
         }
       ]
     },
@@ -2600,12 +2628,12 @@
       },
       "items": [
         {
-          "en": "PII detection with Presidio, transformer NER and validation rules; placeholder masking for LLM inputs; deterministic allow / mask / watch / block decisions.",
-          "zh": "用 Presidio、Transformer NER 与校验规则做 PII 检测；LLM 输入占位符脱敏；确定性的放行 / 脱敏 / 观察 / 拦截。"
+          "en": "Built a PII detection and masking prototype for LLM inputs using Presidio, Hugging Face Transformers NER and rule-based checks.",
+          "zh": "用 Presidio、Hugging Face Transformers NER 和规则校验，为 LLM 输入构建 PII 检测与脱敏原型。"
         },
         {
-          "en": "React/TypeScript and FastAPI governance dashboard: policy, credential and incident workflows.",
-          "zh": "React/TypeScript + FastAPI 治理后台：策略、凭据与事件流程。"
+          "en": "Worked on a React/TypeScript and FastAPI governance dashboard for privacy policies, credentials and security incidents.",
+          "zh": "参与 React/TypeScript + FastAPI 治理后台，覆盖隐私策略、凭据管理与安全事件处理。"
         }
       ]
     },
@@ -2621,20 +2649,20 @@
   ],
   "skills": [
     [
-      "AI / LLM",
-      "tool calling, model evaluation, RAG (pgvector), Ollama, Hugging Face Transformers, PII detection &amp; masking"
-    ],
-    [
       "Backend / Data",
-      "Python, TypeScript, SQL · FastAPI, SQLAlchemy, Alembic, PostgreSQL, Redis, SQLite/FTS5, Temporal"
+      "Python, SQL, TypeScript · FastAPI, REST APIs, SQLAlchemy, Alembic, PostgreSQL, Redis, SQLite/FTS5"
     ],
     [
-      "Reliability",
-      "transactions, row locks, transactional outbox, idempotency, RBAC, hash-chained audit trails"
+      "Systems / Security",
+      "database transactions, row locks, Temporal, transactional outbox, idempotency, RBAC, audit trails, release gates"
     ],
     [
-      "Delivery",
-      "Docker, AWS, Azure, OpenTofu, GitHub Actions, pytest, Playwright, Vitest · React, Next.js"
+      "Cloud / Testing",
+      "AWS, Azure VM, Docker, OpenTofu (IaC), GitHub Actions, pytest, Playwright, Vitest"
+    ],
+    [
+      "AI / Full Stack",
+      "Hugging Face Transformers, Presidio, LLM tools, evaluation, pgvector, Ollama · React, Next.js"
     ],
     [
       "Spoken",
