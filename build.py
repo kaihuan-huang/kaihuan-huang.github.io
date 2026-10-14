@@ -23,6 +23,7 @@ ZH = {  # labels that live in build.py, not in site.json
     "Model architecture card": "模型架构卡片", "Tamper-evident ledger page": "防篡改账本页",
     "Public market snapshot": "公开市场快照", "Privacy gate write-up": "隐私闸门说明",
     "Privacy gate on the live site": "线上站点的隐私闸门", "Try the POS reimplementation": "试用 POS 重写版",
+    "Source on GitHub": "GitHub 源码",
 }
 
 
@@ -203,8 +204,8 @@ def build_index():
     mq_words = ["Eval in CI", "Approval gates", "PII masking", "Audit trails", "Idempotent writes", "Bilingual LLM", "FastAPI · Postgres", "Row locks · outbox"]
     mq = "".join(f'<span class="mq-item">{x}</span>' for x in mq_words) * 2
 
-    html = head(f"{P['name_first']} {P['name_last']} · AI Engineer",
-                "Kaihuan Huang, AI engineer: production Python services and evaluated LLM applications. Live demos with source, tests and measured results.", "", "", jsonld=JSONLD)
+    html = head(f"{P['name_first']} {P['name_last']} · Backend / AI Engineer",
+                "Kaihuan Huang, backend / AI engineer: financial APIs, AI-assisted reviews and data pipelines with FastAPI and PostgreSQL. Live demos and case studies with measured results.", "", "", jsonld=JSONLD)
     html += f"""
 <div class="intro" id="intro" aria-hidden="true">
   <div class="in-stage">
@@ -565,14 +566,14 @@ def build_resume():
         url = w.get("demo") or f"https://kaihuan-huang.github.io/works/{w['slug']}.html"
         proj += f'<div class="r-role"><div class="r-top"><b><a href="{url}">{w["title"]}</a></b><span class="mono">{bi(w["type"])}</span></div><div class="r-at">{bi(w["pitch"])}</div></div>'
     skills = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in C["skills"])
-    html = head(f"Résumé · {P['name_first']} {P['name_last']}", "Résumé of Kaihuan Huang, AI engineer.", "", "resume.html")
+    html = head(f"Résumé · {P['name_first']} {P['name_last']}", "Résumé of Kaihuan Huang, backend / AI engineer.", "", "resume.html")
     html += nav("")
     html += f"""<main id="main" class="resume wrap">
   <div class="r-actions no-print"><button class="btn solid" type="button" onclick="window.print()">{bi({"en": "Print / save as PDF", "zh": "打印 / 存为 PDF"})}</button></div>
   <header class="r-head">
     <h1>{P['name_first']} {P['name_last']}</h1>
     <p>{bi(P['role_line'])}</p>
-    <p class="mono">{bi(P['location'])} · US permanent resident · <a href="mailto:{P['email']}">{P['email']}</a> · <a href="{P['github']}">github.com/kaihuan-huang</a> · <a href="https://kaihuan-huang.github.io/">kaihuan-huang.github.io</a></p>
+    <p class="mono">{bi(P['location'])} · US permanent resident · <a href="mailto:{P['email']}">{P['email']}</a> · <a href="{P['github']}">github.com/kaihuan-huang</a> · <a href="{P['linkedin']}">linkedin.com/in/kaijacksonus</a> · <a href="https://kaihuan-huang.github.io/">kaihuan-huang.github.io</a></p>
   </header>
   <section><h2>{bi({"en": "Experience", "zh": "经历"})}</h2>{roles}</section>
   <section><h2>{bi({"en": "Selected work", "zh": "作品"})}</h2>{proj}</section>
@@ -584,7 +585,7 @@ def build_resume():
 
 
 JSONLD = '<script type="application/ld+json">' + json.dumps({
-    "@context": "https://schema.org", "@type": "Person", "name": "Kaihuan Huang", "jobTitle": "AI Engineer",
+    "@context": "https://schema.org", "@type": "Person", "name": "Kaihuan Huang", "jobTitle": "Backend / AI Engineer",
     "url": SITE, "email": "mailto:" + P["email"], "address": {"@type": "PostalAddress", "addressRegion": "CA", "addressCountry": "US"},
     "alumniOf": "University of York", "sameAs": [P["github"], P["linkedin"]],
     "knowsAbout": ["Python", "FastAPI", "PostgreSQL", "LLM evaluation", "PII detection", "Temporal"],
