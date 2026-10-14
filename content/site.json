@@ -1611,6 +1611,323 @@
       ]
     },
     {
+      "slug": "commander-ops",
+      "title": "Remote Commander Ops",
+      "kicker": {
+        "en": "Operations toolkit · private repo",
+        "zh": "运维工具集 · 私有仓库"
+      },
+      "type": {
+        "en": "macOS supervision & monitoring · Oct 2026",
+        "zh": "macOS 进程监督与监控 · 2026 年 10 月"
+      },
+      "pitch": {
+        "en": "Keeps a home Mac reachable from a phone through an AI chat client: launchd supervision, a safe installer, and a metadata-only monitor that says <em>why</em> remote access is down.",
+        "zh": "让家里的 Mac 能通过手机上的 AI 聊天客户端随时被调用：launchd 监督、安全的安装器，以及只记元数据、能说清<em>为什么</em>断线的监控。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole engineer. Wraps the MIT-licensed Desktop Commander remote device without forking it",
+            "zh": "独立完成。包装 MIT 许可的 Desktop Commander 远程设备，不做分叉"
+          }
+        ],
+        [
+          "Stack",
+          "zsh · launchd · Python 3.9 stdlib · BSD awk · GitHub Actions (macOS)"
+        ],
+        [
+          "Data",
+          {
+            "en": "Process and socket metadata only; no command lines, file contents or tokens are ever stored",
+            "zh": "只用进程和套接字元数据；从不存储命令行、文件内容或令牌"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Deployed on the author's Mac on 2026-10-10; 14-day availability observation in progress",
+            "zh": "2026-10-10 部署在作者的 Mac 上；14 天可用性观察进行中"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "The vendor's remote device is a long-running process that holds a rotating OAuth session. Started by hand it dies with the terminal; started twice it rotates the same refresh token and breaks the connection; supervised naively it restarts every 30 seconds forever after a logout. And a running process does not mean the relay connection is alive.",
+        "zh": "厂商的远程设备是一个持有轮换 OAuth 会话的常驻进程。手动启动会随终端一起退出；启动两份会互相轮换同一个刷新令牌、弄断连接；简单交给监督器又会在登出后每 30 秒无限重启。而且进程活着并不代表中继连接还在。"
+      },
+      "approach": [
+        {
+          "en": "A pinned runtime under launchd. The launcher refuses to start a second supervised instance and waits while a terminal-launched one exists; matching the vendor process by its full command line fixed a real bug where a full-path <code>node</code> or a path with spaces slipped past.",
+          "zh": "锁定版本的运行时交给 launchd。启动脚本拒绝启动第二个托管实例，并在终端手动实例存在时等待；按完整命令行匹配厂商进程修复了一个真实 bug：完整路径的 <code>node</code> 或带空格的路径曾被漏判。"
+        },
+        {
+          "en": "An installer with <code>--check</code> (read-only diff), idempotent <code>--prepare</code> and <code>--activate --yes</code> that backs up, swaps and restores itself when launchd rejects the new job. Every path is tested against stubbed <code>launchctl</code>, <code>ps</code> and <code>plutil</code>.",
+          "zh": "安装器提供只读对比的 <code>--check</code>、幂等的 <code>--prepare</code>，以及会先备份、再替换、launchd 拒绝时自动回滚的 <code>--activate --yes</code>。每条路径都用替身的 <code>launchctl</code>、<code>ps</code>、<code>plutil</code> 测试。"
+        },
+        {
+          "en": "A one-minute monitor classifies each tick as ok / process / auth / relay / network / unknown: it counts the supervised pid's established connections to the relay port, probes the network only when that connection is gone, and reads the session file's age against the vendor's 45-minute refresh. Three consecutive failures raise one alert; recovery raises one more. Notification ships off.",
+          "zh": "每分钟一次的监控把每个时刻分为 ok / process / auth / relay / network / unknown：统计托管进程到中继端口的已建立连接，只在连接消失时探测网络，并按厂商 45 分钟的刷新节奏判断会话文件是否过期。连续三次失败只发一次告警，恢复再发一次；通知默认关闭。"
+        },
+        {
+          "en": "The same process matcher exists in awk (launcher) and Python (monitor); a parity test runs both over one fixture corpus and caught the one case where they disagreed.",
+          "zh": "同一套进程匹配逻辑在 awk（启动脚本）和 Python（监控）里各有一份；一致性测试用同一组样例跑两边，抓到了唯一一处分歧。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Phone · AI chat client",
+          "zh": "手机 · AI 聊天客户端"
+        },
+        {
+          "en": "Vendor relay",
+          "zh": "厂商中继"
+        },
+        {
+          "en": "launchd · pinned runtime",
+          "zh": "launchd · 锁定运行时"
+        },
+        {
+          "en": "Single instance?",
+          "zh": "单实例？",
+          "gate": true
+        },
+        {
+          "en": "Monitor · class + alert",
+          "zh": "监控 · 分类 + 告警"
+        }
+      ],
+      "diagrams": [
+        {
+          "id": "cmd-sys",
+          "title": {
+            "en": "Supervision and monitoring",
+            "zh": "监督与监控"
+          },
+          "caption": {
+            "en": "Drawn from the repository layout",
+            "zh": "依据仓库结构绘制"
+          },
+          "nodes": [
+            {
+              "id": "ph",
+              "r": 0,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Phone · AI chat client",
+                "zh": "手机 · AI 聊天客户端"
+              }
+            },
+            {
+              "id": "rl",
+              "r": 0,
+              "c": 1,
+              "t": "end",
+              "l": {
+                "en": "Vendor relay · HTTPS",
+                "zh": "厂商中继 · HTTPS"
+              }
+            },
+            {
+              "id": "ld",
+              "r": 1,
+              "c": 0,
+              "t": "step",
+              "l": {
+                "en": "launchd · KeepAlive on session file",
+                "zh": "launchd · KeepAlive 绑定会话文件"
+              }
+            },
+            {
+              "id": "ln",
+              "r": 1,
+              "c": 1,
+              "t": "gate",
+              "l": {
+                "en": "Launcher · one instance only",
+                "zh": "启动脚本 · 只允许一个实例"
+              }
+            },
+            {
+              "id": "rd",
+              "r": 2,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Remote Device · pinned 0.2.52",
+                "zh": "远程设备 · 锁定 0.2.52"
+              }
+            },
+            {
+              "id": "ss",
+              "r": 2,
+              "c": 0,
+              "t": "store",
+              "l": {
+                "en": "Session file · 0600, lstat only",
+                "zh": "会话文件 · 0600，只读元数据"
+              }
+            },
+            {
+              "id": "hc",
+              "r": 3,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Monitor · every minute",
+                "zh": "监控 · 每分钟"
+              }
+            },
+            {
+              "id": "lg",
+              "r": 3,
+              "c": 2,
+              "t": "store",
+              "l": {
+                "en": "Records · class, counts, ages",
+                "zh": "记录 · 分类、计数、时长"
+              }
+            },
+            {
+              "id": "al",
+              "r": 4,
+              "c": 1,
+              "t": "gate",
+              "l": {
+                "en": "3 failures → one alert",
+                "zh": "3 次失败 → 一次告警"
+              }
+            },
+            {
+              "id": "rp",
+              "r": 4,
+              "c": 2,
+              "t": "end",
+              "l": {
+                "en": "Availability report",
+                "zh": "可用性报告"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "ph",
+              "rl"
+            ],
+            [
+              "rl",
+              "rd",
+              {
+                "en": "tool calls",
+                "zh": "工具调用"
+              }
+            ],
+            [
+              "ld",
+              "ln"
+            ],
+            [
+              "ln",
+              "rd",
+              {
+                "en": "exec",
+                "zh": "exec"
+              }
+            ],
+            [
+              "ss",
+              "ld",
+              {
+                "en": "exists?",
+                "zh": "存在？"
+              }
+            ],
+            [
+              "rd",
+              "ss",
+              {
+                "en": "refresh · 45 min",
+                "zh": "刷新 · 45 分钟"
+              }
+            ],
+            [
+              "rd",
+              "hc",
+              {
+                "en": "pid, sockets",
+                "zh": "pid、套接字"
+              }
+            ],
+            [
+              "hc",
+              "lg"
+            ],
+            [
+              "hc",
+              "al"
+            ],
+            [
+              "lg",
+              "rp"
+            ]
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "v": "160",
+          "l": {
+            "en": "tests: 89 Python unit tests + 71 shell cases with stubbed launchctl, ps and plutil",
+            "zh": "测试：89 个 Python 单元测试 + 71 个用替身 launchctl、ps、plutil 的 shell 用例"
+          },
+          "src": "kais-commander-ops/tests (private)",
+          "url": ""
+        },
+        {
+          "v": "6",
+          "l": {
+            "en": "health classes from metadata only",
+            "zh": "仅凭元数据得出的健康分类"
+          },
+          "src": "kais-commander-ops/scripts/healthcheck.py (private)",
+          "url": ""
+        },
+        {
+          "v": "9 / 10",
+          "l": {
+            "en": "independent review findings fixed before merge; one rejected with evidence from the vendor source",
+            "zh": "合并前修复的独立复审发现；一条依据厂商源码有理由地拒绝"
+          },
+          "src": "kais-commander-ops PR #2 (private)",
+          "url": ""
+        },
+        {
+          "v": "~40 d",
+          "l": {
+            "en": "health history kept at one record a minute",
+            "zh": "每分钟一条记录可保留的历史"
+          },
+          "src": "kais-commander-ops/scripts/healthcheck.py (private)",
+          "url": ""
+        }
+      ],
+      "limits": [
+        {
+          "en": "One machine, one user. The relay is a third-party service; the monitor can tell a relay outage from a local one but cannot fix it.",
+          "zh": "单机单用户。中继是第三方服务；监控能区分中继故障和本地故障，但无法修复中继。"
+        },
+        {
+          "en": "Reboot and crash drills are documented but not yet run; the 99.5% availability figure is a target, not a measurement.",
+          "zh": "重启和崩溃演练已写明但尚未执行；99.5% 可用性是目标，不是测量结果。"
+        }
+      ],
+      "link": [
+        "Built on Desktop Commander (MIT)",
+        "https://github.com/wonderwhy-er/DesktopCommanderMCP"
+      ]
+    },
+    {
       "slug": "ipot",
       "title": "IPOT Restaurant Platform",
       "kicker": {
@@ -2450,8 +2767,8 @@
         [
           "Role",
           {
-            "en": "Founder and engineer",
-            "zh": "发起人兼工程师"
+            "en": "Co-founder",
+            "zh": "联合发起人"
           }
         ],
         [
