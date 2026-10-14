@@ -16,8 +16,8 @@
       "zh": "后端 / AI 工程师 —— 资金类 API、AI 辅助审核与数据管道。"
     },
     "dek": {
-      "en": "FastAPI and PostgreSQL in production, with AWS and Azure deployments, transaction controls, release safety and asynchronous workflows.",
-      "zh": "生产环境中的 FastAPI 与 PostgreSQL，涵盖 AWS 和 Azure 部署、事务控制、发布安全与异步工作流。"
+      "en": "Python and Go services: FastAPI and PostgreSQL in production, with AWS and Azure deployments, transaction controls, idempotent ingestion, release safety and asynchronous workflows.",
+      "zh": "Python 与 Go 服务：生产环境中的 FastAPI 与 PostgreSQL，涵盖 AWS 和 Azure 部署、事务控制、幂等接入、发布安全与异步工作流。"
     }
   },
   "works": [
@@ -817,6 +817,148 @@
   ],
   "deep": [
     {
+      "slug": "dispute-ingest",
+      "title": "Dispute Ingestion Service",
+      "kicker": {
+        "en": "Independent prototype · Oct 2026",
+        "zh": "独立原型 · 2026 年 10 月"
+      },
+      "type": {
+        "en": "Card disputes · Go · synthetic data",
+        "zh": "银行卡争议 · Go · 合成数据"
+      },
+      "pitch": {
+        "en": "Card networks redeliver and regulators set deadlines; this service turns both into one record per case, a dated deadline and a person in the loop for anything risky.",
+        "zh": "卡组织会重复投递，监管会设截止时间；这个服务把两者变成：每个案件一条记录、明确的截止日期，有风险的都交给人。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole author; an independent prototype, not employer work",
+            "zh": "独立完成；个人原型，非雇主项目"
+          }
+        ],
+        [
+          "Stack",
+          "Go (standard library) · REST · Prometheus · go test -race"
+        ],
+        [
+          "Data",
+          {
+            "en": "Synthetic Visa/Mastercard-style CSV and issuer-webhook disputes",
+            "zh": "合成的 Visa/Mastercard 风格 CSV 与发卡行 webhook 争议数据"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Open source; runs locally, not deployed",
+            "zh": "开源；本地运行，未部署"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "Disputes arrive as network CSV batches and issuer webhooks, often more than once. Each one starts a Regulation E or Z clock, and an automatic credit on a fraudulent claim is money that does not come back.",
+        "zh": "争议以卡组织 CSV 批次和发卡行 webhook 的形式到达，而且经常重复。每一条都会启动 Reg E 或 Reg Z 的计时，对欺诈申请自动入账，钱就回不来了。"
+      },
+      "approach": [
+        {
+          "en": "Normalizes Visa and Mastercard reason codes and issuer categories into one model; amounts parse to integer cents, and every field error in a row is kept in a quarantine log.",
+          "zh": "把 Visa、Mastercard 原因码和发卡行类别统一成一个模型；金额解析为整数分；一行里的每个字段错误都写入隔离日志。"
+        },
+        {
+          "en": "Idempotent ingestion keyed on network + case ID: a redelivery returns 200, the same ID with different content returns 409.",
+          "zh": "以「卡组织 + 案件号」做幂等：重复投递返回 200，同一编号内容不同返回 409。"
+        },
+        {
+          "en": "Simplified Reg E (debit) and Reg Z (credit) deadlines, plus a flag for filings outside the 120-day network window.",
+          "zh": "简化版 Reg E（借记卡）和 Reg Z（信用卡）截止日期，并标记超出 120 天卡组织窗口的申请。"
+        },
+        {
+          "en": "Auto-credits only low-risk, in-window cases under a limit; named fraud signals send a case to manual review. There is no auto-deny.",
+          "zh": "只有低风险、在窗口内、低于限额的案件自动临时入账；命中具名欺诈信号就转人工审核；不做自动拒绝。"
+        },
+        {
+          "en": "Parallel validation, serialized commits, and a hash-chained ledger that is verified on startup and refuses to start if edited.",
+          "zh": "并行校验、串行提交；哈希链账本启动时校验，被改过就拒绝启动。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "CSV batch · webhook",
+          "zh": "CSV 批次 · webhook"
+        },
+        {
+          "en": "Validate",
+          "zh": "校验"
+        },
+        {
+          "en": "Dedupe",
+          "zh": "去重"
+        },
+        {
+          "en": "Deadlines + risk",
+          "zh": "截止日期 + 风险"
+        },
+        {
+          "en": "Manual review",
+          "zh": "人工审核",
+          "gate": true
+        },
+        {
+          "en": "Hash-chained ledger",
+          "zh": "哈希链账本"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "20 → 1",
+          "l": {
+            "en": "concurrent redeliveries of one case create one record",
+            "zh": "同一案件 20 次并发重投只建一条记录"
+          },
+          "src": "internal/ingest/ingest_test.go",
+          "url": "https://github.com/kaihuan-huang/dispute-ingest/blob/main/internal/ingest/ingest_test.go"
+        },
+        {
+          "v": "13",
+          "l": {
+            "en": "tests, all passing under go test -race",
+            "zh": "个测试，go test -race 下全部通过"
+          },
+          "src": "go test -race ./...",
+          "url": "https://github.com/kaihuan-huang/dispute-ingest"
+        }
+      ],
+      "limits": [
+        {
+          "en": "Synthetic data only; not connected to any network or bank.",
+          "zh": "只用合成数据；没有接入任何卡组织或银行。"
+        },
+        {
+          "en": "Regulatory rules are simplified: no bank holidays, new-account extensions or per-reason-code network windows.",
+          "zh": "监管规则是简化版：没有银行假日、新账户延期，也没有按原因码区分的卡组织窗口。"
+        },
+        {
+          "en": "The ledger is a local file; a production version would keep the chain in PostgreSQL behind a unique constraint.",
+          "zh": "账本是本地文件；生产版本会把哈希链放进 PostgreSQL，并加唯一约束。"
+        },
+        {
+          "en": "Built while preparing for a payments role, to learn the domain.",
+          "zh": "为准备一个支付方向的岗位、学习这个领域而做。"
+        }
+      ],
+      "sheet_note": {
+        "en": "Design view · code on GitHub",
+        "zh": "设计视图 · 代码在 GitHub"
+      },
+      "link": [
+        "Source on GitHub",
+        "https://github.com/kaihuan-huang/dispute-ingest"
+      ]
+    },
+    {
       "slug": "governance-platform",
       "title": "AI Governance Platform",
       "kicker": {
@@ -1472,8 +1614,8 @@
       "slug": "ipot",
       "title": "IPOT Restaurant Platform",
       "kicker": {
-        "en": "Jackson Ventures · Apr 2026 — now",
-        "zh": "Jackson Ventures · 2026 年 4 月至今"
+        "en": "Jackson Ventures",
+        "zh": "Jackson Ventures"
       },
       "type": {
         "en": "Production · restaurant operations",
@@ -2574,11 +2716,11 @@
   ],
   "roles": [
     {
-      "when": "Apr 2026 — now",
+      "when": "Apr 2023 — now",
       "title": "AI Engineer · Jackson Ventures",
       "at": {
-        "en": "BloomFrontier fintech lending · IPOT restaurant platform · revenue analytics · San Francisco Bay Area",
-        "zh": "BloomFrontier 金融科技借贷 · IPOT 餐饮平台 · 营收分析 · 旧金山湾区"
+        "en": "BloomFrontier fintech lending · IPOT restaurant platform · revenue analytics · San Francisco Bay Area · affiliate of REAAI under the same ownership",
+        "zh": "BloomFrontier 金融科技借贷 · IPOT 餐饮平台 · 营收分析 · 旧金山湾区 · 与 REAAI 同一老板旗下的关联公司"
       },
       "items": [
         {
@@ -2638,11 +2780,34 @@
       ]
     },
     {
-      "when": "2023 — 2025",
+      "when": "Feb 2022 — Apr 2023",
+      "title": "Founding Engineer · REAAI",
+      "at": {
+        "en": "San Mateo, CA",
+        "zh": "加州圣马特奥"
+      },
+      "items": [
+        {
+          "en": "Built a full-stack real-estate platform (Next.js/React, Node.js, MongoDB) with NextAuth authentication and Google Maps API property search, deployed through CI/CD on Azure.",
+          "zh": "构建全栈房地产平台（Next.js/React、Node.js、MongoDB），NextAuth 认证与 Google Maps API 房源搜索，通过 CI/CD 部署到 Azure。"
+        }
+      ]
+    },
+    {
+      "when": "Sep 2023 — Jan 2026",
       "title": "MSc Computer Science with Artificial Intelligence",
       "at": {
-        "en": "University of York, UK",
-        "zh": "英国约克大学"
+        "en": "University of York, UK (Online)",
+        "zh": "英国约克大学（在线）"
+      },
+      "items": []
+    },
+    {
+      "when": "Jun 2022 — Dec 2022",
+      "title": "Certificate in Full Stack Web Development",
+      "at": {
+        "en": "UC Berkeley Extension",
+        "zh": "加州大学伯克利分校进修部"
       },
       "items": []
     }
@@ -2650,7 +2815,7 @@
   "skills": [
     [
       "Backend / Data",
-      "Python, SQL, TypeScript · FastAPI, REST APIs, SQLAlchemy, Alembic, PostgreSQL, Redis, SQLite/FTS5"
+      "Python, Go, SQL, TypeScript · FastAPI, REST APIs, SQLAlchemy, Alembic, PostgreSQL, SQLite/FTS5"
     ],
     [
       "Systems / Security",
@@ -2658,7 +2823,7 @@
     ],
     [
       "Cloud / Testing",
-      "AWS, Azure VM, Docker, OpenTofu (IaC), GitHub Actions, pytest, Playwright, Vitest"
+      "AWS, Azure VM, Docker, OpenTofu (IaC), GitHub Actions, pytest, go test, Playwright, Vitest"
     ],
     [
       "AI / Full Stack",
@@ -2706,7 +2871,7 @@
     },
     {
       "id": "york-msc",
-      "years": "2023–25",
+      "years": "2023–26",
       "kind": {
         "en": "MSc coursework",
         "zh": "硕士课程"

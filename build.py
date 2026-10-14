@@ -23,6 +23,7 @@ ZH = {  # labels that live in build.py, not in site.json
     "Model architecture card": "模型架构卡片", "Tamper-evident ledger page": "防篡改账本页",
     "Public market snapshot": "公开市场快照", "Privacy gate write-up": "隐私闸门说明",
     "Privacy gate on the live site": "线上站点的隐私闸门", "Try the POS reimplementation": "试用 POS 重写版",
+    "Source on GitHub": "GitHub 源码",
 }
 
 
