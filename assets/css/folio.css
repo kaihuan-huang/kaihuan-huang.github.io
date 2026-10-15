@@ -274,6 +274,7 @@ code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);padding:1
 
 .case-video{margin:0}
 .case-video video{width:100%;display:block;background:#000;border:1px solid var(--line)}
+.case-video audio{width:100%;display:block}
 .case-video figcaption{color:var(--muted);margin-top:8px}
 
 /* ---------- résumé ---------- */
