@@ -441,3 +441,16 @@ code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);padding:1
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none}
 }
+/* How I decide */
+.decs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:8px}
+.dec{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);background:var(--matte);padding:20px 20px 18px;scroll-margin-top:84px}
+.dec .w-label{color:var(--muted);display:flex;flex-direction:column;gap:2px;margin:0;font-size:11px}
+.dec h3{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:24px;letter-spacing:.03em;line-height:1.08;margin:6px 0 4px}
+.dec dl{margin:0;display:grid;gap:4px}
+.dec dt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.dec dt.red{color:var(--red)}
+.dec dd{margin:0;font-size:14.5px;color:var(--ink-2)}
+.dec .dec-rule{font-size:16px;color:var(--ink);font-weight:600}
+.dec .go{margin-top:auto;padding-top:12px;color:var(--ink);text-decoration:none}
+.dec .go:hover{color:var(--red)}
+@media (max-width:1000px){.decs{grid-template-columns:minmax(0,1fr)}}

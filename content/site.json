@@ -18,7 +18,9 @@
     "dek": {
       "en": "Python and Go services: FastAPI and PostgreSQL in production, with AWS and Azure deployments, transaction controls, idempotent ingestion, release safety and asynchronous workflows.",
       "zh": "Python 与 Go 服务：生产环境中的 FastAPI 与 PostgreSQL，涵盖 AWS 和 Azure 部署、事务控制、幂等接入、发布安全与异步工作流。"
-    }
+    },
+    "booking_url": "",
+    "goatcounter": ""
   },
   "works": [
     {
@@ -108,10 +110,10 @@
       ],
       "metrics": [
         {
-          "v": "17/30 → 33/39",
+          "v": "17/30 · 33/39",
           "l": {
-            "en": "model-only pilot vs rules + gate, held-out (57% → 85%)",
-            "zh": "纯模型试点 vs 规则 + 闸门，留出集（57% → 85%）"
+            "en": "model-only pilot (30 cases) · rules + gate on a separate held-out set (39 cases); not a like-for-like before and after",
+            "zh": "纯模型试点（30 例）· 规则 + 确认闸门在另一份留出集上（39 例）；两者不是严格可比的前后对照"
           },
           "src": "booking-agent-demo/index.html",
           "url": "https://github.com/kaihuan-huang/booking-agent-demo/blob/main/index.html"
@@ -3703,6 +3705,99 @@
         "zh": "即使代码由 Agent 来写，也先写失败的测试。"
       },
       "now": "governance-platform"
+    }
+  ],
+  "decisions_intro": {
+    "en": "Three calls I made on real projects, in the same shape as the learning archive: what happened, what it taught me and what it cost, the rule I kept, and where it shows today.",
+    "zh": "我在真实项目里做的三个决定，格式和学习档案一样：当时发生了什么，学到什么、代价是什么，留下的规则，今天体现在哪里。"
+  },
+  "decisions": [
+    {
+      "id": "model-proposes",
+      "when": "2026",
+      "status": {
+        "en": "Nalu · IPOT · pre-launch testing",
+        "zh": "Nalu · IPOT · 预发布测试"
+      },
+      "title": {
+        "en": "The model can suggest; code decides what is booked",
+        "zh": "模型可以建议，订什么由代码决定"
+      },
+      "then": {
+        "en": "We let a language model fill bilingual restaurant bookings. In a 30-case pilot only 17 were fully correct, and 3 contained details the guest never gave.",
+        "zh": "我们让语言模型填写中英双语的餐厅预订。30 例试点里只有 17 例完全正确，3 例填了客人根本没说过的信息。"
+      },
+      "learned": {
+        "en": "A better prompt could not be the only guard on a booking a real guest relies on. I moved every booking field and the final confirmation into code and kept the model for language. The cost: one more confirmation step for the guest.",
+        "zh": "真实客人要依赖的预订，不能只靠更好的提示词把关。我把每个预订字段和最后的确认都改由代码处理，模型只负责语言。代价：客人要多确认一步。"
+      },
+      "rule": {
+        "en": "Anything committed on a customer's behalf is validated by code and confirmed with an explicit yes.",
+        "zh": "凡是替客户提交的东西，都由代码校验，并且要客人明确说「是」。"
+      },
+      "result": {
+        "en": "On a separate 39-case held-out set: 33 fully correct, 0 invented values. The two sets are not a like-for-like before and after.",
+        "zh": "在另一份 39 例留出集上：33 例完全正确，0 个编造值。两套数据不是严格可比的前后对照。"
+      },
+      "now": "booking-agent"
+    },
+    {
+      "id": "provenance",
+      "when": "2026",
+      "status": {
+        "en": "Career OPS · personal project · Sep 30 snapshot",
+        "zh": "Career OPS · 个人项目 · 9 月 30 日快照"
+      },
+      "title": {
+        "en": "A traceable record beats a bigger dataset",
+        "zh": "可追溯的记录，胜过更大的数据量"
+      },
+      "then": {
+        "en": "A third-party job feed showed the date a posting was found as the date it was published, so stale jobs looked new. Of its 1,375 “recent” rows, only 214 were actually recent.",
+        "zh": "第三方岗位数据把「抓到的日期」当成「发布日期」，旧岗位看起来像新的。它标为「最近」的 1,375 条里，真正是最近的只有 214 条。"
+      },
+      "learned": {
+        "en": "More rows were worth less than rows I could trace. I switched to employers' own ATS APIs and kept the source link and timestamp on every record. The cost: every ATS has its own schema and its own meaning of “posted”, so each source needs its own mapping.",
+        "zh": "条数多，不如每条都能追溯。我改用雇主自己的 ATS 接口，每条记录都保留来源链接和时间戳。代价：每个 ATS 的格式和「发布」的含义都不同，每个来源都要单独做映射。"
+      },
+      "rule": {
+        "en": "Know where a field came from before you trust it.",
+        "zh": "先知道一个字段从哪来，再决定信不信它。"
+      },
+      "result": {
+        "en": "264,148 postings from native sources in the Sep 30, 2026 snapshot, each with its source link.",
+        "zh": "2026 年 9 月 30 日快照：264,148 个岗位，全部来自原始来源，每条都带来源链接。"
+      },
+      "now": "career-ops"
+    },
+    {
+      "id": "money-needs-a-person",
+      "when": "2026",
+      "status": {
+        "en": "BloomFrontier · Jackson Ventures · merged Oct 2026, not deployed",
+        "zh": "BloomFrontier · Jackson Ventures · 2026 年 10 月已合并，未部署"
+      },
+      "title": {
+        "en": "A model never moves money",
+        "zh": "模型永远不能自己动钱"
+      },
+      "then": {
+        "en": "Loan officers review construction-draw evidence before money is released. Automated checks could flag missing documents; the question was how far to let them go.",
+        "zh": "放款前，信贷员要审核工程提款的证据。自动检查能标出缺失的文件，问题是让它走多远。"
+      },
+      "learned": {
+        "en": "Checks may raise a flag, but release needs a person and the database. I separated evidence checks, two-person approval and database-enforced limits, and split the work into small pull requests that could each be reviewed on their own. The cost: more review time and a more complex workflow, in exchange for clear accountability.",
+        "zh": "检查可以报警，但放款要靠人和数据库。我把证据检查、双人审批和数据库强制的限制分开，并把工作拆成能各自单独审核的小 PR。代价：审核时间更长、流程更复杂，换来的是清楚的责任归属。"
+      },
+      "rule": {
+        "en": "Anything that moves money needs a person's sign-off and a database constraint, not a model's answer.",
+        "zh": "凡是动钱的操作，要有人签字、有数据库约束，而不是靠模型的回答。"
+      },
+      "result": {
+        "en": "5 pull requests merged on Oct 9, 2026, with 103 financial tests on real PostgreSQL, including concurrent approvals. Not yet deployed.",
+        "zh": "5 个 PR 于 2026 年 10 月 9 日合并，103 个资金相关测试跑在真实 PostgreSQL 上，包括并发审批。尚未部署。"
+      },
+      "now": "loan-draw-review"
     }
   ]
 }

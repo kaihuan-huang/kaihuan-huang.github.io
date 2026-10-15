@@ -48,6 +48,33 @@ def nn(i):
     return f"{i:02d}"
 
 
+def analytics():
+    """GoatCounter: no cookies, no banner. ?ref=<company> on a link shows up as the referrer."""
+    code = P.get("goatcounter")
+    return f'<script data-goatcounter="https://{code}.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>\n' if code else ""
+
+
+def book_btn(cls="btn solid"):
+    """Booking page when set, otherwise an intro email."""
+    if P.get("booking_url"):
+        return f'<a class="{cls}" href="{P["booking_url"]}">{bi({"en": "Book a 15-min call →", "zh": "约 15 分钟通话 →"})}</a>'
+    return f'<a class="{cls}" href="mailto:{P["email"]}?subject=15-minute%20intro%20call">{bi({"en": "Book a 15-min call →", "zh": "约 15 分钟通话 →"})}</a>'
+
+
+def decision_card(k, d):
+    return f"""      <article class="dec reveal" id="{d['id']}">
+        <div class="w-label mono"><span>D{nn(k)} · {d['when']}</span><span>{bi(d['status'])}</span></div>
+        <h3>{bi(d['title'])}</h3>
+        <dl>
+          <dt>{bi({"en": "Then", "zh": "当时"})}</dt><dd>{bi(d['then'])}</dd>
+          <dt>{bi({"en": "What I learned · the cost", "zh": "学到的 · 代价"})}</dt><dd>{bi(d['learned'])}</dd>
+          <dt class="red">{bi({"en": "The rule", "zh": "规则"})}</dt><dd class="dec-rule">{bi(d['rule'])}</dd>
+          <dt>{bi({"en": "Now", "zh": "现在"})}</dt><dd>{bi(d['result'])}</dd>
+        </dl>
+        <a class="go mono" href="works/{d['now']}.html">{bi({"en": "Shows today in", "zh": "今天体现在"})} {slug_title(d['now'])} →</a>
+      </article>"""
+
+
 def head(title, desc, base, path="", og_img="assets/img/og.png", jsonld=""):
     title, desc, url = attr(title), attr(desc), SITE + path
     return f"""<!doctype html>
@@ -74,7 +101,7 @@ def head(title, desc, base, path="", og_img="assets/img/og.png", jsonld=""):
 <link rel="stylesheet" href="{base}assets/css/folio.css?v={VER}">
 <script>(function(){{var r=document.documentElement,l=null,s=null;try{{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='zh')localStorage.setItem('kh-lang',q);l=localStorage.getItem('kh-lang');s=sessionStorage.getItem('kh-intro')}}catch(e){{}}r.setAttribute('data-lang',l||((navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en'));if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('no-intro')}})();</script>
 <script src="{base}assets/js/folio.js?v={VER}" defer></script>
-{jsonld}</head>
+{jsonld}{analytics()}</head>
 <body>
 <a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="zh">跳到正文</span></a>
 """
@@ -90,6 +117,7 @@ def nav(base):
         rows.append(f'<li><a href="{base}works/{w["slug"]}.html"><span class="m-num">{nn(i)}</span><span class="m-title">{w["title"]}</span><span class="m-tag">{bi(w["type"])}</span></a></li>')
     n = len(all_items())
     rows.append(f'<li><a href="{base}resume.html"><span class="m-num">{nn(n + 1)}</span><span class="m-title">{bi({"en": "Résumé", "zh": "简历"})}</span><span class="m-tag">{bi({"en": "Web · print", "zh": "网页 · 可打印"})}</span></a></li>')
+    rows.append(f'<li><a href="{base}index.html#decisions"><span class="m-num">D</span><span class="m-title">{bi({"en": "How I decide", "zh": "我怎么做决定"})}</span><span class="m-tag">{bi({"en": "Three decisions", "zh": "三个决定"})}</span></a></li>')
     rows.append(f'<li><a href="{base}archive.html"><span class="m-num">A</span><span class="m-title">{bi({"en": "Learning Archive", "zh": "学习档案"})}</span><span class="m-tag">2023 — 2025</span></a></li>')
     rows.append(f'<li><a href="{base}notes/"><span class="m-num">{nn(n + 2)}</span><span class="m-title">{bi({"en": "Notes", "zh": "笔记"})}</span><span class="m-tag">{bi({"en": "Writing", "zh": "文章"})}</span></a></li>')
     rows.append(f'<li><a href="{base}index.html#contact"><span class="m-num">{nn(n + 3)}</span><span class="m-title">{bi({"en": "Contact", "zh": "联系"})}</span><span class="m-tag">{bi({"en": "Say hi", "zh": "打个招呼"})}</span></a></li>')
@@ -195,6 +223,7 @@ def build_index():
     nw = len(works)
     cards = "\n".join(wall_card(i, w) for i, w in enumerate(works, 1))
     deeps = "\n".join(deep_card(nw + i, d) for i, d in enumerate(C["deep"], 1))
+    decs = "\n".join(decision_card(k, d) for k, d in enumerate(C["decisions"], 1))
     stats = "".join(f'<div class="stat"><div class="st-num">{s["v"]}</div><div class="st-lab">{bi(s["l"])}</div></div>' for s in C["stats"])
     roles = ""
     for r in C["roles"]:
@@ -230,7 +259,8 @@ def build_index():
         <p class="avail mono"><span class="dot"></span>{bi({"en": "Open to AI / backend engineering roles · US permanent resident", "zh": "正在看 AI / 后端工程岗位 · 美国永久居民"})}</p>
       </div>
       <div class="cta">
-        <a class="btn solid" href="mailto:{P['email']}?subject=Intro%20call">{bi({"en": "Email me →", "zh": "发邮件 →"})}</a>
+        {book_btn()}
+        <a class="btn" href="mailto:{P['email']}?subject=Intro">{bi({"en": "Email me", "zh": "发邮件"})}</a>
         <a class="btn" href="resume.html">{bi({"en": "Résumé", "zh": "简历"})}</a>
       </div>
     </div>
@@ -259,15 +289,23 @@ def build_index():
     </div>
   </section>
 
+  <section class="sec wrap" id="decisions" aria-labelledby="dec-h">
+    <div class="sec-head"><span class="n">02</span><h2 id="dec-h">— {bi({"en": "How I decide", "zh": "我怎么做决定"})}</h2><span class="sec-note mono">{bi({"en": "Three calls, what they cost, the rule I kept", "zh": "三个决定、各自的代价、留下的规则"})}</span></div>
+    <p class="arch-intro">{bi(C['decisions_intro'])}</p>
+    <div class="decs">
+{decs}
+    </div>
+  </section>
+
   <section class="sec wrap" id="archive" aria-labelledby="archive-h">
-    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— {bi({"en": "Learning Archive", "zh": "学习档案"})}</h2><span class="sec-note mono">{bi({"en": "2023 — 2025 · what each early project taught me", "zh": "2023 — 2025 · 每个早期项目教会我的事"})}</span></div>
+    <div class="sec-head"><span class="n">03</span><h2 id="archive-h">— {bi({"en": "Learning Archive", "zh": "学习档案"})}</h2><span class="sec-note mono">{bi({"en": "2023 — 2025 · what each early project taught me", "zh": "2023 — 2025 · 每个早期项目教会我的事"})}</span></div>
     <p class="arch-intro">{bi(C['archive_intro'])}</p>
     {archive_register("")}
     <div class="cta left"><a class="btn" href="archive.html">{bi({"en": "Open the archive →", "zh": "打开学习档案 →"})}</a></div>
   </section>
 
   <section class="sec wrap" id="about" aria-labelledby="about-h">
-    <div class="sec-head"><span class="n">03</span><h2 id="about-h">— {bi({"en": "The Engineer", "zh": "工程师"})}</h2></div>
+    <div class="sec-head"><span class="n">04</span><h2 id="about-h">— {bi({"en": "The Engineer", "zh": "工程师"})}</h2></div>
     <div class="study">
       <figure class="fig reveal">
         <div class="plate" id="plate">{PORTRAIT}</div>
@@ -287,13 +325,13 @@ def build_index():
   </section>
 
   <section class="sec wrap" id="contact" aria-labelledby="contact-h">
-    <div class="sec-head"><span class="n">04</span><h2 id="contact-h">— {bi({"en": "The Invitation", "zh": "邀请"})}</h2></div>
+    <div class="sec-head"><span class="n">05</span><h2 id="contact-h">— {bi({"en": "The Invitation", "zh": "邀请"})}</h2></div>
     <div class="invite reveal">
       <span class="kicker">{bi({"en": "Hiring for AI or backend engineering?", "zh": "在招 AI 或后端工程师？"})}</span>
       <div class="big">{bi({"en": "Let's build<br>what <span class=\"red\">ships</span>", "zh": "一起做<br>能<span class=\"red\">上线</span>的东西"})}</div>
       <a class="mail" href="mailto:{P['email']}">{P['email']}</a>
       <div class="cta">
-        <a class="btn solid" href="mailto:{P['email']}?subject=20-minute%20intro%20call">{bi({"en": "Book a 20-min intro →", "zh": "约 20 分钟聊聊 →"})}</a>
+        {book_btn()}
         <a class="btn" href="resume.html">{bi({"en": "Résumé", "zh": "简历"})}</a>
         <a class="btn" href="{P['github']}">GitHub</a>
       </div>
