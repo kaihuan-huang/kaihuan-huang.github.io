@@ -65,6 +65,7 @@
 <li><a href="works/reea.html"><span class="m-num">13</span><span class="m-title">REEA</span><span class="m-tag"><span lang="en">AI real-estate platform · 2023–24</span><span lang="zh">AI 房地产平台 · 2023–24</span></span></a></li>
 <li><a href="works/lightup.html"><span class="m-num">14</span><span class="m-title">LightUp</span><span class="m-tag"><span lang="en">Charity giving platform · Gold, London Design Award</span><span lang="zh">慈善捐赠平台 · 伦敦设计奖金奖</span></span></a></li>
 <li><a href="resume.html"><span class="m-num">15</span><span class="m-title"><span lang="en">Résumé</span><span lang="zh">简历</span></span><span class="m-tag"><span lang="en">Web · print</span><span lang="zh">网页 · 可打印</span></span></a></li>
+<li><a href="index.html#decisions"><span class="m-num">D</span><span class="m-title"><span lang="en">How I decide</span><span lang="zh">我怎么做决定</span></span><span class="m-tag"><span lang="en">Three decisions</span><span lang="zh">三个决定</span></span></a></li>
 <li><a href="archive.html"><span class="m-num">A</span><span class="m-title"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></span><span class="m-tag">2023 — 2025</span></a></li>
 <li><a href="notes/"><span class="m-num">16</span><span class="m-title"><span lang="en">Notes</span><span lang="zh">笔记</span></span><span class="m-tag"><span lang="en">Writing</span><span lang="zh">文章</span></span></a></li>
 <li><a href="index.html#contact"><span class="m-num">17</span><span class="m-title"><span lang="en">Contact</span><span lang="zh">联系</span></span><span class="m-tag"><span lang="en">Say hi</span><span lang="zh">打个招呼</span></span></a></li>
@@ -87,7 +88,8 @@
         <p class="avail mono"><span class="dot"></span><span lang="en">Open to AI / backend engineering roles · US permanent resident</span><span lang="zh">正在看 AI / 后端工程岗位 · 美国永久居民</span></p>
       </div>
       <div class="cta">
-        <a class="btn solid" href="mailto:huangkaihuan0216@gmail.com?subject=Intro%20call"><span lang="en">Email me →</span><span lang="zh">发邮件 →</span></a>
+        <a class="btn solid" href="mailto:huangkaihuan0216@gmail.com?subject=15-minute%20intro%20call"><span lang="en">Book a 15-min call →</span><span lang="zh">约 15 分钟通话 →</span></a>
+        <a class="btn" href="mailto:huangkaihuan0216@gmail.com?subject=Intro"><span lang="en">Email me</span><span lang="zh">发邮件</span></a>
         <a class="btn" href="resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a>
       </div>
     </div>
@@ -266,8 +268,48 @@
     </div>
   </section>
 
+  <section class="sec wrap" id="decisions" aria-labelledby="dec-h">
+    <div class="sec-head"><span class="n">02</span><h2 id="dec-h">— <span lang="en">How I decide</span><span lang="zh">我怎么做决定</span></h2><span class="sec-note mono"><span lang="en">Three calls, what they cost, the rule I kept</span><span lang="zh">三个决定、各自的代价、留下的规则</span></span></div>
+    <p class="arch-intro"><span lang="en">Three calls I made on real projects, in the same shape as the learning archive: what happened, what it taught me and what it cost, the rule I kept, and where it shows today.</span><span lang="zh">我在真实项目里做的三个决定，格式和学习档案一样：当时发生了什么，学到什么、代价是什么，留下的规则，今天体现在哪里。</span></p>
+    <div class="decs">
+      <article class="dec reveal" id="model-proposes">
+        <div class="w-label mono"><span>D01 · 2026</span><span><span lang="en">Nalu · IPOT · pre-launch testing</span><span lang="zh">Nalu · IPOT · 预发布测试</span></span></div>
+        <h3><span lang="en">The model can suggest; code decides what is booked</span><span lang="zh">模型可以建议，订什么由代码决定</span></h3>
+        <dl>
+          <dt><span lang="en">Then</span><span lang="zh">当时</span></dt><dd><span lang="en">We let a language model fill bilingual restaurant bookings. In a 30-case pilot only 17 were fully correct, and 3 contained details the guest never gave.</span><span lang="zh">我们让语言模型填写中英双语的餐厅预订。30 例试点里只有 17 例完全正确，3 例填了客人根本没说过的信息。</span></dd>
+          <dt><span lang="en">What I learned · the cost</span><span lang="zh">学到的 · 代价</span></dt><dd><span lang="en">A better prompt could not be the only guard on a booking a real guest relies on. I moved every booking field and the final confirmation into code and kept the model for language. The cost: one more confirmation step for the guest.</span><span lang="zh">真实客人要依赖的预订，不能只靠更好的提示词把关。我把每个预订字段和最后的确认都改由代码处理，模型只负责语言。代价：客人要多确认一步。</span></dd>
+          <dt class="red"><span lang="en">The rule</span><span lang="zh">规则</span></dt><dd class="dec-rule"><span lang="en">Anything committed on a customer's behalf is validated by code and confirmed with an explicit yes.</span><span lang="zh">凡是替客户提交的东西，都由代码校验，并且要客人明确说「是」。</span></dd>
+          <dt><span lang="en">Now</span><span lang="zh">现在</span></dt><dd><span lang="en">On a separate 39-case held-out set: 33 fully correct, 0 invented values. The two sets are not a like-for-like before and after.</span><span lang="zh">在另一份 39 例留出集上：33 例完全正确，0 个编造值。两套数据不是严格可比的前后对照。</span></dd>
+        </dl>
+        <a class="go mono" href="works/booking-agent.html"><span lang="en">Shows today in</span><span lang="zh">今天体现在</span> Booking Agent →</a>
+      </article>
+      <article class="dec reveal" id="provenance">
+        <div class="w-label mono"><span>D02 · 2026</span><span><span lang="en">Career OPS · personal project · Sep 30 snapshot</span><span lang="zh">Career OPS · 个人项目 · 9 月 30 日快照</span></span></div>
+        <h3><span lang="en">A traceable record beats a bigger dataset</span><span lang="zh">可追溯的记录，胜过更大的数据量</span></h3>
+        <dl>
+          <dt><span lang="en">Then</span><span lang="zh">当时</span></dt><dd><span lang="en">A third-party job feed showed the date a posting was found as the date it was published, so stale jobs looked new. Of its 1,375 “recent” rows, only 214 were actually recent.</span><span lang="zh">第三方岗位数据把「抓到的日期」当成「发布日期」，旧岗位看起来像新的。它标为「最近」的 1,375 条里，真正是最近的只有 214 条。</span></dd>
+          <dt><span lang="en">What I learned · the cost</span><span lang="zh">学到的 · 代价</span></dt><dd><span lang="en">More rows were worth less than rows I could trace. I switched to employers' own ATS APIs and kept the source link and timestamp on every record. The cost: every ATS has its own schema and its own meaning of “posted”, so each source needs its own mapping.</span><span lang="zh">条数多，不如每条都能追溯。我改用雇主自己的 ATS 接口，每条记录都保留来源链接和时间戳。代价：每个 ATS 的格式和「发布」的含义都不同，每个来源都要单独做映射。</span></dd>
+          <dt class="red"><span lang="en">The rule</span><span lang="zh">规则</span></dt><dd class="dec-rule"><span lang="en">Know where a field came from before you trust it.</span><span lang="zh">先知道一个字段从哪来，再决定信不信它。</span></dd>
+          <dt><span lang="en">Now</span><span lang="zh">现在</span></dt><dd><span lang="en">264,148 postings from native sources in the Sep 30, 2026 snapshot, each with its source link.</span><span lang="zh">2026 年 9 月 30 日快照：264,148 个岗位，全部来自原始来源，每条都带来源链接。</span></dd>
+        </dl>
+        <a class="go mono" href="works/career-ops.html"><span lang="en">Shows today in</span><span lang="zh">今天体现在</span> Career OPS →</a>
+      </article>
+      <article class="dec reveal" id="money-needs-a-person">
+        <div class="w-label mono"><span>D03 · 2026</span><span><span lang="en">BloomFrontier · Jackson Ventures · merged Oct 2026, not deployed</span><span lang="zh">BloomFrontier · Jackson Ventures · 2026 年 10 月已合并，未部署</span></span></div>
+        <h3><span lang="en">A model never moves money</span><span lang="zh">模型永远不能自己动钱</span></h3>
+        <dl>
+          <dt><span lang="en">Then</span><span lang="zh">当时</span></dt><dd><span lang="en">Loan officers review construction-draw evidence before money is released. Automated checks could flag missing documents; the question was how far to let them go.</span><span lang="zh">放款前，信贷员要审核工程提款的证据。自动检查能标出缺失的文件，问题是让它走多远。</span></dd>
+          <dt><span lang="en">What I learned · the cost</span><span lang="zh">学到的 · 代价</span></dt><dd><span lang="en">Checks may raise a flag, but release needs a person and the database. I separated evidence checks, two-person approval and database-enforced limits, and split the work into small pull requests that could each be reviewed on their own. The cost: more review time and a more complex workflow, in exchange for clear accountability.</span><span lang="zh">检查可以报警，但放款要靠人和数据库。我把证据检查、双人审批和数据库强制的限制分开，并把工作拆成能各自单独审核的小 PR。代价：审核时间更长、流程更复杂，换来的是清楚的责任归属。</span></dd>
+          <dt class="red"><span lang="en">The rule</span><span lang="zh">规则</span></dt><dd class="dec-rule"><span lang="en">Anything that moves money needs a person's sign-off and a database constraint, not a model's answer.</span><span lang="zh">凡是动钱的操作，要有人签字、有数据库约束，而不是靠模型的回答。</span></dd>
+          <dt><span lang="en">Now</span><span lang="zh">现在</span></dt><dd><span lang="en">5 pull requests merged on Oct 9, 2026, with 103 financial tests on real PostgreSQL, including concurrent approvals. Not yet deployed.</span><span lang="zh">5 个 PR 于 2026 年 10 月 9 日合并，103 个资金相关测试跑在真实 PostgreSQL 上，包括并发审批。尚未部署。</span></dd>
+        </dl>
+        <a class="go mono" href="works/loan-draw-review.html"><span lang="en">Shows today in</span><span lang="zh">今天体现在</span> Loan-Draw Review Controls →</a>
+      </article>
+    </div>
+  </section>
+
   <section class="sec wrap" id="archive" aria-labelledby="archive-h">
-    <div class="sec-head"><span class="n">02</span><h2 id="archive-h">— <span lang="en">Learning Archive</span><span lang="zh">学习档案</span></h2><span class="sec-note mono"><span lang="en">2023 — 2025 · what each early project taught me</span><span lang="zh">2023 — 2025 · 每个早期项目教会我的事</span></span></div>
+    <div class="sec-head"><span class="n">03</span><h2 id="archive-h">— <span lang="en">Learning Archive</span><span lang="zh">学习档案</span></h2><span class="sec-note mono"><span lang="en">2023 — 2025 · what each early project taught me</span><span lang="zh">2023 — 2025 · 每个早期项目教会我的事</span></span></div>
     <p class="arch-intro"><span lang="en">Earlier projects that are not portfolio pieces on their own: tutorials, coursework, hackathons and prototypes. Each one taught me a rule I still build by, and each rule points to the work where it shows today.</span><span lang="zh">单独拿出来不够格当作品的早期项目：教程、课程、黑客松和原型。每一个都教会了我一条至今仍在用的规则，每条规则都指向今天体现它的作品。</span></p>
     <ol class="register"><li class="reg-head mono" aria-hidden="true"><span>No.</span><span><span lang="en">Year</span><span lang="zh">年份</span></span><span><span lang="en">Sheet</span><span lang="zh">图纸</span></span><span><span lang="en">The rule it left me</span><span lang="zh">留下的规则</span></span><span><span lang="en">Shows today in</span><span lang="zh">今天体现在</span></span></li><li class="reg-row reveal"><a href="archive.html#first-llm-apps">
           <span class="r-no mono">A01</span>
@@ -310,7 +352,7 @@
   </section>
 
   <section class="sec wrap" id="about" aria-labelledby="about-h">
-    <div class="sec-head"><span class="n">03</span><h2 id="about-h">— <span lang="en">The Engineer</span><span lang="zh">工程师</span></h2></div>
+    <div class="sec-head"><span class="n">04</span><h2 id="about-h">— <span lang="en">The Engineer</span><span lang="zh">工程师</span></h2></div>
     <div class="study">
       <figure class="fig reveal">
         <div class="plate" id="plate"><svg viewBox="0 0 400 500" role="img" aria-labelledby="plate-t">
@@ -369,13 +411,13 @@
   </section>
 
   <section class="sec wrap" id="contact" aria-labelledby="contact-h">
-    <div class="sec-head"><span class="n">04</span><h2 id="contact-h">— <span lang="en">The Invitation</span><span lang="zh">邀请</span></h2></div>
+    <div class="sec-head"><span class="n">05</span><h2 id="contact-h">— <span lang="en">The Invitation</span><span lang="zh">邀请</span></h2></div>
     <div class="invite reveal">
       <span class="kicker"><span lang="en">Hiring for AI or backend engineering?</span><span lang="zh">在招 AI 或后端工程师？</span></span>
       <div class="big"><span lang="en">Let's build<br>what <span class="red">ships</span></span><span lang="zh">一起做<br>能<span class="red">上线</span>的东西</span></div>
       <a class="mail" href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a>
       <div class="cta">
-        <a class="btn solid" href="mailto:huangkaihuan0216@gmail.com?subject=20-minute%20intro%20call"><span lang="en">Book a 20-min intro →</span><span lang="zh">约 20 分钟聊聊 →</span></a>
+        <a class="btn solid" href="mailto:huangkaihuan0216@gmail.com?subject=15-minute%20intro%20call"><span lang="en">Book a 15-min call →</span><span lang="zh">约 15 分钟通话 →</span></a>
         <a class="btn" href="resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a>
         <a class="btn" href="https://github.com/kaihuan-huang">GitHub</a>
       </div>
