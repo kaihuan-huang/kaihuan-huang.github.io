@@ -426,6 +426,8 @@ def build_case(i, kind, w, prev, nxt):
         btns = ""
         if w.get("link"):
             btns = f'<a class="btn solid" href="{w["link"][1]}">{tr(w["link"][0])} →</a>'
+        for t, u in w.get("extra_links", []):
+            btns += f'<a class="btn" href="{u}">{tr(t)}</a>'
         kicker = bi(w["kicker"])
     pager = f"""<nav class="pager wrap mono" aria-label="More work">
     <a href="{prev['slug']}.html">← {prev['title']}</a>
@@ -437,6 +439,8 @@ def build_case(i, kind, w, prev, nxt):
         secs.append(({"en": "Recognition", "zh": "获奖"}, '<ul class="awards">' + "".join(f"<li>{bi(x)}</li>" for x in w["awards"]) + "</ul>"))
     if kind == "w":
         secs.append(({"en": "Flow", "zh": "流程"}, flow(w["flow"])))
+    if w.get("principle"):
+        secs.append(({"en": "How it works", "zh": "原理"}, '<ul class="approach">' + "".join(f"<li>{bi(x)}</li>" for x in w["principle"]) + "</ul>"))
     secs.append(({"en": "What I built", "zh": "我做了什么"}, f'<ul class="approach">{approach}</ul>'))
     if w.get("diagrams"):
         secs.append(({"en": "Architecture", "zh": "架构"}, "".join(diagram(dg) for dg in w["diagrams"])))
@@ -450,9 +454,14 @@ def build_case(i, kind, w, prev, nxt):
     if w.get("video"):
         v = w["video"]
         secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls muted playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
+    if w.get("audio"):
+        a = w["audio"]
+        secs.append(({"en": "Listen", "zh": "听一段"}, f'<figure class="case-video"><audio src="{a["src"]}" controls preload="none"></audio><figcaption class="mono">{bi(a["cap"])}</figcaption></figure>'))
     if w["metrics"]:
         secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
     secs.append(({"en": "Limits, stated plainly", "zh": "局限，直说"}, f'<ul class="limits">{limits}</ul>'))
+    if w.get("next"):
+        secs.append(({"en": "Next", "zh": "下一步"}, '<ul class="approach">' + "".join(f"<li>{bi(x)}</li>" for x in w["next"]) + "</ul>"))
     body = "".join(f'<section class="case-sec"><h2 class="case-h"><span class="mono">{nn(k)}</span>{bi(h)}</h2>{c}</section>' for k, (h, c) in enumerate(secs, 1))
     og = f"assets/img/works/{w['img']}" if w.get("img") else "assets/img/og.png"
     html = head(f"{w['title']} · {P['name_first']} {P['name_last']}", w["pitch"]["en"], "../", f"works/{w['slug']}.html", og)
