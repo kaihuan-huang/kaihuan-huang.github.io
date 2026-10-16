@@ -491,7 +491,20 @@ def build_case(i, kind, w, prev, nxt):
                      f'<figcaption class="mono">{bi(y["cap"])}</figcaption></figure>'))
     if w.get("video"):
         v = w["video"]
-        secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls muted playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
+        secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls{"" if v.get("sound") else " muted"} playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
+    if w.get("series"):
+        eps = ""
+        for n, e in enumerate(w["series"], 1):
+            vid = f'{w["slug"]}-ep{n}'
+            chs = "".join(f'<button type="button" class="ch mono" data-seek="{vid}" data-t="{c["t"]}">'
+                          f'{int(c["t"]) // 60}:{int(c["t"]) % 60:02d} {bi(c["l"])}</button>' for c in e["chapters"])
+            eps += (f'<article class="ep"><figure class="case-video"><video id="{vid}" src="{e["src"]}" controls playsinline preload="none" poster="{e["poster"]}"></video></figure>'
+                    f'<p class="ep-meta mono">EP {n:02d} · {e["dur"]}</p><h3 class="ep-title">{e["title"]}</h3>'
+                    f'<p class="ep-key">{bi(e["key"])}</p><div class="chapters">{chs}</div></article>')
+        secs.append(({"en": "The series", "zh": "系列"}, f'<p class="lead">{bi(w["series_intro"])}</p><div class="series">{eps}</div>'))
+    if w.get("iterations"):
+        rows = "".join(f'<li><span class="mono">{it["ep"]}</span> {bi(it["what"])}</li>' for it in w["iterations"])
+        secs.append(({"en": "What each episode taught the engine", "zh": "每一集让引擎学到什么"}, f'<ul class="approach iters">{rows}</ul>'))
     if w.get("audio"):
         a = w["audio"]
         secs.append(({"en": "Listen", "zh": "听一段"}, f'<figure class="case-video"><audio src="{a["src"]}" controls preload="none"></audio><figcaption class="mono">{bi(a["cap"])}</figcaption></figure>'))

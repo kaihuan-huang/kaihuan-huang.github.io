@@ -276,6 +276,14 @@ code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);padding:1
 .case-video video{width:100%;display:block;background:#000;border:1px solid var(--line)}
 .case-video audio{width:100%;display:block}
 .case-video figcaption{color:var(--muted);margin-top:8px}
+.series{display:grid;gap:48px;margin-top:24px}
+.ep-meta{color:var(--muted);margin:12px 0 2px;font-size:12px;letter-spacing:.08em}
+.ep-title{margin:0 0 6px;font-size:22px}
+.ep-key{margin:0 0 12px;color:var(--ink-2)}
+.chapters{display:flex;flex-wrap:wrap;gap:6px}
+.chapters .ch{font-size:12px;padding:5px 10px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;cursor:pointer}
+.chapters .ch:hover,.chapters .ch:focus-visible{border-color:var(--ink)}
+.iters .mono{display:inline-block;min-width:48px;color:var(--muted)}
 
 /* ---------- résumé ---------- */
 .resume{padding-top:104px;max-width:900px}
