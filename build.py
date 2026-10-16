@@ -491,7 +491,7 @@ def build_case(i, kind, w, prev, nxt):
                      f'<figcaption class="mono">{bi(y["cap"])}</figcaption></figure>'))
     if w.get("video"):
         v = w["video"]
-        secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls muted playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
+        secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls{"" if v.get("sound") else " muted"} playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
     if w.get("audio"):
         a = w["audio"]
         secs.append(({"en": "Listen", "zh": "听一段"}, f'<figure class="case-video"><audio src="{a["src"]}" controls preload="none"></audio><figcaption class="mono">{bi(a["cap"])}</figcaption></figure>'))
