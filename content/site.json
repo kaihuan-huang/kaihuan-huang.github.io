@@ -1196,8 +1196,8 @@
         "zh": "脚本生成视频 · 本地语音合成 · Playwright · ffmpeg"
       },
       "pitch": {
-        "en": "I write a system-design walkthrough as one sentence per line, and one command turns it into a narrated mock interview: two voices, Chinese and English subtitles, guess-then-reveal quizzes, and code traces taken from actually running the code. Four episodes so far, each one improving the engine.",
-        "zh": "我把系统设计讲解写成一行一句的脚本，一条命令就生成一场模拟面试视频：两个声音、中英字幕、先猜再揭晓的小测，代码执行画面来自真跑代码。目前做了四集，每一集都让引擎更好一点。"
+        "en": "I write a system-design walkthrough as one sentence per line, and one command turns it into a narrated mock interview: two voices, Chinese and English subtitles, guess-then-reveal quizzes, motion on whatever changed, and code traces taken from actually running the code. Five episodes so far, each one improving the engine.",
+        "zh": "我把系统设计讲解写成一行一句的脚本，一条命令就生成一场模拟面试视频：两个声音、中英字幕、先猜再揭晓的小测、变化的地方会动，代码执行画面来自真跑代码。目前做了五集，每一集都让引擎更好一点。"
       },
       "spec": [
         [
@@ -1214,8 +1214,8 @@
         [
           "Data",
           {
-            "en": "Scripts I write; the series covers four classic interview questions: rate limiter, URL shortener, news feed, notification system",
-            "zh": "我自己写的脚本；系列是四道经典面试题：限流器、短链接、新闻推送、通知系统"
+            "en": "Scripts I write; the series covers five classic interview questions: rate limiter, URL shortener, news feed, notification system, job scheduler",
+            "zh": "我自己写的脚本；系列是五道经典面试题：限流器、短链接、新闻推送、通知系统、任务调度"
           }
         ],
         [
@@ -1302,28 +1302,28 @@
       ],
       "metrics": [
         {
-          "v": "4",
+          "v": "5",
           "l": {
-            "en": "mock-interview episodes so far: rate limiter, URL shortener, news feed, notification system (26 min in total)",
-            "zh": "集模拟面试：限流器、短链接、新闻推送、通知系统（共 26 分钟）"
+            "en": "mock-interview episodes so far: rate limiter, URL shortener, news feed, notification system, job scheduler (34 min in total)",
+            "zh": "集模拟面试：限流器、短链接、新闻推送、通知系统、任务调度（共 34 分钟）"
           },
-          "src": "render logs, 2026-10-15 (private)",
+          "src": "render logs, 2026-10-16 (private)",
           "url": ""
         },
         {
-          "v": "13 / 13",
+          "v": "14 / 14",
           "l": {
-            "en": "on the stricter v2 rubric for episode 4; episodes 1–3 scored 8 / 8 on v1, and the first cut of episode 1 scored 2 / 8",
-            "zh": "第 4 集在更严格的 v2 评分表上的得分；第 1–3 集在 v1 上是 8 / 8，第 1 集第一版是 2 / 8"
+            "en": "on the current rubric for episodes 4 and 5; the first cut of episode 1 scored 2 / 8 on the original one",
+            "zh": "第 4、5 集在现行评分表上的得分；第 1 集第一版在最初的评分表上是 2 / 8"
           },
           "src": "review command output (private)",
           "url": ""
         },
         {
-          "v": "19",
+          "v": "29",
           "l": {
-            "en": "guess-then-reveal quizzes and 4 spot-the-bug moments across the series",
-            "zh": "道先猜再揭晓的小测，外加 4 个找 bug 环节"
+            "en": "guess-then-reveal quizzes and 5 spot-the-bug moments across the series",
+            "zh": "道先猜再揭晓的小测，外加 5 个找 bug 环节"
           },
           "src": "scripts (private)",
           "url": ""
@@ -1331,10 +1331,10 @@
         {
           "v": "0",
           "l": {
-            "en": "speech retries across 245 lines, and 0 paid API calls",
-            "zh": "次配音重试（245 行），0 次付费 API 调用"
+            "en": "speech retries across 319 lines, and 0 paid API calls",
+            "zh": "次配音重试（319 行），0 次付费 API 调用"
           },
-          "src": "speech logs, 2026-10-15 (private)",
+          "src": "speech logs, 2026-10-16 (private)",
           "url": ""
         },
         {
@@ -1367,16 +1367,16 @@
       ],
       "next": [
         {
-          "en": "Next episodes in the same format: distributed job scheduler, then typeahead search.",
-          "zh": "按同一格式继续：下一集分布式任务调度，然后是搜索联想。"
+          "en": "Next episode in the same format: typeahead search.",
+          "zh": "按同一格式做下一集：搜索联想。"
+        },
+        {
+          "en": "Remake episodes 1–3 on the upgraded engine (motion, current rubric), keeping only the better version.",
+          "zh": "用升级后的引擎重做第 1–3 集（动画、现行评分表），只保留更好的版本。"
         },
         {
           "en": "Word-level subtitle timing from the speech model's timestamps.",
           "zh": "用语音模型给出的时间戳做逐词字幕。"
-        },
-        {
-          "en": "Publish the engine with the rate-limiter topic as its example.",
-          "zh": "把引擎开源，限流器专题作为示例。"
         }
       ],
       "sheet_note": {
@@ -1727,11 +1727,114 @@
               }
             }
           ]
+        },
+        {
+          "title": "Design a Distributed Job Scheduler",
+          "src": "../assets/video/job-scheduler.mp4",
+          "poster": "../assets/img/works/sd-job-scheduler.jpg",
+          "dur": "8:04",
+          "key": {
+            "en": "Workers claim rows with SKIP LOCKED under a lease, renew it with a heartbeat, and finish only if their token is still current, so a worker that comes back after its lease expired changes zero rows. In a simulation, polling without a lock ran 1,000 jobs 4,245 times with 32 workers.",
+            "zh": "工作者用 SKIP LOCKED 加租约认领任务，用心跳续租，只有令牌还对得上才算完成，所以租约过期后才回来的工作者一行都改不了。在模拟里，不加锁轮询让 32 个工作者把 1,000 个任务跑了 4,245 次。"
+          },
+          "chapters": [
+            {
+              "t": 0.0,
+              "l": {
+                "en": "Recall",
+                "zh": "回忆"
+              }
+            },
+            {
+              "t": 36.8,
+              "l": {
+                "en": "The prompt",
+                "zh": "出题"
+              }
+            },
+            {
+              "t": 70.2,
+              "l": {
+                "en": "Clarify",
+                "zh": "澄清"
+              }
+            },
+            {
+              "t": 98.9,
+              "l": {
+                "en": "Estimate + vocabulary",
+                "zh": "需求"
+              }
+            },
+            {
+              "t": 141.3,
+              "l": {
+                "en": "Watch it fail",
+                "zh": "先看它失败"
+              }
+            },
+            {
+              "t": 167.5,
+              "l": {
+                "en": "The kitchen rail",
+                "zh": "先画图"
+              }
+            },
+            {
+              "t": 220.1,
+              "l": {
+                "en": "Write it",
+                "zh": "写代码"
+              }
+            },
+            {
+              "t": 251.8,
+              "l": {
+                "en": "Run it",
+                "zh": "运行"
+              }
+            },
+            {
+              "t": 294.5,
+              "l": {
+                "en": "Spot the bug",
+                "zh": "找 bug"
+              }
+            },
+            {
+              "t": 316.1,
+              "l": {
+                "en": "High-level design",
+                "zh": "架构"
+              }
+            },
+            {
+              "t": 366.6,
+              "l": {
+                "en": "Deep dive",
+                "zh": "深挖"
+              }
+            },
+            {
+              "t": 428.8,
+              "l": {
+                "en": "Which one?",
+                "zh": "速答"
+              }
+            },
+            {
+              "t": 473.9,
+              "l": {
+                "en": "The instinct",
+                "zh": "直觉"
+              }
+            }
+          ]
         }
       ],
       "series_intro": {
-        "en": "Four classic interview questions, each a mock interview with an interviewer and a candidate voice. Every concept follows the same order: feel the problem, see a picture or an everyday analogy, then the mechanism, then guess before the answer. Chapter buttons jump straight to a section.",
-        "zh": "四道经典面试题，每道都是一场模拟面试，有面试官和候选人两个声音。每个概念都按同一个顺序讲：先感到问题，再看一张图或一个生活类比，然后讲机制，最后先猜再揭晓。点章节按钮可直接跳到那一段。"
+        "en": "Five classic interview questions, each a mock interview with an interviewer and a candidate voice. Every concept follows the same order: feel the problem, see a picture or an everyday analogy, then the mechanism, then guess before the answer. Chapter buttons jump straight to a section.",
+        "zh": "五道经典面试题，每道都是一场模拟面试，有面试官和候选人两个声音。每个概念都按同一个顺序讲：先感到问题，再看一张图或一个生活类比，然后讲机制，最后先猜再揭晓。点章节按钮可直接跳到那一段。"
       },
       "iterations": [
         {
@@ -1781,6 +1884,13 @@
           "what": {
             "en": "Upgrade after episode 4, aimed at the stated limits: motion (only what changed since the last sentence moves; new pictures build in, chart lines draw after their dots), a subtitle check for numbers and names (it raised 67 flags across eight episodes; fixing the parser left 3, all real), bundled open-source fonts so frames don't depend on macOS, and script marks for beats and emphasis in the voice.",
             "zh": "第 4 集之后针对已知局限的一次升级：动画（只动和上一句相比变化的部分；新画面逐个出现，曲线在点出现后自己画出来）、字幕数字与名称检查（8 集里报了 67 处，修好解析后剩 3 处，都是真问题）、自带开源字体让画面不依赖 macOS、配音的停顿和重音标记。"
+          }
+        },
+        {
+          "ep": "EP 05",
+          "what": {
+            "en": "First episode made on the upgraded engine. Its checks caught a real slip on the first run: an English line said “about two million” where the Chinese said 2.2 million. The naive-polling simulation was also fixed before any number reached the screen: an assertion failed because the first model let a single worker re-read its own job.",
+            "zh": "第一集用升级后的引擎做。检查第一次跑就抓到一处真错：一句英文说「about two million」，中文却是 220 万。不加锁轮询的模拟也在数字上屏之前修好了：断言失败，因为第一版模型让单个工作者重读了自己的任务。"
           }
         }
       ]
