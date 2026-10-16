@@ -1196,8 +1196,8 @@
         "zh": "脚本生成视频 · 本地语音合成 · Playwright · ffmpeg"
       },
       "pitch": {
-        "en": "I write a system-design or algorithm walkthrough as one sentence per line, and one command turns it into a narrated 1080p video with two voices, Chinese and English subtitles, and code traces taken from actually running the code.",
-        "zh": "我把系统设计或算法讲解写成一行一句的脚本，一条命令就生成 1080p 讲解视频：两个声音、中英字幕，代码执行画面来自真跑代码。"
+        "en": "I write a system-design walkthrough as one sentence per line, and one command turns it into a narrated mock interview: two voices, Chinese and English subtitles, guess-then-reveal quizzes, and code traces taken from actually running the code. Three episodes so far.",
+        "zh": "我把系统设计讲解写成一行一句的脚本，一条命令就生成一场模拟面试视频：两个声音、中英字幕、先猜再揭晓的小测，代码执行画面来自真跑代码。目前做了三集。"
       },
       "spec": [
         [
@@ -1214,8 +1214,8 @@
         [
           "Data",
           {
-            "en": "Scripts I write; the demo is a classic interview question, <i>Design a Rate Limiter</i>",
-            "zh": "我自己写的脚本；演示是经典面试题「设计限流器」"
+            "en": "Scripts I write; the series covers three classic interview questions: rate limiter, URL shortener, news feed",
+            "zh": "我自己写的脚本；系列是三道经典面试题：限流器、短链接、新闻推送"
           }
         ],
         [
@@ -1262,8 +1262,8 @@
           "zh": "内置 11 种版式；专题可以在一个小的 Python 钩子里加自己的画面，不用改引擎。"
         },
         {
-          "en": "Preview before render: every distinct scene is screenshotted first, so overflowing labels and wrong states are caught in seconds, not after a full render. On the demo this caught a double-escaped <code>&lt;</code> and a design diagram that wrongly put Redis on the request path.",
-          "zh": "先预览再渲染：每种画面先截一张图，文字溢出、状态错误几秒内就能发现，不用等全片渲染完。在演示视频里，这一步抓到了一个被转义两次的 <code>&lt;</code>，以及一张把 Redis 错画在请求路径上的架构图。"
+          "en": "Preview before render: every distinct scene is screenshotted first and checked for clipped or off-stage text; a rubric then scores the script (quizzes, think pauses, code written before it runs, one bug hunt, no still over 15 s) before anything is rendered.",
+          "zh": "先预览再渲染：每种画面先截图，并自动检查文字是否被截断或超出画面；再用评分表给脚本打分（小测、思考停顿、代码先写后跑、一个找 bug 环节、静止画面不超过 15 秒），通过了才渲染。"
         },
         {
           "en": "Interview structure for system design: prompt, clarifying questions with what each answer locks in, functional and non-functional requirements, an estimate, the algorithm trade-off, the design, a deep dive with interviewer follow-ups, then a recap.",
@@ -1302,48 +1302,48 @@
       ],
       "metrics": [
         {
-          "v": "4.5 min",
+          "v": "3",
           "l": {
-            "en": "rate-limiter video from a 40-line script: 696 words, 8 chapters, 2 voices",
-            "zh": "限流器视频，来自 40 行脚本：696 个词、8 章、2 个声音"
+            "en": "mock-interview episodes: rate limiter, URL shortener, news feed (19 min in total)",
+            "zh": "集模拟面试：限流器、短链接、新闻推送（共 19 分钟）"
           },
-          "src": "render log, 2026-10-15 (private)",
+          "src": "render logs, 2026-10-15 (private)",
+          "url": ""
+        },
+        {
+          "v": "8 / 8",
+          "l": {
+            "en": "rubric score for every episode; the first cut of episode 1 scored 2 / 8",
+            "zh": "每一集的评分表得分；第 1 集第一版是 2 / 8"
+          },
+          "src": "review command output (private)",
+          "url": ""
+        },
+        {
+          "v": "10",
+          "l": {
+            "en": "guess-then-reveal quizzes and 3 spot-the-bug moments across the series",
+            "zh": "道先猜再揭晓的小测，外加 3 个找 bug 环节"
+          },
+          "src": "scripts (private)",
           "url": ""
         },
         {
           "v": "0",
           "l": {
-            "en": "speech retries across the 40 lines",
-            "zh": "40 行配音的重试次数"
+            "en": "speech retries across 179 lines, and 0 paid API calls",
+            "zh": "次配音重试（179 行），0 次付费 API 调用"
           },
-          "src": "speech log, 2026-10-15 (private)",
+          "src": "speech logs, 2026-10-15 (private)",
           "url": ""
         },
         {
-          "v": "8 MB",
+          "v": "~9 MB",
           "l": {
-            "en": "for the 1080p video: still frames encode small",
-            "zh": "1080p 视频大小：静态画面压缩率高"
+            "en": "per 720p episode on this page; 1080p masters kept locally",
+            "zh": "本页每集 720p 视频大小；1080p 原片留在本地"
           },
-          "src": "output file, 2026-10-15",
-          "url": ""
-        },
-        {
-          "v": "11",
-          "l": {
-            "en": "built-in scene layouts, from tables to step-by-step code traces",
-            "zh": "种内置画面版式，从表格到逐步代码执行"
-          },
-          "src": "engine source (private)",
-          "url": ""
-        },
-        {
-          "v": "0",
-          "l": {
-            "en": "paid API calls; speech, frames and encoding all run on my own machines",
-            "zh": "次付费 API 调用；配音、画面、编码全部在自己的机器上"
-          },
-          "src": "pipeline config (private)",
+          "src": "output files",
           "url": ""
         }
       ],
@@ -1367,12 +1367,12 @@
       ],
       "next": [
         {
-          "en": "Word-level subtitle timing from the speech model's timestamps.",
-          "zh": "用语音模型给出的时间戳做逐词字幕。"
+          "en": "More classic questions in the same format: notification system, distributed job scheduler, typeahead.",
+          "zh": "按同一格式做更多经典题：通知系统、分布式任务调度、搜索联想。"
         },
         {
-          "en": "A series of classic system-design questions in the same format.",
-          "zh": "按同一格式做一组经典系统设计题。"
+          "en": "Word-level subtitle timing from the speech model's timestamps.",
+          "zh": "用语音模型给出的时间戳做逐词字幕。"
         },
         {
           "en": "Publish the engine with the rate-limiter topic as its example.",
@@ -1384,16 +1384,289 @@
         "zh": "设计视图 · 代码私有"
       },
       "img": "study-video.jpg",
-      "alt": "A video frame: token-bucket Python code with the current line highlighted, request times and variables beside it, English and Chinese subtitles below",
-      "video": {
-        "src": "../assets/video/rate-limiter.mp4",
-        "poster": "../assets/img/works/study-video-poster.jpg",
-        "sound": true,
-        "cap": {
-          "en": "4 min 28 s, made end to end by this pipeline: a mock system-design interview, <i>Design a Rate Limiter</i>, two voices, Chinese and English subtitles",
-          "zh": "4 分 28 秒，全部由这套流程生成：一场模拟系统设计面试「设计限流器」，两个声音，中英字幕"
+      "alt": "A video frame: token-bucket Python code with one line marked red in a spot-the-bug question, English and Chinese subtitles below",
+      "series": [
+        {
+          "title": "Design a Rate Limiter",
+          "src": "../assets/video/rate-limiter.mp4",
+          "poster": "../assets/img/works/sd-rate-limiter.jpg",
+          "dur": "6:30",
+          "key": {
+            "en": "Token bucket, because bursts are allowed; one Lua script so twenty gateways share an atomic count; fail open when Redis is down.",
+            "zh": "选令牌桶，因为允许突发；一个 Lua 脚本让 20 台网关共享原子计数；Redis 挂了就 fail open。"
+          },
+          "chapters": [
+            {
+              "t": 0.0,
+              "l": {
+                "en": "The prompt",
+                "zh": "出题"
+              }
+            },
+            {
+              "t": 16.9,
+              "l": {
+                "en": "Clarify",
+                "zh": "澄清"
+              }
+            },
+            {
+              "t": 55.9,
+              "l": {
+                "en": "Requirements + estimate",
+                "zh": "需求"
+              }
+            },
+            {
+              "t": 105.0,
+              "l": {
+                "en": "Picture first",
+                "zh": "先画图"
+              }
+            },
+            {
+              "t": 133.1,
+              "l": {
+                "en": "Pick an algorithm",
+                "zh": "算法"
+              }
+            },
+            {
+              "t": 180.5,
+              "l": {
+                "en": "Write it, find the bug",
+                "zh": "写代码"
+              }
+            },
+            {
+              "t": 225.2,
+              "l": {
+                "en": "Run it",
+                "zh": "令牌桶"
+              }
+            },
+            {
+              "t": 259.0,
+              "l": {
+                "en": "High-level design",
+                "zh": "架构"
+              }
+            },
+            {
+              "t": 286.0,
+              "l": {
+                "en": "Deep dive",
+                "zh": "深挖"
+              }
+            },
+            {
+              "t": 353.7,
+              "l": {
+                "en": "Wrap-up",
+                "zh": "收尾"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Design a URL Shortener",
+          "src": "../assets/video/url-shortener.mp4",
+          "poster": "../assets/img/works/sd-url-shortener.jpg",
+          "dur": "6:36",
+          "key": {
+            "en": "A counter plus base62 instead of a truncated hash, which by the birthday paradox collides within the first half hour; 302 to keep click data.",
+            "zh": "用发号器 + base62，而不是截断哈希：按生日悖论，后者开张半小时左右就会撞车；用 302 保留点击数据。"
+          },
+          "chapters": [
+            {
+              "t": 0.0,
+              "l": {
+                "en": "The prompt",
+                "zh": "出题"
+              }
+            },
+            {
+              "t": 13.7,
+              "l": {
+                "en": "Clarify",
+                "zh": "澄清"
+              }
+            },
+            {
+              "t": 43.6,
+              "l": {
+                "en": "Requirements + estimate",
+                "zh": "需求"
+              }
+            },
+            {
+              "t": 80.6,
+              "l": {
+                "en": "Picture first",
+                "zh": "先画图"
+              }
+            },
+            {
+              "t": 128.0,
+              "l": {
+                "en": "Hash or counter",
+                "zh": "方案"
+              }
+            },
+            {
+              "t": 162.2,
+              "l": {
+                "en": "Write it, find the bug",
+                "zh": "写代码"
+              }
+            },
+            {
+              "t": 207.0,
+              "l": {
+                "en": "Run it",
+                "zh": "运行"
+              }
+            },
+            {
+              "t": 242.5,
+              "l": {
+                "en": "API + design",
+                "zh": "架构"
+              }
+            },
+            {
+              "t": 305.0,
+              "l": {
+                "en": "Deep dive",
+                "zh": "深挖"
+              }
+            },
+            {
+              "t": 362.4,
+              "l": {
+                "en": "Wrap-up",
+                "zh": "收尾"
+              }
+            }
+          ]
+        },
+        {
+          "title": "Design a News Feed",
+          "src": "../assets/video/news-feed.mp4",
+          "poster": "../assets/img/works/sd-news-feed.jpg",
+          "dur": "6:05",
+          "key": {
+            "en": "Push for regular users, pull for celebrities, merged at read time; feeds store post IDs only, 800 GB instead of 1 PB.",
+            "zh": "普通人推、明星拉，读时合并；推送只存帖子 ID：800 GB，而不是 1 PB。"
+          },
+          "chapters": [
+            {
+              "t": 0.0,
+              "l": {
+                "en": "The prompt",
+                "zh": "出题"
+              }
+            },
+            {
+              "t": 17.2,
+              "l": {
+                "en": "Clarify",
+                "zh": "澄清"
+              }
+            },
+            {
+              "t": 52.4,
+              "l": {
+                "en": "Requirements + estimate",
+                "zh": "需求"
+              }
+            },
+            {
+              "t": 97.8,
+              "l": {
+                "en": "Push or pull",
+                "zh": "推还是拉"
+              }
+            },
+            {
+              "t": 174.2,
+              "l": {
+                "en": "Write it, find the bug",
+                "zh": "写代码"
+              }
+            },
+            {
+              "t": 220.4,
+              "l": {
+                "en": "Run it",
+                "zh": "运行"
+              }
+            },
+            {
+              "t": 261.4,
+              "l": {
+                "en": "High-level design",
+                "zh": "架构"
+              }
+            },
+            {
+              "t": 304.3,
+              "l": {
+                "en": "Deep dive",
+                "zh": "深挖"
+              }
+            },
+            {
+              "t": 336.5,
+              "l": {
+                "en": "Wrap-up",
+                "zh": "收尾"
+              }
+            }
+          ]
         }
-      }
+      ],
+      "series_intro": {
+        "en": "Three classic interview questions, each a mock interview with an interviewer and a candidate voice. Every concept follows the same order: feel the problem, see a picture or an everyday analogy, then the mechanism, then guess before the answer. Chapter buttons jump straight to a section.",
+        "zh": "三道经典面试题，每道都是一场模拟面试，有面试官和候选人两个声音。每个概念都按同一个顺序讲：先感到问题，再看一张图或一个生活类比，然后讲机制，最后先猜再揭晓。点章节按钮可直接跳到那一段。"
+      },
+      "iterations": [
+        {
+          "ep": "EP 01",
+          "what": {
+            "en": "Previewing every distinct scene before rendering caught three mistakes by eye: a double-escaped <code>&lt;</code>, a code-trace frame one step behind its narration, and a diagram that put Redis on the request path.",
+            "zh": "渲染前逐个预览每种画面，肉眼抓到三处错：一个被转义两次的 <code>&lt;</code>、一帧代码执行比旁白慢一步、一张把 Redis 画在请求路径上的图。"
+          }
+        },
+        {
+          "ep": "EP 01 v2",
+          "what": {
+            "en": "A review rubric scored the first cut 2 of 8. The remake opens on an incident, adds three guess-then-reveal quizzes with think pauses, writes the code line by line before running it, adds a spot-the-bug moment, and keeps every still under 15 s. Now 8 of 8.",
+            "zh": "评分表给第一版打了 2/8。重做后：开场是一个事故，加三道先猜再揭晓的题和思考停顿，代码先逐行写再运行，加一个找 bug 环节，每个静止画面不超过 15 秒。现在 8/8。"
+          }
+        },
+        {
+          "ep": "EP 02",
+          "what": {
+            "en": "Render now writes chapter timestamps (they drive the buttons above). Estimates are computed in code and spoken as words, since the speech model would read “2.2M” as “two point two M”. Preview flags clipped or off-stage text automatically.",
+            "zh": "渲染时输出章节时间点（就是上面的按钮）。估算由代码计算，并转成读得出的说法，因为语音模型会把「2.2M」读成「two point two M」。预览自动标出被截断或超出画面的文字。"
+          }
+        },
+        {
+          "ep": "EP 02",
+          "what": {
+            "en": "Found and fixed a highlighter bug: any string literal showed up as <code>&amp;#x27;</code>, because the comment rule matched the <code>#</code> inside the escaped quote.",
+            "zh": "发现并修了一个代码高亮 bug：任何字符串字面量都显示成 <code>&amp;#x27;</code>，因为注释规则匹配到了转义引号里的 <code>#</code>。"
+          }
+        },
+        {
+          "ep": "EP 03",
+          "what": {
+            "en": "Numbers argue for a design choice on screen: the memory estimate (1 PB of posts vs 800 GB of IDs) is what decides that feeds store IDs only.",
+            "zh": "让数字在画面上为设计决定说话：内存估算（整条帖子 1 PB vs 只存 ID 800 GB）直接决定了推送只存 ID。"
+          }
+        }
+      ]
     },
     {
       "slug": "dispute-ingest",

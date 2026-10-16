@@ -88,6 +88,15 @@
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && menu.classList.contains('open')) setMenu(false); });
 
+    // ---------- Video chapters: jump the player to a chapter start ----------
+    document.querySelectorAll('button[data-seek]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var v = document.getElementById(b.getAttribute('data-seek'));
+        if (!v) return;
+        var go = function () { v.currentTime = parseFloat(b.getAttribute('data-t')); v.play(); };
+        if (v.readyState >= 1) go(); else { v.preload = 'metadata'; v.addEventListener('loadedmetadata', go, { once: true }); v.load(); }
+      });
+    });
     // ---------- YouTube: swap the thumbnail for the player on click ----------
     document.querySelectorAll('a.yt[data-yt]').forEach(function (a) {
       a.addEventListener('click', function (e) {
