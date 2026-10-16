@@ -1349,20 +1349,20 @@
       ],
       "limits": [
         {
-          "en": "Frames are still slides, not animation; motion comes from stepping through states one sentence at a time.",
-          "zh": "画面是静态幻灯片，不是动画；「动」靠一句一步地切换状态。"
+          "en": "Motion is generated, not hand-animated: parts build in, changed values flash and chart lines draw themselves, but there are no free camera moves or custom transitions.",
+          "zh": "动画是生成的，不是手做的：元素逐个出现、变化的值闪一下、曲线自己画出来，但没有自由运镜或定制转场。"
         },
         {
-          "en": "The voices are synthetic and sound like it; there is no emphasis control beyond punctuation.",
-          "zh": "声音是合成的，听得出来；除了标点，没法控制重音。"
+          "en": "The voices are synthetic. Beats and emphasis can be marked in the script, but delivery is still flatter than a person's.",
+          "zh": "声音是合成的。脚本里可以标停顿和重音，但语气仍然比真人平。"
         },
         {
-          "en": "Chinese subtitles are a translation file per line; the engine does not check that they match.",
-          "zh": "中文字幕是每行一条的翻译文件；引擎不检查译文是否对得上。"
+          "en": "The subtitle check compares numbers and names between the English and the Chinese; it cannot judge whether a translation reads naturally.",
+          "zh": "字幕检查比对中英文里的数字和名称，但判断不了译文读起来是否自然。"
         },
         {
-          "en": "Fonts and layout are tuned for macOS; another machine may wrap text differently.",
-          "zh": "字体和排版按 macOS 调的；换台机器折行可能不同。"
+          "en": "Speech runs on my home GPU server, so the pipeline is not yet a one-command install elsewhere (frames now render the same on any machine with the bundled fonts).",
+          "zh": "配音跑在家用 GPU 服务器上，所以还不能在别的机器上一条命令装好（画面已经用自带字体，在任何机器上渲染都一样）。"
         }
       ],
       "next": [
@@ -1774,6 +1774,13 @@
           "what": {
             "en": "First episode on the stricter 13-point rubric: it opens with recall questions from earlier episodes (one shared question bank across the system design and algorithm series), shows the naive design failing on a real chart, re-checks an invariant (“each text reaches the phone at most once”) on a simulated lost response, and ends with a mixed drill across all four episodes. It also added a check that warns when a quiz's side picture gives the answer away, after this episode's first draft did exactly that.",
             "zh": "第一集按更严格的 13 条评分表做：开场先回忆前几集（系统设计和算法两个系列共用一个题库），用真实曲线展示朴素设计失败，在模拟的「响应丢失」上逐步检查不变量（每条短信最多到手机一次），最后是覆盖四集的混合速答。还加了一个检查：小测旁边的图如果泄露答案就警告，因为这一集的初稿就犯了这个错。"
+          }
+        },
+        {
+          "ep": "Engine",
+          "what": {
+            "en": "Upgrade after episode 4, aimed at the stated limits: motion (only what changed since the last sentence moves; new pictures build in, chart lines draw after their dots), a subtitle check for numbers and names (it raised 67 flags across eight episodes; fixing the parser left 3, all real), bundled open-source fonts so frames don't depend on macOS, and script marks for beats and emphasis in the voice.",
+            "zh": "第 4 集之后针对已知局限的一次升级：动画（只动和上一句相比变化的部分；新画面逐个出现，曲线在点出现后自己画出来）、字幕数字与名称检查（8 集里报了 67 处，修好解析后剩 3 处，都是真问题）、自带开源字体让画面不依赖 macOS、配音的停顿和重音标记。"
           }
         }
       ]
