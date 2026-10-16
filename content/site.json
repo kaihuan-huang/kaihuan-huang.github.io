@@ -1196,8 +1196,8 @@
         "zh": "脚本生成视频 · 本地语音合成 · Playwright · ffmpeg"
       },
       "pitch": {
-        "en": "I write a system-design walkthrough as one sentence per line, and one command turns it into a narrated mock interview: two voices, Chinese and English subtitles, guess-then-reveal quizzes, and code traces taken from actually running the code. Three episodes so far.",
-        "zh": "我把系统设计讲解写成一行一句的脚本，一条命令就生成一场模拟面试视频：两个声音、中英字幕、先猜再揭晓的小测，代码执行画面来自真跑代码。目前做了三集。"
+        "en": "I write a system-design walkthrough as one sentence per line, and one command turns it into a narrated mock interview: two voices, Chinese and English subtitles, guess-then-reveal quizzes, and code traces taken from actually running the code. Four episodes so far, each one improving the engine.",
+        "zh": "我把系统设计讲解写成一行一句的脚本，一条命令就生成一场模拟面试视频：两个声音、中英字幕、先猜再揭晓的小测，代码执行画面来自真跑代码。目前做了四集，每一集都让引擎更好一点。"
       },
       "spec": [
         [
@@ -1214,8 +1214,8 @@
         [
           "Data",
           {
-            "en": "Scripts I write; the series covers three classic interview questions: rate limiter, URL shortener, news feed",
-            "zh": "我自己写的脚本；系列是三道经典面试题：限流器、短链接、新闻推送"
+            "en": "Scripts I write; the series covers four classic interview questions: rate limiter, URL shortener, news feed, notification system",
+            "zh": "我自己写的脚本；系列是四道经典面试题：限流器、短链接、新闻推送、通知系统"
           }
         ],
         [
@@ -1302,28 +1302,28 @@
       ],
       "metrics": [
         {
-          "v": "3",
+          "v": "4",
           "l": {
-            "en": "mock-interview episodes: rate limiter, URL shortener, news feed (19 min in total)",
-            "zh": "集模拟面试：限流器、短链接、新闻推送（共 19 分钟）"
+            "en": "mock-interview episodes so far: rate limiter, URL shortener, news feed, notification system (26 min in total)",
+            "zh": "集模拟面试：限流器、短链接、新闻推送、通知系统（共 26 分钟）"
           },
           "src": "render logs, 2026-10-15 (private)",
           "url": ""
         },
         {
-          "v": "8 / 8",
+          "v": "13 / 13",
           "l": {
-            "en": "rubric score for every episode; the first cut of episode 1 scored 2 / 8",
-            "zh": "每一集的评分表得分；第 1 集第一版是 2 / 8"
+            "en": "on the stricter v2 rubric for episode 4; episodes 1–3 scored 8 / 8 on v1, and the first cut of episode 1 scored 2 / 8",
+            "zh": "第 4 集在更严格的 v2 评分表上的得分；第 1–3 集在 v1 上是 8 / 8，第 1 集第一版是 2 / 8"
           },
           "src": "review command output (private)",
           "url": ""
         },
         {
-          "v": "10",
+          "v": "19",
           "l": {
-            "en": "guess-then-reveal quizzes and 3 spot-the-bug moments across the series",
-            "zh": "道先猜再揭晓的小测，外加 3 个找 bug 环节"
+            "en": "guess-then-reveal quizzes and 4 spot-the-bug moments across the series",
+            "zh": "道先猜再揭晓的小测，外加 4 个找 bug 环节"
           },
           "src": "scripts (private)",
           "url": ""
@@ -1331,8 +1331,8 @@
         {
           "v": "0",
           "l": {
-            "en": "speech retries across 179 lines, and 0 paid API calls",
-            "zh": "次配音重试（179 行），0 次付费 API 调用"
+            "en": "speech retries across 245 lines, and 0 paid API calls",
+            "zh": "次配音重试（245 行），0 次付费 API 调用"
           },
           "src": "speech logs, 2026-10-15 (private)",
           "url": ""
@@ -1367,8 +1367,8 @@
       ],
       "next": [
         {
-          "en": "More classic questions in the same format: notification system, distributed job scheduler, typeahead.",
-          "zh": "按同一格式做更多经典题：通知系统、分布式任务调度、搜索联想。"
+          "en": "Next episodes in the same format: distributed job scheduler, then typeahead search.",
+          "zh": "按同一格式继续：下一集分布式任务调度，然后是搜索联想。"
         },
         {
           "en": "Word-level subtitle timing from the speech model's timestamps.",
@@ -1624,11 +1624,114 @@
               }
             }
           ]
+        },
+        {
+          "title": "Design a Notification System",
+          "src": "../assets/video/notification.mp4",
+          "poster": "../assets/img/works/sd-notification.jpg",
+          "dur": "7:10",
+          "key": {
+            "en": "Accept fast, deliver later: an express lane so login codes never wait 83 minutes behind a promo, and an idempotency key born with the message so a retry after a lost response never sends the text twice.",
+            "zh": "先收下、之后送：验证码走快车道，不会排在促销后面等 83 分钟；幂等键跟着消息诞生，响应丢失后的重试不会把短信发两次。"
+          },
+          "chapters": [
+            {
+              "t": 0.0,
+              "l": {
+                "en": "Recall",
+                "zh": "回忆"
+              }
+            },
+            {
+              "t": 34.7,
+              "l": {
+                "en": "The prompt",
+                "zh": "出题"
+              }
+            },
+            {
+              "t": 69.0,
+              "l": {
+                "en": "Clarify",
+                "zh": "澄清"
+              }
+            },
+            {
+              "t": 101.2,
+              "l": {
+                "en": "Estimate + vocabulary",
+                "zh": "需求"
+              }
+            },
+            {
+              "t": 135.1,
+              "l": {
+                "en": "Watch it fail",
+                "zh": "先看它失败"
+              }
+            },
+            {
+              "t": 157.5,
+              "l": {
+                "en": "Post office + lanes",
+                "zh": "先画图"
+              }
+            },
+            {
+              "t": 212.1,
+              "l": {
+                "en": "Write it",
+                "zh": "写代码"
+              }
+            },
+            {
+              "t": 245.7,
+              "l": {
+                "en": "Run it",
+                "zh": "运行"
+              }
+            },
+            {
+              "t": 263.2,
+              "l": {
+                "en": "Spot the bug",
+                "zh": "找 bug"
+              }
+            },
+            {
+              "t": 286.4,
+              "l": {
+                "en": "High-level design",
+                "zh": "架构"
+              }
+            },
+            {
+              "t": 321.8,
+              "l": {
+                "en": "Deep dive",
+                "zh": "深挖"
+              }
+            },
+            {
+              "t": 376.4,
+              "l": {
+                "en": "Which one?",
+                "zh": "速答"
+              }
+            },
+            {
+              "t": 420.5,
+              "l": {
+                "en": "The instinct",
+                "zh": "直觉"
+              }
+            }
+          ]
         }
       ],
       "series_intro": {
-        "en": "Three classic interview questions, each a mock interview with an interviewer and a candidate voice. Every concept follows the same order: feel the problem, see a picture or an everyday analogy, then the mechanism, then guess before the answer. Chapter buttons jump straight to a section.",
-        "zh": "三道经典面试题，每道都是一场模拟面试，有面试官和候选人两个声音。每个概念都按同一个顺序讲：先感到问题，再看一张图或一个生活类比，然后讲机制，最后先猜再揭晓。点章节按钮可直接跳到那一段。"
+        "en": "Four classic interview questions, each a mock interview with an interviewer and a candidate voice. Every concept follows the same order: feel the problem, see a picture or an everyday analogy, then the mechanism, then guess before the answer. Chapter buttons jump straight to a section.",
+        "zh": "四道经典面试题，每道都是一场模拟面试，有面试官和候选人两个声音。每个概念都按同一个顺序讲：先感到问题，再看一张图或一个生活类比，然后讲机制，最后先猜再揭晓。点章节按钮可直接跳到那一段。"
       },
       "iterations": [
         {
@@ -1664,6 +1767,13 @@
           "what": {
             "en": "Numbers argue for a design choice on screen: the memory estimate (1 PB of posts vs 800 GB of IDs) is what decides that feeds store IDs only.",
             "zh": "让数字在画面上为设计决定说话：内存估算（整条帖子 1 PB vs 只存 ID 800 GB）直接决定了推送只存 ID。"
+          }
+        },
+        {
+          "ep": "EP 04",
+          "what": {
+            "en": "First episode on the stricter 13-point rubric: it opens with recall questions from earlier episodes (one shared question bank across the system design and algorithm series), shows the naive design failing on a real chart, re-checks an invariant (“each text reaches the phone at most once”) on a simulated lost response, and ends with a mixed drill across all four episodes. It also added a check that warns when a quiz's side picture gives the answer away, after this episode's first draft did exactly that.",
+            "zh": "第一集按更严格的 13 条评分表做：开场先回忆前几集（系统设计和算法两个系列共用一个题库），用真实曲线展示朴素设计失败，在模拟的「响应丢失」上逐步检查不变量（每条短信最多到手机一次），最后是覆盖四集的混合速答。还加了一个检查：小测旁边的图如果泄露答案就警告，因为这一集的初稿就犯了这个错。"
           }
         }
       ]
