@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Does a Hybrid Prophet-LSTM Forecast Stock Prices? A 2026 Re-examination · Kaihuan Huang</title>
+<meta name="description" content="A paper-style re-examination of my 2024 MSc thesis: reproduction, twelve measured problems, and a 2026 protocol with 16 models against the random walk.">
+<link rel="canonical" href="https://kaihuan-huang.github.io/works/thesis-revisit-paper.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kaihuan-huang.github.io/works/thesis-revisit-paper.html">
+<meta property="og:title" content="Does a Hybrid Prophet-LSTM Forecast Stock Prices? A 2026 Re-examination · Kaihuan Huang">
+<meta property="og:description" content="A paper-style re-examination of my 2024 MSc thesis: reproduction, twelve measured problems, and a 2026 protocol with 16 models against the random walk.">
+<meta property="og:image" content="https://kaihuan-huang.github.io/assets/img/works/thesis-revisit-chart.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f4f0e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120f" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<link rel="stylesheet" href="../assets/css/folio.css?v=5">
+<script>(function(){var r=document.documentElement,l=null,s=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='zh')localStorage.setItem('kh-lang',q);l=localStorage.getItem('kh-lang');s=sessionStorage.getItem('kh-intro')}catch(e){}r.setAttribute('data-lang',l||((navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en'));if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('no-intro')})();</script>
+<script src="../assets/js/folio.js?v=5" defer></script>
+</head>
+<body>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="zh">跳到正文</span></a>
+<nav class="nav" id="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="stamp">KH</span><span class="b-txt">Kaihuan Huang — Folio</span></a>
+    <div class="nav-r">
+      <a class="pill hide-sm" href="../resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a>
+      <button class="pill" id="lang-btn" type="button" title="Switch language / 切换语言">中</button>
+      <button class="pill" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu"><span lang="en">Menu</span><span lang="zh">目录</span></button>
+    </div>
+  </div>
+</nav>
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+  <button class="pill menu-close" id="menu-close" type="button"><span lang="en">Close</span><span lang="zh">关闭</span></button>
+  <div class="wrap">
+    <ol>
+      <li><a href="../index.html#top"><span class="m-num">00</span><span class="m-title"><span lang="en">Home</span><span lang="zh">首页</span></span><span class="m-tag"><span lang="en">Start</span><span lang="zh">开始</span></span></a></li>
+<li><a href="../works/booking-agent.html"><span class="m-num">01</span><span class="m-title">Booking Agent</span><span class="m-tag"><span lang="en">Bilingual LLM booking agent · 2026</span><span lang="zh">双语 LLM 预订助手 · 2026</span></span></a></li>
+<li><a href="../works/pos-platform.html"><span class="m-num">02</span><span class="m-title">POS Platform</span><span class="m-tag"><span lang="en">Restaurant backend · 2026</span><span lang="zh">餐厅 POS 后端 · 2026</span></span></a></li>
+<li><a href="../works/refund-agent.html"><span class="m-num">03</span><span class="m-title">Refund Agent</span><span class="m-tag"><span lang="en">Tool-calling agent · 2026</span><span lang="zh">工具调用 Agent · 2026</span></span></a></li>
+<li><a href="../works/pii-detector.html"><span class="m-num">04</span><span class="m-title">PII Detector</span><span class="m-tag"><span lang="en">In-browser privacy model · 2026</span><span lang="zh">浏览器内隐私模型 · 2026</span></span></a></li>
+<li><a href="../works/career-ops.html"><span class="m-num">05</span><span class="m-title">Career OPS</span><span class="m-tag"><span lang="en">Job intelligence and interview platform · 2026</span><span lang="zh">求职情报与面试平台 · 2026</span></span></a></li>
+<li><a href="../works/llm-arch-cards.html"><span class="m-num">06</span><span class="m-title">LLM Arch Cards</span><span class="m-tag"><span lang="en">Model internals · 2026</span><span lang="zh">模型内部结构 · 2026</span></span></a></li>
+<li><a href="../works/thesis-revisit.html"><span class="m-num">07</span><span class="m-title">Revisiting my MSc thesis</span><span class="m-tag"><span lang="en">Time-series forecasting · evaluation design</span><span lang="zh">时间序列预测 · 评估设计</span></span></a></li>
+<li><a href="../works/bilingual-reader.html"><span class="m-num">08</span><span class="m-title">Bilingual Note Reader</span><span class="m-tag"><span lang="en">Local speech synthesis · Obsidian · GPU home server</span><span lang="zh">本地语音合成 · Obsidian · 家用 GPU 服务器</span></span></a></li>
+<li><a href="../works/study-video.html"><span class="m-num">09</span><span class="m-title">Narrated Study Videos</span><span class="m-tag"><span lang="en">Script-to-video pipeline · local speech synthesis · Playwright · ffmpeg</span><span lang="zh">脚本生成视频 · 本地语音合成 · Playwright · ffmpeg</span></span></a></li>
+<li><a href="../works/dispute-ingest.html"><span class="m-num">10</span><span class="m-title">Dispute Ingestion Service</span><span class="m-tag"><span lang="en">Card disputes · Go · synthetic data</span><span lang="zh">银行卡争议 · Go · 合成数据</span></span></a></li>
+<li><a href="../works/governance-platform.html"><span class="m-num">11</span><span class="m-title">AI Governance Platform</span><span class="m-tag"><span lang="en">Privacy & policy platform · Sep 2026</span><span lang="zh">隐私与策略平台 · 2026 年 9 月</span></span></a></li>
+<li><a href="../works/commander-ops.html"><span class="m-num">12</span><span class="m-title">Remote Commander Ops</span><span class="m-tag"><span lang="en">macOS supervision & monitoring · Oct 2026</span><span lang="zh">macOS 进程监督与监控 · 2026 年 10 月</span></span></a></li>
+<li><a href="../works/ipot.html"><span class="m-num">13</span><span class="m-title">IPOT Restaurant Platform</span><span class="m-tag"><span lang="en">Production · restaurant operations</span><span lang="zh">生产环境 · 餐饮运营</span></span></a></li>
+<li><a href="../works/loan-draw-review.html"><span class="m-num">14</span><span class="m-title">Loan-Draw Review Controls</span><span class="m-tag"><span lang="en">Fintech lending · merged Oct 2026</span><span lang="zh">金融科技借贷 · 2026 年 10 月合并</span></span></a></li>
+<li><a href="../works/reea.html"><span class="m-num">15</span><span class="m-title">REEA</span><span class="m-tag"><span lang="en">AI real-estate platform · 2023–24</span><span lang="zh">AI 房地产平台 · 2023–24</span></span></a></li>
+<li><a href="../works/lightup.html"><span class="m-num">16</span><span class="m-title">LightUp</span><span class="m-tag"><span lang="en">Charity giving platform · Gold, London Design Award</span><span lang="zh">慈善捐赠平台 · 伦敦设计奖金奖</span></span></a></li>
+<li><a href="../resume.html"><span class="m-num">17</span><span class="m-title"><span lang="en">Résumé</span><span lang="zh">简历</span></span><span class="m-tag"><span lang="en">Web · print</span><span lang="zh">网页 · 可打印</span></span></a></li>
+<li><a href="../index.html#decisions"><span class="m-num">D</span><span class="m-title"><span lang="en">How I decide</span><span lang="zh">我怎么做决定</span></span><span class="m-tag"><span lang="en">Three decisions</span><span lang="zh">三个决定</span></span></a></li>
+<li><a href="../archive.html"><span class="m-num">A</span><span class="m-title"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></span><span class="m-tag">2023 — 2025</span></a></li>
+<li><a href="../notes/"><span class="m-num">18</span><span class="m-title"><span lang="en">Notes</span><span lang="zh">笔记</span></span><span class="m-tag"><span lang="en">Writing</span><span lang="zh">文章</span></span></a></li>
+<li><a href="../index.html#contact"><span class="m-num">19</span><span class="m-title"><span lang="en">Contact</span><span lang="zh">联系</span></span><span class="m-tag"><span lang="en">Say hi</span><span lang="zh">打个招呼</span></span></a></li>
+    </ol>
+    <div class="m-foot"><span><span lang="en">San Francisco Bay Area</span><span lang="zh">旧金山湾区</span></span><a href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a><a href="https://github.com/kaihuan-huang">GitHub</a></div>
+  </div>
+</div>
+<main id="main" class="case">
+  <article class="wrap paper">
+    <p class="p-back mono"><a href="thesis-revisit.html">← Revisiting my MSc thesis</a></p>
+<header class="p-head">
+  <p class="p-kicker mono">Re-examination · October 2026</p>
+  <h1>Does a Hybrid Prophet-LSTM Forecast Stock Prices? A 2026 Re-examination of My MSc Thesis</h1>
+  <p class="p-by">Kaihuan Huang</p>
+  <p class="p-meta mono">Original thesis: University of York, MSc dissertation (COM00151M), submitted 17 October 2024 · Re-run: October 2026</p>
+</header>
+
+<section class="p-abs" lang="en">
+  <h2>Abstract</h2>
+  <p>My 2024 MSc thesis proposed a hybrid of Prophet and a Long Short-Term Memory network (LSTM) for daily stock-price forecasting and reported that it was the best of four models on Apple, with a significant difference (p &lt; 0.05). Two years later I reproduced the original code unchanged and evaluated it against the baseline it never used: the random walk, which forecasts that tomorrow's price equals today's. The random walk had the lowest error on all four series; the best thesis model was 1.9–5.6 times worse and the proposed hybrid 7.0–12.8 times worse (RMSE). I list twelve problems in the original study and measure each, including a 60-day misalignment in the hybrid, a scaler fitted on test data, and a reported test that does not exist in the code. I then re-ran the question under a current protocol: 20 US stocks and ETFs, log returns at 1, 5 and 20 trading days, a forecast from each of 208 trading days between November 2025 and September 2026 using only earlier data, and 16 models including the 2025 time-series foundation models Chronos-2 and TimesFM 2.5, each compared with the random walk by a Diebold-Mariano test. No model was significantly more accurate than the random walk at any horizon; the foundation models were significantly less accurate at one day, though their 80% intervals were close to calibrated. The result held on a second test period (2023–2025). The predictable quantity was volatility: a gradient-boosted model reduced the error of 20-day volatility forecasts by 20% against a naive baseline (relative MAE 0.802, DM p = 0.048, uncorrected for two comparisons).</p>
+</section>
+
+<section class="p-abs p-abs-zh" lang="zh">
+  <h2>中文摘要 · 正文为英文</h2>
+  <p>2024 年的硕士论文提出用 Prophet + LSTM 混合模型预测日股价，结论是它在苹果股票上最好，且差异显著（p &lt; 0.05）。2026 年我用原代码原样复现，并加上论文从没用过的基准——随机游走（「明天的价格 = 今天的价格」）：它在 4 个序列上误差都最小，论文最好的模型差 1.9–5.6 倍，混合模型差 7.0–12.8 倍。我列出原研究的 12 个问题并逐条量化，包括混合模型的 60 天错位、缩放器在测试数据上拟合、论文报告的检验在代码里不存在。随后按现在的协议重做：20 只美股和 ETF、1 / 5 / 20 天对数收益率、2025-11 到 2026-09 每个交易日一个预测起点（共 208 个，只用之前的数据）、16 个模型（含 2025 年的 Chronos-2、TimesFM 2.5），每个都用 Diebold-Mariano 检验和随机游走比较。没有任何模型在任何步长上显著优于随机游走；基础模型在 1 天上显著更差，但 80% 区间接近校准。换 2023–2025 测试期结论不变。能预测的是波动率：梯度提升树把 20 天波动率的预测误差降低 20%（相对 MAE 0.802，DM p = 0.048，未做两次比较的校正）。</p>
+</section>
+
+<section>
+  <h2><span class="mono">1</span>Introduction</h2>
+  <p>Forecasting daily stock prices is a standard student project because the data is free and the target feels important. It is also a setting where a weak evaluation can make almost any model look good: prices are highly autocorrelated, so any forecast close to yesterday's price earns a high R², and an error measured in dollars says nothing until it is compared with a sensible baseline.</p>
+  <p>This paper revisits my own MSc thesis with that in mind. It makes four contributions:</p>
+  <ol>
+    <li>An unchanged reproduction of the original code, matched to the result files submitted with the thesis (Section 3).</li>
+    <li>A list of twelve problems in the original study, each with its measured effect (Section 4).</li>
+    <li>A re-run of the research question under a 2026 protocol, with 16 models, two test periods and significance tests against the random walk (Sections 5–6).</li>
+    <li>Evidence that, on the same data, volatility is predictable where direction is not (Section 6.4).</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="mono">2</span>The original study</h2>
+  <ul>
+    <li><b>Data.</b> Daily closing prices from yfinance, 1 January 2010 to 12 October 2024 (Google to 1 January 2023): Apple as the "stable" stock, Tesla as the "volatile" one, plus Google and the S&amp;P 500.</li>
+    <li><b>Split.</b> One chronological split: the first 80% for training, the last 20% for testing (about October 2021 to October 2024; 655–744 trading days).</li>
+    <li><b>Models.</b> ARIMA(5,1,0); a two-layer LSTM with 50 units, a 60-day input window and MinMax-scaled prices, trained for 5 epochs; Prophet with yearly and weekly seasonality; and the hybrid, in which an LSTM predicts Prophet's residuals and the prediction is added back to Prophet's forecast.</li>
+    <li><b>Metrics.</b> MSE, RMSE, MAE, MAPE and R², computed on price levels.</li>
+    <li><b>Claim.</b> The hybrid is best on the stable stock, significantly so against the LSTM (p &lt; 0.05), and worse than the LSTM on the volatile stock.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="mono">3</span>Reproduction (E0)</h2>
+  <p>I ran the original functions without changing a line, with the same tickers, dates and split, over three random seeds. The results match the CSV files submitted with the thesis: the ARIMA RMSE for Tesla and the S&amp;P 500 is identical (160.56 and 554.37), and Apple differs by 3% because today's download is dividend-adjusted. The problems below therefore belong to the study, not to the reproduction.</p>
+  <figure class="p-tab">
+    <figcaption><b>Table 1.</b> RMSE on the thesis test split, in price units (mean of three seeds). The last column is the random walk, which the thesis did not report.</figcaption>
+    <div class="p-scroll"><table>
+      <thead><tr><th>Series</th><th>ARIMA</th><th>Prophet</th><th>LSTM</th><th>Hybrid</th><th>Random walk</th></tr></thead>
+      <tbody>
+        <tr><td>AAPL</td><td>34.8</td><td>33.9</td><td>9.5</td><td>24.0</td><td><b>2.85</b></td></tr>
+        <tr><td>TSLA</td><td>160.6</td><td>239.2</td><td>17.5</td><td>114.9</td><td><b>9.01</b></td></tr>
+        <tr><td>GOOG</td><td>45.9</td><td>44.9</td><td>11.9</td><td>14.9</td><td><b>2.14</b></td></tr>
+        <tr><td>S&amp;P 500</td><td>554.4</td><td>702.4</td><td>125.5</td><td>341.0</td><td><b>47.78</b></td></tr>
+      </tbody>
+    </table></div>
+  </figure>
+  <figure class="p-fig">
+    <a href="../assets/img/works/thesis-fig1_thesis_vs_naive.jpg" class="p-zoom"><img src="../assets/img/works/thesis-fig1_thesis_vs_naive.jpg" alt="Bar chart of RMSE on a log scale for each thesis model and the random walk on four series; the random walk is lowest on all four." width="1280" height="576" loading="lazy"></a>
+    <figcaption><b>Figure 1.</b> RMSE on the thesis split (log scale). "Hybrid (bugs fixed)" removes both the 60-day misalignment and the test-data leak described in Section 4.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2><span class="mono">4</span>Diagnosis: twelve problems (E1)</h2>
+  <p>Listing 1 is the core of the hybrid as submitted. It contains two of the problems.</p>
+  <figure class="p-code">
+    <figcaption><b>Listing 1.</b> <code>hybrid_prophet_lstm_forecast</code> in the submitted <code>app.py</code> (abridged; line 4 summarises the training code).</figcaption>
+<pre><code><span class="ln">1</span>residuals_full = total_dataset - prophet_full['yhat'].values
+<span class="ln">2</span>scaler = MinMaxScaler(feature_range=(0, 1))
+<span class="ln bad">3</span>residuals_scaled = scaler.fit_transform(residuals_full.reshape(-1, 1))   # fitted on train + test
+<span class="ln">4</span># ... train the LSTM on residual windows ...
+<span class="ln">5</span>for i in range(len(train), len(total_dataset) - look_back):
+<span class="ln">6</span>    X_test.append(residuals_scaled[i - look_back:i, 0])
+<span class="ln">7</span>lstm_residuals = scaler.inverse_transform(lstm_model.predict(X_test))
+<span class="ln bad">8</span>prophet_predictions_adjusted = prophet_predictions[look_back:]           # shifted 60 days
+<span class="ln">9</span>hybrid_predictions = prophet_predictions_adjusted + lstm_residuals.flatten()</code></pre>
+  </figure>
+  <ol class="p-issues">
+    <li><b>No random-walk baseline.</b> The random walk scores R² 0.97–0.99 on every series; the LSTM's R² of 0.84–0.95 only looked strong because prices are autocorrelated. The best thesis model's RMSE is 1.9–5.6 times the random walk's.</li>
+    <li><b>The LSTM learned to copy yesterday, imprecisely.</b> Its forecasts correlate 0.970–0.986 with the previous day's price, it calls the direction correctly 47.4–49.9% of the time, and with 5 epochs it is undertrained, so its error is about three times that of copying yesterday exactly.</li>
+    <li><b>Unequal horizons.</b> ARIMA and Prophet forecast 655–744 days ahead from the end of training; the LSTM and the hybrid forecast one day ahead with yesterday's true price as input. "LSTM beats ARIMA" reflects the protocol, not the models.</li>
+    <li><b>A 60-day misalignment in the hybrid</b> (Listing 1, line 8). The residual predicted for test day <i>k</i> is added to Prophet's forecast for day <i>k</i> + 60. Fixing only this reduces the hybrid's RMSE from 24.0 to 12.6 on Apple, 14.9 to 4.8 on Google and 114.9 to 66.6 on Tesla. Much of the thesis's "hybrid struggles in volatile markets" finding is this bug.</li>
+    <li><b>Leakage</b> (line 3). The scaler is fitted on training and test residuals together, so the model knows the test range. Fitting it on training data only raises the error on three of four series (Tesla 66.6 → 130.3, Google 4.8 → 9.4, Apple 12.6 → 13.5) and lowers it on the S&amp;P 500 (153.2 → 131.8).</li>
+    <li><b>Different test samples.</b> The hybrid is scored on the test period minus its first 60 days; the other models on all of it.</li>
+    <li><b>MinMax scaling of price levels cannot extrapolate.</b> The training maximum maps to 1, so the LSTM cannot forecast a new high. On the 2025–2026 test period this setting is the worst of all models, 11.8 times the random walk's error.</li>
+    <li><b>The conclusion contradicts the submitted results.</b> The thesis names the hybrid best on Apple; the submitted <code>APPL_predict_results.csv</code> reports RMSE 8.8 for the LSTM and 25.7 for the hybrid, with the hybrid's R² at −0.06.</li>
+    <li><b>Methods described but not implemented.</b> The submitted code has no t-test behind the reported p &lt; 0.05, no volume, moving-average or volatility features despite the described feature selection, no interpolation and no dropout tuning. K-fold appears only in an earlier version, and is not valid for time series.</li>
+    <li><b>Metrics.</b> MSE is not comparable across series (the S&amp;P 500's is hundreds of times Apple's), R² on price levels is uninformative, and MAPE inflates errors on low-priced stocks.</li>
+    <li><b>Sample.</b> Two main stocks, one split, one training run: no estimate of variance.</li>
+    <li><b>Engineering.</b> Virtual environments, <code>node_modules</code> and a 1.4 GB archive were committed; versions were not pinned and <code>requirements.txt</code> omitted TensorFlow and statsmodels.</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="mono">5</span>A 2026 protocol (E2)</h2>
+  <ul>
+    <li><b>Data.</b> 20 US stocks and ETFs (AAPL, TSLA, GOOG, MSFT, AMZN, NVDA, JPM, XOM, JNJ, PG, KO, WMT, CAT, BA, NFLX, AMD, PFE, DIS, SPY, QQQ), daily OHLCV adjusted for splits and dividends, January 2010 to September 2026, with SPY, VIX and the 10-year Treasury yield as exogenous series. Adjustment matters: Apple's 4-for-1 split in August 2020 would otherwise appear as a one-day log return of ln(1/4) ≈ −1.39.</li>
+    <li><b>Target.</b> The log return over the next <i>h</i> trading days, <i>h</i> ∈ {1, 5, 20}.</li>
+    <li><b>Test period.</b> 3 November 2025 to 1 September 2026, with a forecast origin on every trading day: 208 origins × 20 tickers = 4,160 forecasts per horizon. The period begins after the foundation models were released, so it cannot appear in their pre-training data.</li>
+    <li><b>Training.</b> Statistical models use only data up to each origin (ARIMA and ETS re-estimated every 20 origins and updated daily; Prophet refitted at every origin, 4,160 fits). Neural networks and gradient-boosted trees are trained once on data before 31 October 2025 and frozen; no target crosses into the test period.</li>
+    <li><b>Models (16, scored against the random walk).</b> Random walk with drift; AutoARIMA and AutoETS (statsforecast); the thesis family: Prophet, the price-level LSTM (thesis setting, leak removed), a return LSTM trained on the panel, and the hybrid with the misalignment fixed; PatchTST and NHITS (NeuralForecast); gradient-boosted trees on four data versions (Section 6.3); and zero-shot foundation models Chronos-Bolt-base (released November 2024), Chronos-2 (October 2025) and TimesFM 2.5 (September 2025).</li>
+    <li><b>Metrics and tests.</b> MAE relative to the random walk (below 1 beats it), out-of-sample R² against the random walk, directional accuracy compared with always predicting a rise, 80% interval coverage, pinball loss, and at <i>h</i> = 1 the annualised Sharpe ratio of a long-short rule after 2 basis points of cost. Each model is compared with the random walk by a Diebold-Mariano test on the cross-sectional mean loss differential, with a Newey-West variance at lag <i>h</i> − 1 and the Harvey-Leybourne-Newbold small-sample correction.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="mono">6</span>Results</h2>
+  <h3>6.1 Main test period, November 2025 – September 2026</h3>
+  <figure class="p-fig">
+    <a href="../assets/img/works/thesis-fig2_relmae_by_horizon.jpg" class="p-zoom"><img src="../assets/img/works/thesis-fig2_relmae_by_horizon.jpg" alt="Three panels, one per horizon, plotting each model's MAE relative to the random walk on a log scale; every model sits at or to the right of 1." width="1760" height="672" loading="lazy"></a>
+    <figcaption><b>Figure 2.</b> MAE relative to the random walk at 1, 5 and 20 days (log scale). Red: foundation models; orange: the thesis family; grey: statistical, gradient-boosted and other deep models.</figcaption>
+  </figure>
+  <figure class="p-tab">
+    <figcaption><b>Table 2.</b> One-day horizon, 4,160 forecasts per model. <i>p</i> is the Diebold-Mariano test against the random walk; a dash means the model produces no interval.</figcaption>
+    <div class="p-scroll"><table>
+      <thead><tr><th>Model</th><th>Rel. MAE</th><th>R²<sub>oos</sub></th><th>Direction</th><th><i>p</i></th><th>80% cover</th><th>Sharpe</th></tr></thead>
+      <tbody>
+        <tr><td>Random walk with drift</td><td>1.000</td><td>0.00%</td><td>51.2%</td><td>0.98</td><td>82.7%</td><td>0.81</td></tr>
+        <tr><td>GBDT, panel + technical</td><td>1.001</td><td>0.05%</td><td>51.3%</td><td>0.88</td><td>75.8%</td><td>1.44</td></tr>
+        <tr><td>AutoETS</td><td>1.002</td><td>−0.17%</td><td>49.8%</td><td>0.45</td><td>83.2%</td><td>0.58</td></tr>
+        <tr><td>AutoARIMA</td><td>1.007</td><td>−1.12%</td><td>48.6%</td><td>0.006</td><td>81.0%</td><td>−2.18</td></tr>
+        <tr><td>Return LSTM (3 seeds)</td><td>1.010</td><td>−0.99%</td><td>50.2%</td><td>0.40</td><td>–</td><td>0.60</td></tr>
+        <tr><td>PatchTST</td><td>1.012</td><td>−2.26%</td><td>50.0%</td><td>0.002</td><td>–</td><td>−0.89</td></tr>
+        <tr><td>TimesFM 2.5</td><td>1.019</td><td>−2.40%</td><td>49.7%</td><td>0.001</td><td>84.6%</td><td>−0.70</td></tr>
+        <tr><td>Chronos-2</td><td>1.059</td><td>−9.46%</td><td>50.6%</td><td>&lt;0.001</td><td>79.4%</td><td>−1.25</td></tr>
+        <tr><td>NHITS</td><td>1.059</td><td>−9.81%</td><td>49.6%</td><td>&lt;0.001</td><td>–</td><td>−0.75</td></tr>
+        <tr><td>Chronos-Bolt-base</td><td>1.140</td><td>−22.9%</td><td>51.0%</td><td>&lt;0.001</td><td>80.0%</td><td>−1.20</td></tr>
+        <tr><td>Hybrid Prophet-LSTM (fixed)</td><td>1.220</td><td>−55%</td><td>49.5%</td><td>&lt;0.001</td><td>–</td><td>−0.95</td></tr>
+        <tr><td>Prophet</td><td>3.468</td><td>−1053%</td><td>50.4%</td><td>&lt;0.001</td><td>57.2%</td><td>−0.29</td></tr>
+        <tr><td>Price-level LSTM (thesis)</td><td>11.758</td><td>−11432%</td><td>48.4%</td><td>&lt;0.001</td><td>–</td><td>−0.76</td></tr>
+        <tr class="ref"><td>Always up / buy and hold</td><td></td><td></td><td>51.3%</td><td></td><td></td><td>1.18</td></tr>
+      </tbody>
+    </table></div>
+  </figure>
+  <p>No model is significantly more accurate than the random walk. The best (random walk with drift, gradient-boosted trees, AutoETS) tie it at relative MAE 1.000–1.002; every model with <i>p</i> &lt; 0.05 is significantly <em>worse</em>. The ranking at 5 and 20 days is similar: the best models sit at 0.998–1.008 with <i>p</i> above 0.6, the foundation models at 1.011–1.088, and both Chronos models are significantly worse than the random walk at the 5% level. At 20 days the gradient-boosted models call the direction correctly 54.1–54.5% of the time, the same as always predicting a rise (54.4%).</p>
+  <p>The foundation models' median forecasts move by 0.4–0.7% a day, but those moves are essentially uncorrelated with what happened (−0.16 for Chronos-Bolt at 20 days), so they add noise to a near-zero signal. Their strength is uncertainty: TimesFM 2.5's 80% intervals cover 84.6% of outcomes and Chronos-Bolt's 80.0%. The Sharpe ratios are not distinguishable: with 208 days (0.83 years) their standard error is roughly ±1.1–1.4, so 1.44 for gradient-boosted trees and 1.18 for buy-and-hold are within noise. Prophet, which has no autoregressive term, forecasts a return to its trend line every day; the price-level LSTM cannot forecast above its training maximum.</p>
+
+  <h3>6.2 Robustness: January 2023 – October 2025 (E3)</h3>
+  <p>I re-ran the less expensive models on an earlier period: 711 origins × 20 tickers = 14,220 forecasts per horizon, training ending 30 December 2022. This period may overlap the foundation models' pre-training data, which can only favour them.</p>
+  <figure class="p-tab">
+    <figcaption><b>Table 3.</b> Relative MAE and Diebold-Mariano <i>p</i> against the random walk, January 2023 – October 2025.</figcaption>
+    <div class="p-scroll"><table>
+      <thead><tr><th>Model</th><th>h=1</th><th><i>p</i></th><th>h=5</th><th><i>p</i></th><th>h=20</th><th><i>p</i></th><th>Direction, h=20</th></tr></thead>
+      <tbody>
+        <tr><td>Random walk with drift</td><td>0.997</td><td>0.13</td><td>0.990</td><td>0.12</td><td>0.971</td><td>0.13</td><td>60.5%</td></tr>
+        <tr><td>GBDT A, one ticker, own lags</td><td>0.998</td><td>0.25</td><td>0.989</td><td>0.10</td><td>0.965</td><td>0.08</td><td>60.4%</td></tr>
+        <tr><td>GBDT C, panel + technical</td><td>1.000</td><td>0.60</td><td>0.989</td><td>0.14</td><td>0.976</td><td>0.19</td><td>59.4%</td></tr>
+        <tr><td>GBDT D, + macro</td><td>1.004</td><td>0.89</td><td>0.993</td><td>0.48</td><td>0.970</td><td>0.12</td><td>59.1%</td></tr>
+        <tr><td>AutoETS</td><td>0.999</td><td>0.47</td><td>0.992</td><td>0.04</td><td>0.974</td><td>0.07</td><td>58.2%</td></tr>
+        <tr><td>AutoARIMA</td><td>1.002</td><td>0.77</td><td>0.993</td><td>0.19</td><td>0.974</td><td>0.20</td><td>59.5%</td></tr>
+        <tr><td>TimesFM 2.5</td><td>1.019</td><td>&lt;0.001</td><td>1.007</td><td>0.14</td><td>1.002</td><td>0.67</td><td>54.1%</td></tr>
+        <tr><td>Chronos-2</td><td>1.055</td><td>&lt;0.001</td><td>1.013</td><td>0.02</td><td>1.003</td><td>0.11</td><td>55.2%</td></tr>
+        <tr><td>Chronos-Bolt-base</td><td>1.157</td><td>&lt;0.001</td><td>1.053</td><td>&lt;0.001</td><td>1.050</td><td>0.02</td><td>54.1%</td></tr>
+        <tr class="ref"><td>Always up</td><td></td><td></td><td></td><td></td><td></td><td></td><td>60.4%</td></tr>
+      </tbody>
+    </table></div>
+  </figure>
+  <p>This was a strong bull market (equal-weight buy-and-hold Sharpe 1.63), so drift alone improves on the random walk by 3% at 20 days. The learned models improve by the same amount, and their 60.4% directional accuracy equals always predicting a rise: they learned that prices tend to go up, and nothing more. The only <i>p</i> &lt; 0.05 in favour of a model is AutoETS at five days (<i>p</i> = 0.04), one result among 30 model-horizon pairs, which does not survive a multiple-comparison correction. The foundation models rank last again.</p>
+
+  <h3>6.3 What better data buys (E4)</h3>
+  <p>Holding the learner fixed (gradient-boosted trees with quantile loss), I varied only the data: (A) one model per ticker on its own lagged returns, the thesis's information set; (B) one model on the 20-ticker panel; (C) B plus OHLCV features (5-, 20- and 60-day returns and volatility, distance from moving averages, volume z-score, intraday range); (D) C plus market and macro series (lagged SPY return, VIX level and change, 10-year yield change).</p>
+  <figure class="p-fig">
+    <a href="../assets/img/works/thesis-fig3_data_ablation.jpg" class="p-zoom"><img src="../assets/img/works/thesis-fig3_data_ablation.jpg" alt="Two line charts across data versions A to D: relative MAE stays within one percent of 1, and directional accuracy stays near the always-up rate." width="1600" height="544" loading="lazy"></a>
+    <figcaption><b>Figure 3.</b> Data versions A–D. Left: MAE relative to the random walk. Right: directional accuracy; dashed lines are the always-up rate for each horizon.</figcaption>
+  </figure>
+  <figure class="p-tab">
+    <figcaption><b>Table 4.</b> Gradient-boosted trees on four data versions, November 2025 – September 2026.</figcaption>
+    <div class="p-scroll"><table>
+      <thead><tr><th>Version</th><th>Rel. MAE h=1</th><th>h=5</th><th>h=20</th><th>80% cover, h=1</th><th>Rel. pinball, h=1</th></tr></thead>
+      <tbody>
+        <tr><td>A one ticker, own lags</td><td>1.001</td><td>1.001</td><td>1.015</td><td>74.3%</td><td>0.999</td></tr>
+        <tr><td>B panel</td><td>1.001</td><td>1.002</td><td>1.007</td><td>76.8%</td><td>0.999</td></tr>
+        <tr><td>C + technical</td><td>1.001</td><td>0.998</td><td>1.008</td><td>75.8%</td><td>0.992</td></tr>
+        <tr><td>D + macro</td><td>1.002</td><td>1.001</td><td>1.004</td><td>75.2%</td><td>0.993</td></tr>
+      </tbody>
+    </table></div>
+  </figure>
+  <p>More and better data barely moves point accuracy: at most 1% (20 days, A to D), and nothing is significant. The gain is in the intervals: volatility features lower pinball loss by about 0.8%, because volatility is predictable (Section 6.4). The larger gain from data work is avoiding mistakes: adjusted prices, returns rather than levels, features dated no later than the origin, and targets that never cross into the test period together bring the thesis family from 3–12 times the random walk's error back to about 1.0 (return LSTM 1.010).</p>
+
+  <h3>6.4 Volatility is predictable (E5)</h3>
+  <p>With the same tickers and origins, I changed the target to realised volatility over the next 20 days.</p>
+  <figure class="p-fig">
+    <a href="../assets/img/works/thesis-fig4_volatility.jpg" class="p-zoom"><img src="../assets/img/works/thesis-fig4_volatility.jpg" alt="Left: bar chart of MAE relative to a naive volatility forecast, 1.000 for naive, 0.905 for HAR-RV and 0.802 for gradient-boosted trees. Right: correlation with realised volatility, 0.67, 0.67 and 0.75." width="1600" height="544" loading="lazy"></a>
+    <figcaption><b>Figure 4.</b> Twenty-day realised volatility. Left: MAE relative to the naive forecast (last 20 days' volatility). Right: correlation with realised volatility; the axis starts at 0.5.</figcaption>
+  </figure>
+  <figure class="p-tab">
+    <figcaption><b>Table 5.</b> Twenty-day realised volatility, 4,160 forecasts. <i>p</i> is the Diebold-Mariano test against the naive forecast.</figcaption>
+    <div class="p-scroll"><table>
+      <thead><tr><th>Model</th><th>Rel. MAE</th><th>R²<sub>oos</sub> vs naive</th><th>QLIKE</th><th>Correlation</th><th><i>p</i></th></tr></thead>
+      <tbody>
+        <tr><td>Naive (last 20 days)</td><td>1.000</td><td>0%</td><td>0.283</td><td>0.665</td><td>–</td></tr>
+        <tr><td>HAR-RV (Corsi, 2009)</td><td>0.905</td><td>+15.2%</td><td>0.261</td><td>0.673</td><td>0.34</td></tr>
+        <tr><td>GBDT, version D features</td><td><b>0.802</b></td><td><b>+32.8%</b></td><td><b>0.207</b></td><td><b>0.752</b></td><td><b>0.048</b></td></tr>
+      </tbody>
+    </table></div>
+  </figure>
+  <p>Gradient-boosted trees reduce the error of 20-day volatility forecasts by 20% (relative MAE 0.802, out-of-sample R² +32.8%). The effect is large but the evidence is only marginally significant (DM <i>p</i> = 0.048), for a clear reason: adjacent 20-day windows overlap by 19 days, so each ticker contributes roughly 208 ÷ 20 ≈ 10 independent observations, and the 20 tickers move together when VIX moves. Two models were tested against the naive forecast; a Bonferroni correction gives 0.048 × 2 = 0.096, above 0.05. The defensible statement is the effect size with a qualified test, not a pass at 0.05. Direction is noise; volatility clusters.</p>
+</section>
+
+<section>
+  <h2><span class="mono">7</span>Discussion</h2>
+  <p><b>Why nothing beats the random walk.</b> The result is consistent with the efficient-markets view (Fama, 1970) and with the forecasting literature, where simple benchmarks are hard to beat out of sample (Welch &amp; Goyal, 2008). A regularity that public models can find in public daily prices is one that traders can exploit, and exploiting it removes it. Tying the random walk is the realistic ceiling for this task.</p>
+  <p><b>What changed between 2024 and 2026.</b> The tools changed a great deal: statsforecast and NeuralForecast run rolling-origin evaluation in a few lines, and a zero-shot foundation model produces 4,160 forecasts with intervals in seconds (Chronos-Bolt took 22 seconds on an M1 Pro). On general benchmarks such as GIFT-Eval these models now beat classical methods. On daily stock returns their point accuracy did not improve, and should not be expected to. What changed most is the standard of evaluation: the first question a reviewer asks today is whether the model was compared with the random walk.</p>
+  <p><b>What the thesis should have asked.</b> A falsifiable version of the question is: can 2025 time-series foundation models, zero-shot, beat classical baselines on stock returns and volatility? Stated as hypotheses: H1, no model is significantly more accurate than the random walk on returns (supported); H2, learned models beat naive and HAR forecasts of volatility (partly supported: GBDT at <i>p</i> = 0.048, HAR not significant); H3, foundation-model intervals are better calibrated than a Gaussian random walk (not tested here).</p>
+  <p><b>Lessons for any modelling project.</b> Build the simplest baseline first and stop if a complex model cannot beat it. Treat a suspiciously good score as a symptom of leakage or misalignment. Compare every model on the same samples, horizon and information. Make every method in the write-up traceable to a line of code, and every conclusion to a results file. Re-run on another period before believing a result. Ask first whether the target is predictable at all.</p>
+</section>
+
+<section>
+  <h2><span class="mono">8</span>Limitations</h2>
+  <ul>
+    <li>Moirai 2 and TimesFM 3 were not run: Moirai 2's library pins PyTorch 2.4 and NumPy 1.x, which conflicted with the other packages, and TimesFM 3 is a separate package. Chronos-2 was run without covariates.</li>
+    <li>LightGBM needed a system OpenMP library, so scikit-learn's HistGradientBoosting (the same family of algorithm) was used instead.</li>
+    <li>The main test period is 11 months, which limits the power of the Sharpe comparison and the 20-day tests.</li>
+    <li>No multiple-comparison correction was applied across 16 models and 3 horizons. No model was significantly better, so a correction would not change the conclusion.</li>
+    <li>Only public daily data was used: no intraday data, news or order flow.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="mono">9</span>Conclusion</h2>
+  <p>The thesis's central claim does not survive reproduction: its models lose to the random walk by a wide margin, and part of what it reported came from a misalignment and a leak in the code. Under a current protocol, 16 models including 2025's foundation models do not significantly beat the random walk on daily stock returns, on two test periods. What is predictable on the same data is volatility. The broader lesson is that as models improve, the evaluation protocol, not the model, decides whether a result can be trusted.</p>
+</section>
+
+<section>
+  <h2>Reproducibility</h2>
+  <p>The original code and result files, the new experiment code, all forecasts and scores, and a locked environment (uv, <code>requirements.lock.txt</code>) are kept together; the full run takes about one hour on an M1 Pro with 16 GB of memory. The repository is not yet public. A narrated walkthrough of the study is on the <a href="thesis-revisit.html">case page</a>.</p>
+</section>
+
+<section class="p-refs">
+  <h2>References</h2>
+  <ol>
+    <li>Ansari, A. F., et al. (2024). Chronos: Learning the language of time series. <i>Transactions on Machine Learning Research</i>.</li>
+    <li>Aksu, T., et al. (2024). GIFT-Eval: A benchmark for general time series forecasting model evaluation. arXiv:2410.10393.</li>
+    <li>Challu, C., et al. (2023). NHITS: Neural hierarchical interpolation for time series forecasting. <i>AAAI 2023</i>.</li>
+    <li>Corsi, F. (2009). A simple approximate long-memory model of realized volatility. <i>Journal of Financial Econometrics</i>, 7(2), 174–196.</li>
+    <li>Das, A., Kong, W., Sen, R., &amp; Zhou, Y. (2024). A decoder-only foundation model for time-series forecasting. <i>ICML 2024</i>.</li>
+    <li>Diebold, F. X., &amp; Mariano, R. S. (1995). Comparing predictive accuracy. <i>Journal of Business &amp; Economic Statistics</i>, 13(3), 253–263.</li>
+    <li>Fama, E. F. (1970). Efficient capital markets: A review of theory and empirical work. <i>Journal of Finance</i>, 25(2), 383–417.</li>
+    <li>Harvey, D., Leybourne, S., &amp; Newbold, P. (1997). Testing the equality of prediction mean squared errors. <i>International Journal of Forecasting</i>, 13(2), 281–291.</li>
+    <li>Hochreiter, S., &amp; Schmidhuber, J. (1997). Long short-term memory. <i>Neural Computation</i>, 9(8), 1735–1780.</li>
+    <li>Hyndman, R. J., &amp; Khandakar, Y. (2008). Automatic time series forecasting: The forecast package for R. <i>Journal of Statistical Software</i>, 27(3).</li>
+    <li>Newey, W. K., &amp; West, K. D. (1987). A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix. <i>Econometrica</i>, 55(3), 703–708.</li>
+    <li>Nie, Y., Nguyen, N. H., Sinthong, P., &amp; Kalagnanam, J. (2023). A time series is worth 64 words: Long-term forecasting with transformers. <i>ICLR 2023</i>.</li>
+    <li>Taylor, S. J., &amp; Letham, B. (2018). Forecasting at scale. <i>The American Statistician</i>, 72(1), 37–45.</li>
+    <li>Welch, I., &amp; Goyal, A. (2008). A comprehensive look at the empirical performance of equity premium prediction. <i>Review of Financial Studies</i>, 21(4), 1455–1508.</li>
+  </ol>
+</section>
+
+  </article>
+</main>
+<footer class="foot wrap">
+  <div class="cols">
+    <div>
+      <div class="sign">Kaihuan Huang</div>
+      <div class="motto"><span lang="en">Measure first. Ship second. Keep the receipts.</span><span lang="zh">先测量，再上线，留好凭据。</span></div>
+    </div>
+    <div><p class="foot-h"><span lang="en">Index</span><span lang="zh">目录</span></p><ul><li><a href="../works/booking-agent.html">01 Booking Agent</a></li><li><a href="../works/pos-platform.html">02 POS Platform</a></li><li><a href="../works/refund-agent.html">03 Refund Agent</a></li><li><a href="../works/pii-detector.html">04 PII Detector</a></li><li><a href="../works/career-ops.html">05 Career OPS</a></li><li><a href="../works/llm-arch-cards.html">06 LLM Arch Cards</a></li><li><a href="../works/thesis-revisit.html">07 Revisiting my MSc thesis</a></li><li><a href="../works/bilingual-reader.html">08 Bilingual Note Reader</a></li><li><a href="../works/study-video.html">09 Narrated Study Videos</a></li><li><a href="../works/dispute-ingest.html">10 Dispute Ingestion Service</a></li><li><a href="../works/governance-platform.html">11 AI Governance Platform</a></li><li><a href="../works/commander-ops.html">12 Remote Commander Ops</a></li><li><a href="../works/ipot.html">13 IPOT Restaurant Platform</a></li><li><a href="../works/loan-draw-review.html">14 Loan-Draw Review Controls</a></li><li><a href="../works/reea.html">15 REEA</a></li><li><a href="../works/lightup.html">16 LightUp</a></li></ul></div>
+    <div><p class="foot-h"><span lang="en">Elsewhere</span><span lang="zh">其他</span></p><ul>
+      <li><a href="https://github.com/kaihuan-huang">GitHub</a></li>
+      <li><a href="https://linkedin.com/in/kaijacksonus/">LinkedIn</a></li>
+      <li><a href="../resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a></li>
+      <li><a href="../archive.html"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></a></li>
+      <li><a href="../notes/"><span lang="en">Notes</span><span lang="zh">笔记</span></a></li>
+    </ul></div>
+    <div><p class="foot-h"><span lang="en">Contact</span><span lang="zh">联系</span></p><ul>
+      <li><a href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a></li>
+      <li><span lang="en">San Francisco Bay Area</span><span lang="zh">旧金山湾区</span></li>
+    </ul></div>
+  </div>
+  <div class="base mono"><span>© <span id="year">2026</span> Kaihuan Huang</span><span>SFO 37.7749°N 122.4194°W</span></div>
+</footer>
+</body>
+</html>

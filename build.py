@@ -462,6 +462,8 @@ def build_case(i, kind, w, prev, nxt):
         else:
             hero = f'<figure class="case-hero plate-flow"><div class="sheet">{flow(w["flow"], big=True)}<div class="sheet-foot mono"><span>SECTION · {w["title"].upper()}</span><span>{bi(w.get("sheet_note", {"en": "Design view · code private", "zh": "设计视图 · 代码私有"}))}</span></div></div></figure>'
         btns = ""
+        if w.get("paper"):
+            btns = f'<a class="btn solid" href="{w["slug"]}-paper.html">{bi({"en": "Read the full paper →", "zh": "阅读完整论文 →"})}</a>'
         if w.get("link"):
             btns = f'<a class="btn solid" href="{w["link"][1]}">{tr(w["link"][0])} →</a>'
         for t, u in w.get("extra_links", []):
@@ -546,6 +548,24 @@ def build_case(i, kind, w, prev, nxt):
 
 
 # ---------------- learning archive ----------------
+
+# ---------------- paper pages (long-form write-up beside a case) ----------------
+def build_paper(w):
+    pp = w["paper"]
+    body = (ROOT / pp["src"]).read_text(encoding="utf-8")
+    html = head(f"{pp['title']} · {P['name_first']} {P['name_last']}", pp["desc"], "../", f"works/{w['slug']}-paper.html",
+                f"assets/img/works/{w['img']}" if w.get("img") else "assets/img/og.png")
+    html += nav("../")
+    html += f"""<main id="main" class="case">
+  <article class="wrap paper">
+    <p class="p-back mono"><a href="{w['slug']}.html">← {w['title']}</a></p>
+{body}
+  </article>
+</main>
+"""
+    html += footer("../")
+    (ROOT / "works" / f"{w['slug']}-paper.html").write_text(html, encoding="utf-8")
+
 
 def slug_title(slug):
     for _, w in all_items():
@@ -666,9 +686,11 @@ if __name__ == "__main__":
         prev = items[i - 2][1]
         nxt = items[i % len(items)][1]
         build_case(i, kind, w, prev, nxt)
+        if w.get("paper"):
+            build_paper(w)
     build_resume()
     build_archive()
-    urls = ["", "archive.html", "resume.html", "notes/"] + [f"works/{w['slug']}.html" for _, w in items]
+    urls = ["", "archive.html", "resume.html", "notes/"] + [f"works/{w['slug']}.html" for _, w in items] + [f"works/{w['slug']}-paper.html" for _, w in items if w.get("paper")]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
                                       + "".join(f"  <url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n", encoding="utf-8")
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n", encoding="utf-8")
