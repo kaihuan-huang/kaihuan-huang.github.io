@@ -1970,7 +1970,7 @@
           "title": "Design a Distributed Job Scheduler",
           "src": "../assets/video/job-scheduler.mp4",
           "poster": "../assets/img/works/sd-job-scheduler.jpg",
-          "dur": "8:04",
+          "dur": "8:11",
           "key": {
             "en": "Workers claim rows with SKIP LOCKED under a lease, renew it with a heartbeat, and finish only if their token is still current, so a worker that comes back after its lease expired changes zero rows. In a simulation, polling without a lock ran 1,000 jobs 4,245 times with 32 workers.",
             "zh": "工作者用 SKIP LOCKED 加租约认领任务，用心跳续租，只有令牌还对得上才算完成，所以租约过期后才回来的工作者一行都改不了。在模拟里，不加锁轮询让 32 个工作者把 1,000 个任务跑了 4,245 次。"
@@ -2047,21 +2047,21 @@
               }
             },
             {
-              "t": 366.6,
+              "t": 374.2,
               "l": {
                 "en": "Deep dive",
                 "zh": "深挖"
               }
             },
             {
-              "t": 428.8,
+              "t": 436.4,
               "l": {
                 "en": "Which one?",
                 "zh": "速答"
               }
             },
             {
-              "t": 473.9,
+              "t": 481.5,
               "l": {
                 "en": "The instinct",
                 "zh": "直觉"
