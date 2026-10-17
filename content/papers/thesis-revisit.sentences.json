@@ -1,0 +1,927 @@
+[
+ {
+  "i": 0,
+  "sec": 0,
+  "text": "Does a Hybrid Prophet-LSTM Forecast Stock Prices?"
+ },
+ {
+  "i": 1,
+  "sec": 0,
+  "text": "A 2026 Re-examination of My MSc Thesis"
+ },
+ {
+  "i": 2,
+  "sec": 0,
+  "text": "Kaihuan Huang"
+ },
+ {
+  "i": 3,
+  "sec": 1,
+  "text": "Abstract"
+ },
+ {
+  "i": 4,
+  "sec": 1,
+  "text": "My 2024 MSc thesis proposed a hybrid of Prophet and a Long Short-Term Memory network (LSTM) for daily stock-price forecasting and reported that it was the best of four models on Apple, with a significant difference (p < 0.05)."
+ },
+ {
+  "i": 5,
+  "sec": 1,
+  "text": "Two years later I reproduced the original code unchanged and evaluated it against the baseline it never used: the random walk, which forecasts that tomorrow's price equals today's."
+ },
+ {
+  "i": 6,
+  "sec": 1,
+  "text": "The random walk had the lowest error on all four series; the best thesis model was 1.9–5.6 times worse and the proposed hybrid 7.0–12.8 times worse (RMSE)."
+ },
+ {
+  "i": 7,
+  "sec": 1,
+  "text": "I list twelve problems in the original study and measure each, including a 60-day misalignment in the hybrid, a scaler fitted on test data, and a reported test that does not exist in the code."
+ },
+ {
+  "i": 8,
+  "sec": 1,
+  "text": "I then re-ran the question under a current protocol: 20 US stocks and ETFs, log returns at 1, 5 and 20 trading days, a forecast from each of 208 trading days between November 2025 and September 2026 using only earlier data, and 16 models including the 2025 time-series foundation models Chronos-2 and TimesFM 2.5, each compared with the random walk by a Diebold-Mariano test."
+ },
+ {
+  "i": 9,
+  "sec": 1,
+  "text": "No model was significantly more accurate than the random walk at any horizon; the foundation models were significantly less accurate at one day, though their 80% intervals were close to calibrated."
+ },
+ {
+  "i": 10,
+  "sec": 1,
+  "text": "The result held on a second test period (2023–2025)."
+ },
+ {
+  "i": 11,
+  "sec": 1,
+  "text": "The predictable quantity was volatility: a gradient-boosted model reduced the error of 20-day volatility forecasts by 20% against a naive baseline (relative MAE 0.802, DM p = 0.048, uncorrected for two comparisons)."
+ },
+ {
+  "i": 12,
+  "sec": 1,
+  "text": "I close with what went wrong in how I worked, not only in the code, and the checklist I now apply before trusting any model result, including the language-model systems I build."
+ },
+ {
+  "i": 13,
+  "sec": 3,
+  "text": "1. Introduction"
+ },
+ {
+  "i": 14,
+  "sec": 3,
+  "text": "Forecasting daily stock prices is a standard student project because the data is free and the target feels important."
+ },
+ {
+  "i": 15,
+  "sec": 3,
+  "text": "It is also a setting where a weak evaluation can make almost any model look good: prices are highly autocorrelated, so any forecast close to yesterday's price earns a high R², and an error measured in dollars says nothing until it is compared with a sensible baseline."
+ },
+ {
+  "i": 16,
+  "sec": 3,
+  "text": "This paper revisits my own MSc thesis with that in mind."
+ },
+ {
+  "i": 17,
+  "sec": 3,
+  "text": "It makes five contributions:"
+ },
+ {
+  "i": 18,
+  "sec": 3,
+  "text": "An unchanged reproduction of the original code, matched to the result files submitted with the thesis (Section 3)."
+ },
+ {
+  "i": 19,
+  "sec": 3,
+  "text": "A list of twelve problems in the original study, each with its measured effect (Section 4)."
+ },
+ {
+  "i": 20,
+  "sec": 3,
+  "text": "A re-run of the research question under a 2026 protocol, with 16 models, two test periods and significance tests against the random walk (Sections 5–6)."
+ },
+ {
+  "i": 21,
+  "sec": 3,
+  "text": "Evidence that, on the same data, volatility is predictable where direction is not (Section 6.4)."
+ },
+ {
+  "i": 22,
+  "sec": 3,
+  "text": "An account of why the mistakes happened and the working checklist that came out of it (Section 8)."
+ },
+ {
+  "i": 23,
+  "sec": 4,
+  "text": "2. The original study"
+ },
+ {
+  "i": 24,
+  "sec": 4,
+  "text": "Data. Daily closing prices from yfinance, 1 January 2010 to 12 October 2024 (Google to 1 January 2023): Apple as the \"stable\" stock, Tesla as the \"volatile\" one, plus Google and the S&P 500."
+ },
+ {
+  "i": 25,
+  "sec": 4,
+  "text": "Split. One chronological split: the first 80% for training, the last 20% for testing (about October 2021 to October 2024; 655–744 trading days)."
+ },
+ {
+  "i": 26,
+  "sec": 4,
+  "text": "Models. ARIMA(5,1,0); a two-layer LSTM with 50 units, a 60-day input window and MinMax-scaled prices, trained for 5 epochs; Prophet with yearly and weekly seasonality; and the hybrid, in which an LSTM predicts Prophet's residuals and the prediction is added back to Prophet's forecast."
+ },
+ {
+  "i": 27,
+  "sec": 4,
+  "text": "Metrics. MSE, RMSE, MAE, MAPE and R², computed on price levels."
+ },
+ {
+  "i": 28,
+  "sec": 4,
+  "text": "Claim. The hybrid is best on the stable stock, significantly so against the LSTM (p < 0.05), and worse than the LSTM on the volatile stock."
+ },
+ {
+  "i": 29,
+  "sec": 5,
+  "text": "3. Reproduction (E0)"
+ },
+ {
+  "i": 30,
+  "sec": 5,
+  "text": "I ran the original functions without changing a line, with the same tickers, dates and split, over three random seeds."
+ },
+ {
+  "i": 31,
+  "sec": 5,
+  "text": "The results match the CSV files submitted with the thesis: the ARIMA RMSE for Tesla and the S&P 500 is identical (160.56 and 554.37), and Apple differs by 3% because today's download is dividend-adjusted."
+ },
+ {
+  "i": 32,
+  "sec": 5,
+  "text": "The problems below therefore belong to the study, not to the reproduction."
+ },
+ {
+  "i": 33,
+  "sec": 5,
+  "text": "Table 1. RMSE on the thesis test split, in price units (mean of three seeds)."
+ },
+ {
+  "i": 34,
+  "sec": 5,
+  "text": "The last column is the random walk, which the thesis did not report."
+ },
+ {
+  "i": 35,
+  "sec": 5,
+  "text": "Figure 1. RMSE on the thesis split (log scale)."
+ },
+ {
+  "i": 36,
+  "sec": 5,
+  "text": "\"Hybrid (bugs fixed)\" removes both the 60-day misalignment and the test-data leak described in Section 4."
+ },
+ {
+  "i": 37,
+  "sec": 6,
+  "text": "4. Diagnosis: twelve problems (E1)"
+ },
+ {
+  "i": 38,
+  "sec": 6,
+  "text": "Listing 1 is the core of the hybrid as submitted."
+ },
+ {
+  "i": 39,
+  "sec": 6,
+  "text": "It contains two of the problems."
+ },
+ {
+  "i": 40,
+  "sec": 6,
+  "text": "Listing 1. hybrid_prophet_lstm_forecast in the submitted app.py (abridged; line 4 summarises the training code)."
+ },
+ {
+  "i": 41,
+  "sec": 6,
+  "text": "No random-walk baseline. The random walk scores R² 0.97–0.99 on every series; the LSTM's R² of 0.84–0.95 only looked strong because prices are autocorrelated."
+ },
+ {
+  "i": 42,
+  "sec": 6,
+  "text": "The best thesis model's RMSE is 1.9–5.6 times the random walk's."
+ },
+ {
+  "i": 43,
+  "sec": 6,
+  "text": "The LSTM learned to copy yesterday, imprecisely. Its forecasts correlate 0.970–0.986 with the previous day's price, it calls the direction correctly 47.4–49.9% of the time, and with 5 epochs it is undertrained, so its error is about three times that of copying yesterday exactly."
+ },
+ {
+  "i": 44,
+  "sec": 6,
+  "text": "Unequal horizons. ARIMA and Prophet forecast 655–744 days ahead from the end of training; the LSTM and the hybrid forecast one day ahead with yesterday's true price as input."
+ },
+ {
+  "i": 45,
+  "sec": 6,
+  "text": "\"LSTM beats ARIMA\" reflects the protocol, not the models."
+ },
+ {
+  "i": 46,
+  "sec": 6,
+  "text": "A 60-day misalignment in the hybrid (Listing 1, line 8)."
+ },
+ {
+  "i": 47,
+  "sec": 6,
+  "text": "The residual predicted for test day k is added to Prophet's forecast for day k + 60."
+ },
+ {
+  "i": 48,
+  "sec": 6,
+  "text": "Fixing only this reduces the hybrid's RMSE from 24.0 to 12.6 on Apple, 14.9 to 4.8 on Google and 114.9 to 66.6 on Tesla."
+ },
+ {
+  "i": 49,
+  "sec": 6,
+  "text": "Much of the thesis's \"hybrid struggles in volatile markets\" finding is this bug."
+ },
+ {
+  "i": 50,
+  "sec": 6,
+  "text": "Leakage (line 3)."
+ },
+ {
+  "i": 51,
+  "sec": 6,
+  "text": "The scaler is fitted on training and test residuals together, so the model knows the test range."
+ },
+ {
+  "i": 52,
+  "sec": 6,
+  "text": "Fitting it on training data only raises the error on three of four series (Tesla 66.6 → 130.3, Google 4.8 → 9.4, Apple 12.6 → 13.5) and lowers it on the S&P 500 (153.2 → 131.8)."
+ },
+ {
+  "i": 53,
+  "sec": 6,
+  "text": "Different test samples. The hybrid is scored on the test period minus its first 60 days; the other models on all of it."
+ },
+ {
+  "i": 54,
+  "sec": 6,
+  "text": "MinMax scaling of price levels cannot extrapolate. The training maximum maps to 1, so the LSTM cannot forecast a new high."
+ },
+ {
+  "i": 55,
+  "sec": 6,
+  "text": "On the 2025–2026 test period this setting is the worst of all models, 11.8 times the random walk's error."
+ },
+ {
+  "i": 56,
+  "sec": 6,
+  "text": "The conclusion contradicts the submitted results. The thesis names the hybrid best on Apple; the submitted APPL_predict_results.csv reports RMSE 8.8 for the LSTM and 25.7 for the hybrid, with the hybrid's R² at −0.06."
+ },
+ {
+  "i": 57,
+  "sec": 6,
+  "text": "Methods described but not implemented. The submitted code has no t-test behind the reported p < 0.05, no volume, moving-average or volatility features despite the described feature selection, no interpolation and no dropout tuning."
+ },
+ {
+  "i": 58,
+  "sec": 6,
+  "text": "K-fold appears only in an earlier version, and is not valid for time series."
+ },
+ {
+  "i": 59,
+  "sec": 6,
+  "text": "Metrics. MSE is not comparable across series (the S&P 500's is hundreds of times Apple's), R² on price levels is uninformative, and MAPE inflates errors on low-priced stocks."
+ },
+ {
+  "i": 60,
+  "sec": 6,
+  "text": "Sample. Two main stocks, one split, one training run: no estimate of variance."
+ },
+ {
+  "i": 61,
+  "sec": 6,
+  "text": "Engineering. Virtual environments, node_modules and a 1.4 GB archive were committed; versions were not pinned and requirements.txt omitted TensorFlow and statsmodels."
+ },
+ {
+  "i": 62,
+  "sec": 7,
+  "text": "5. A 2026 protocol (E2)"
+ },
+ {
+  "i": 63,
+  "sec": 7,
+  "text": "Data. 20 US stocks and ETFs (AAPL, TSLA, GOOG, MSFT, AMZN, NVDA, JPM, XOM, JNJ, PG, KO, WMT, CAT, BA, NFLX, AMD, PFE, DIS, SPY, QQQ), daily OHLCV adjusted for splits and dividends, January 2010 to September 2026, with SPY, VIX and the 10-year Treasury yield as exogenous series."
+ },
+ {
+  "i": 64,
+  "sec": 7,
+  "text": "Adjustment matters: Apple's 4-for-1 split in August 2020 would otherwise appear as a one-day log return of ln(1/4) ≈ −1.39."
+ },
+ {
+  "i": 65,
+  "sec": 7,
+  "text": "Target. The log return over the next h trading days, h ∈ {1, 5, 20}."
+ },
+ {
+  "i": 66,
+  "sec": 7,
+  "text": "Test period. 3 November 2025 to 1 September 2026, with a forecast origin on every trading day: 208 origins × 20 tickers = 4,160 forecasts per horizon."
+ },
+ {
+  "i": 67,
+  "sec": 7,
+  "text": "The period begins after the foundation models were released, so it cannot appear in their pre-training data."
+ },
+ {
+  "i": 68,
+  "sec": 7,
+  "text": "Training. Statistical models use only data up to each origin (ARIMA and ETS re-estimated every 20 origins and updated daily; Prophet refitted at every origin, 4,160 fits)."
+ },
+ {
+  "i": 69,
+  "sec": 7,
+  "text": "Neural networks and gradient-boosted trees are trained once on data before 31 October 2025 and frozen; no target crosses into the test period."
+ },
+ {
+  "i": 70,
+  "sec": 7,
+  "text": "Models (16, scored against the random walk). Random walk with drift; AutoARIMA and AutoETS (statsforecast); the thesis family: Prophet, the price-level LSTM (thesis setting, leak removed), a return LSTM trained on the panel, and the hybrid with the misalignment fixed; PatchTST and NHITS (NeuralForecast); gradient-boosted trees on four data versions (Section 6.3); and zero-shot foundation models Chronos-Bolt-base (released November 2024), Chronos-2 (October 2025) and TimesFM 2.5 (September 2025)."
+ },
+ {
+  "i": 71,
+  "sec": 7,
+  "text": "Metrics and tests. MAE relative to the random walk (below 1 beats it), out-of-sample R² against the random walk, directional accuracy compared with always predicting a rise, 80% interval coverage, pinball loss, and at h = 1 the annualised Sharpe ratio of a long-short rule after 2 basis points of cost."
+ },
+ {
+  "i": 72,
+  "sec": 7,
+  "text": "Each model is compared with the random walk by a Diebold-Mariano test on the cross-sectional mean loss differential, with a Newey-West variance at lag h − 1 and the Harvey-Leybourne-Newbold small-sample correction."
+ },
+ {
+  "i": 73,
+  "sec": 8,
+  "text": "6. Results"
+ },
+ {
+  "i": 74,
+  "sec": 8,
+  "text": "6.1 Main test period, November 2025 – September 2026"
+ },
+ {
+  "i": 75,
+  "sec": 8,
+  "text": "Figure 2. MAE relative to the random walk at 1, 5 and 20 days (log scale)."
+ },
+ {
+  "i": 76,
+  "sec": 8,
+  "text": "Red: foundation models; orange: the thesis family; grey: statistical, gradient-boosted and other deep models."
+ },
+ {
+  "i": 77,
+  "sec": 8,
+  "text": "Table 2. One-day horizon, 4,160 forecasts per model. p is the Diebold-Mariano test against the random walk; a dash means the model produces no interval."
+ },
+ {
+  "i": 78,
+  "sec": 8,
+  "text": "No model is significantly more accurate than the random walk."
+ },
+ {
+  "i": 79,
+  "sec": 8,
+  "text": "The best (random walk with drift, gradient-boosted trees, AutoETS) tie it at relative MAE 1.000–1.002; every model with p worse."
+ },
+ {
+  "i": 80,
+  "sec": 8,
+  "text": "The ranking at 5 and 20 days is similar: the best models sit at 0.998–1.008 with p above 0.6, the foundation models at 1.011–1.088, and both Chronos models are significantly worse than the random walk at the 5% level."
+ },
+ {
+  "i": 81,
+  "sec": 8,
+  "text": "At 20 days the gradient-boosted models call the direction correctly 54.1–54.5% of the time, the same as always predicting a rise (54.4%)."
+ },
+ {
+  "i": 82,
+  "sec": 8,
+  "text": "The foundation models' median forecasts move by 0.4–0.7% a day, but those moves are essentially uncorrelated with what happened (−0.16 for Chronos-Bolt at 20 days), so they add noise to a near-zero signal."
+ },
+ {
+  "i": 83,
+  "sec": 8,
+  "text": "Their strength is uncertainty: TimesFM 2.5's 80% intervals cover 84.6% of outcomes and Chronos-Bolt's 80.0%."
+ },
+ {
+  "i": 84,
+  "sec": 8,
+  "text": "The Sharpe ratios are not distinguishable: with 208 days (0.83 years) their standard error is roughly ±1.1–1.4, so 1.44 for gradient-boosted trees and 1.18 for buy-and-hold are within noise."
+ },
+ {
+  "i": 85,
+  "sec": 8,
+  "text": "Prophet, which has no autoregressive term, forecasts a return to its trend line every day; the price-level LSTM cannot forecast above its training maximum."
+ },
+ {
+  "i": 86,
+  "sec": 8,
+  "text": "6.2 Robustness: January 2023 – October 2025 (E3)"
+ },
+ {
+  "i": 87,
+  "sec": 8,
+  "text": "I re-ran the less expensive models on an earlier period: 711 origins × 20 tickers = 14,220 forecasts per horizon, training ending 30 December 2022."
+ },
+ {
+  "i": 88,
+  "sec": 8,
+  "text": "This period may overlap the foundation models' pre-training data, which can only favour them."
+ },
+ {
+  "i": 89,
+  "sec": 8,
+  "text": "Table 3. Relative MAE and Diebold-Mariano p against the random walk, January 2023 – October 2025."
+ },
+ {
+  "i": 90,
+  "sec": 8,
+  "text": "This was a strong bull market (equal-weight buy-and-hold Sharpe 1.63), so drift alone improves on the random walk by 3% at 20 days."
+ },
+ {
+  "i": 91,
+  "sec": 8,
+  "text": "The learned models improve by the same amount, and their 60.4% directional accuracy equals always predicting a rise: they learned that prices tend to go up, and nothing more."
+ },
+ {
+  "i": 92,
+  "sec": 8,
+  "text": "The only p p = 0.04), one result among 30 model-horizon pairs, which does not survive a multiple-comparison correction."
+ },
+ {
+  "i": 93,
+  "sec": 8,
+  "text": "The foundation models rank last again."
+ },
+ {
+  "i": 94,
+  "sec": 8,
+  "text": "6.3 What better data buys (E4)"
+ },
+ {
+  "i": 95,
+  "sec": 8,
+  "text": "Holding the learner fixed (gradient-boosted trees with quantile loss), I varied only the data: (A) one model per ticker on its own lagged returns, the thesis's information set; (B) one model on the 20-ticker panel; (C) B plus OHLCV features (5-, 20- and 60-day returns and volatility, distance from moving averages, volume z-score, intraday range); (D) C plus market and macro series (lagged SPY return, VIX level and change, 10-year yield change)."
+ },
+ {
+  "i": 96,
+  "sec": 8,
+  "text": "Figure 3. Data versions A–D."
+ },
+ {
+  "i": 97,
+  "sec": 8,
+  "text": "Left: MAE relative to the random walk."
+ },
+ {
+  "i": 98,
+  "sec": 8,
+  "text": "Right: directional accuracy; dashed lines are the always-up rate for each horizon."
+ },
+ {
+  "i": 99,
+  "sec": 8,
+  "text": "Table 4. Gradient-boosted trees on four data versions, November 2025 – September 2026."
+ },
+ {
+  "i": 100,
+  "sec": 8,
+  "text": "More and better data barely moves point accuracy: at most 1% (20 days, A to D), and nothing is significant."
+ },
+ {
+  "i": 101,
+  "sec": 8,
+  "text": "The gain is in the intervals: volatility features lower pinball loss by about 0.8%, because volatility is predictable (Section 6.4)."
+ },
+ {
+  "i": 102,
+  "sec": 8,
+  "text": "The larger gain from data work is avoiding mistakes: adjusted prices, returns rather than levels, features dated no later than the origin, and targets that never cross into the test period together bring the thesis family from 3–12 times the random walk's error back to about 1.0 (return LSTM 1.010)."
+ },
+ {
+  "i": 103,
+  "sec": 8,
+  "text": "6.4 Volatility is predictable (E5)"
+ },
+ {
+  "i": 104,
+  "sec": 8,
+  "text": "With the same tickers and origins, I changed the target to realised volatility over the next 20 days."
+ },
+ {
+  "i": 105,
+  "sec": 8,
+  "text": "Figure 4. Twenty-day realised volatility."
+ },
+ {
+  "i": 106,
+  "sec": 8,
+  "text": "Left: MAE relative to the naive forecast (last 20 days' volatility)."
+ },
+ {
+  "i": 107,
+  "sec": 8,
+  "text": "Right: correlation with realised volatility; the axis starts at 0.5."
+ },
+ {
+  "i": 108,
+  "sec": 8,
+  "text": "Table 5. Twenty-day realised volatility, 4,160 forecasts. p is the Diebold-Mariano test against the naive forecast."
+ },
+ {
+  "i": 109,
+  "sec": 8,
+  "text": "Gradient-boosted trees reduce the error of 20-day volatility forecasts by 20% (relative MAE 0.802, out-of-sample R² +32.8%)."
+ },
+ {
+  "i": 110,
+  "sec": 8,
+  "text": "The effect is large but the evidence is only marginally significant (DM p = 0.048), for a clear reason: adjacent 20-day windows overlap by 19 days, so each ticker contributes roughly 208 ÷ 20 ≈ 10 independent observations, and the 20 tickers move together when VIX moves."
+ },
+ {
+  "i": 111,
+  "sec": 8,
+  "text": "Two models were tested against the naive forecast; a Bonferroni correction gives 0.048 × 2 = 0.096, above 0.05."
+ },
+ {
+  "i": 112,
+  "sec": 8,
+  "text": "The defensible statement is the effect size with a qualified test, not a pass at 0.05."
+ },
+ {
+  "i": 113,
+  "sec": 8,
+  "text": "Direction is noise; volatility clusters."
+ },
+ {
+  "i": 114,
+  "sec": 9,
+  "text": "7. Discussion"
+ },
+ {
+  "i": 115,
+  "sec": 9,
+  "text": "Why nothing beats the random walk. The result is consistent with the efficient-markets view (Fama, 1970) and with the forecasting literature, where simple benchmarks are hard to beat out of sample (Welch & Goyal, 2008)."
+ },
+ {
+  "i": 116,
+  "sec": 9,
+  "text": "A regularity that public models can find in public daily prices is one that traders can exploit, and exploiting it removes it."
+ },
+ {
+  "i": 117,
+  "sec": 9,
+  "text": "Tying the random walk is the realistic ceiling for this task."
+ },
+ {
+  "i": 118,
+  "sec": 9,
+  "text": "What changed between 2024 and 2026. The tools changed a great deal: statsforecast and NeuralForecast run rolling-origin evaluation in a few lines, and a zero-shot foundation model produces 4,160 forecasts with intervals in seconds (Chronos-Bolt took 22 seconds on an M1 Pro)."
+ },
+ {
+  "i": 119,
+  "sec": 9,
+  "text": "On general benchmarks such as GIFT-Eval these models now beat classical methods."
+ },
+ {
+  "i": 120,
+  "sec": 9,
+  "text": "On daily stock returns their point accuracy did not improve, and should not be expected to."
+ },
+ {
+  "i": 121,
+  "sec": 9,
+  "text": "What changed most is the standard of evaluation: the first question a reviewer asks today is whether the model was compared with the random walk."
+ },
+ {
+  "i": 122,
+  "sec": 9,
+  "text": "What the thesis should have asked. A falsifiable version of the question is: can 2025 time-series foundation models, zero-shot, beat classical baselines on stock returns and volatility?"
+ },
+ {
+  "i": 123,
+  "sec": 9,
+  "text": "Stated as hypotheses: H1, no model is significantly more accurate than the random walk on returns (supported); H2, learned models beat naive and HAR forecasts of volatility (partly supported: GBDT at p = 0.048, HAR not significant); H3, foundation-model intervals are better calibrated than a Gaussian random walk (not tested here)."
+ },
+ {
+  "i": 124,
+  "sec": 10,
+  "text": "8. Reflection: what I got wrong, and how I work now"
+ },
+ {
+  "i": 125,
+  "sec": 10,
+  "text": "The errors in Section 4 are symptoms."
+ },
+ {
+  "i": 126,
+  "sec": 10,
+  "text": "This section is about the habits that produced them, because those habits would produce the same errors on any other problem."
+ },
+ {
+  "i": 127,
+  "sec": 10,
+  "text": "8.1 Why the mistakes happened"
+ },
+ {
+  "i": 128,
+  "sec": 10,
+  "text": "Nothing had to be beaten. The study compared four models with each other and never with a forecast they had to beat."
+ },
+ {
+  "i": 129,
+  "sec": 10,
+  "text": "That produces a ranking, and a ranking always has a winner, so the study could not fail."
+ },
+ {
+  "i": 130,
+  "sec": 10,
+  "text": "The question I should have asked first was \"what does doing nothing clever score?\""
+ },
+ {
+  "i": 131,
+  "sec": 10,
+  "text": "I read a high number as success. An R² of 0.9 looked like a good model."
+ },
+ {
+  "i": 132,
+  "sec": 10,
+  "text": "I did not ask what a trivial forecast would score on the same metric; the answer, 0.99, would have ended the thesis's argument on the first day."
+ },
+ {
+  "i": 133,
+  "sec": 10,
+  "text": "The write-up drifted from the code. The methods chapter describes a t-test, feature selection and interpolation that are not in the submitted code, and the conclusion contradicts the submitted results file."
+ },
+ {
+  "i": 134,
+  "sec": 10,
+  "text": "I wrote what I had planned and believed, and did not check each sentence against an output."
+ },
+ {
+  "i": 135,
+  "sec": 10,
+  "text": "Nothing forced the predictions to line up. The 60-day shift survived because forecasts and targets were matched by array position, never by date, and no test checked that day k's forecast was compared with day k's price."
+ },
+ {
+  "i": 136,
+  "sec": 10,
+  "text": "The leak survived because preprocessing was fitted before the split rather than inside it."
+ },
+ {
+  "i": 137,
+  "sec": 10,
+  "text": "One run was treated as the answer. One split, one training run, no second period."
+ },
+ {
+  "i": 138,
+  "sec": 10,
+  "text": "With no variance, I could not tell a result from noise, and neither could a reader."
+ },
+ {
+  "i": 139,
+  "sec": 10,
+  "text": "I could not have re-run it myself. An unpinned environment and a repository full of build artefacts meant that even I could not reproduce the numbers later."
+ },
+ {
+  "i": 140,
+  "sec": 10,
+  "text": "A result nobody can re-run, including its author, cannot be corrected."
+ },
+ {
+  "i": 141,
+  "sec": 10,
+  "text": "8.2 What I learned"
+ },
+ {
+  "i": 142,
+  "sec": 10,
+  "text": "A model's score is a claim about a comparison. Without a baseline and a test, it is not yet a result."
+ },
+ {
+  "i": 143,
+  "sec": 10,
+  "text": "The evaluation is designed before the model, not after. The split, the baseline, the metric and the bar to clear decide what the study can conclude."
+ },
+ {
+  "i": 144,
+  "sec": 10,
+  "text": "Changing them after seeing results is how a study ends up proving what its author hoped."
+ },
+ {
+  "i": 145,
+  "sec": 10,
+  "text": "Bugs hide in summary tables. Neither bug was visible in the table of RMSEs."
+ },
+ {
+  "i": 146,
+  "sec": 10,
+  "text": "Both appeared only when I aligned forecasts to dates and refitted preprocessing on training data alone."
+ },
+ {
+  "i": 147,
+  "sec": 10,
+  "text": "An honest negative result is useful. Accepting that daily returns are not predictable is what led to the question that was answerable: volatility (Section 6.4)."
+ },
+ {
+  "i": 148,
+  "sec": 10,
+  "text": "Better tools do not fix the question. The 2026 tools made the re-run fast and the foundation models are strong elsewhere, but none of them could beat the random walk on this target."
+ },
+ {
+  "i": 149,
+  "sec": 10,
+  "text": "Model capability is moving quickly; whether a result can be trusted still depends on the protocol."
+ },
+ {
+  "i": 150,
+  "sec": 10,
+  "text": "8.3 How I work now"
+ },
+ {
+  "i": 151,
+  "sec": 10,
+  "text": "Before I trust any model result, mine or anyone else's, I go through this list:"
+ },
+ {
+  "i": 152,
+  "sec": 10,
+  "text": "Baseline and bar first. Before building anything, write down the simplest baseline (the random walk, a rule, no model at all) and how much better the model must be to matter."
+ },
+ {
+  "i": 153,
+  "sec": 10,
+  "text": "Freeze the test set before looking. Split by time or by source."
+ },
+ {
+  "i": 154,
+  "sec": 10,
+  "text": "Nothing from the test set touches scaling, feature selection, prompts, few-shot examples or fine-tuning data."
+ },
+ {
+  "i": 155,
+  "sec": 10,
+  "text": "Join on keys, and assert it. Forecasts and targets are matched by date or ID, and the code fails if they do not line up."
+ },
+ {
+  "i": 156,
+  "sec": 10,
+  "text": "Same samples, same information. Every model sees the same rows, the same horizon and the same inputs, or the difference is stated next to the number."
+ },
+ {
+  "i": 157,
+  "sec": 10,
+  "text": "Effect size with uncertainty. Report how big the difference is, with a test, seeds or an interval, and correct for the number of comparisons."
+ },
+ {
+  "i": 158,
+  "sec": 10,
+  "text": "A second period or dataset before calling anything a finding."
+ },
+ {
+  "i": 159,
+  "sec": 10,
+  "text": "Every sentence traceable. Each claim in a write-up points to a file or a line of code, and tables are generated from result files rather than typed."
+ },
+ {
+  "i": 160,
+  "sec": 10,
+  "text": "The video's numbers are read directly from the result files; the tables on this page were transcribed from them, and generating them too is the next step."
+ },
+ {
+  "i": 161,
+  "sec": 10,
+  "text": "One-command re-run. Pinned environment, data snapshot, scripts in order."
+ },
+ {
+  "i": 162,
+  "sec": 10,
+  "text": "Ask whether the target is predictable at all, and change the question if it is not."
+ },
+ {
+  "i": 163,
+  "sec": 10,
+  "text": "The same list applies to the language-model systems I build now."
+ },
+ {
+  "i": 164,
+  "sec": 10,
+  "text": "On the Booking Agent, the rules and the confirmation gate are measured on a separate held-out set of 39 cases, and the page says plainly that this and the 30-case pilot are not a like-for-like before-and-after."
+ },
+ {
+  "i": 165,
+  "sec": 10,
+  "text": "On the PII detector, recall is reported per category rather than as one average, which is how the Chinese national-ID gap (23% before boundary-safe rules, 91% after) became visible."
+ },
+ {
+  "i": 166,
+  "sec": 10,
+  "text": "Evaluating a prompt or an agent has the same traps as evaluating a forecaster: no baseline, test examples leaking into prompts, and a single run read as a result."
+ },
+ {
+  "i": 167,
+  "sec": 11,
+  "text": "9. Limitations"
+ },
+ {
+  "i": 168,
+  "sec": 11,
+  "text": "Moirai 2 and TimesFM 3 were not run: Moirai 2's library pins PyTorch 2.4 and NumPy 1.x, which conflicted with the other packages, and TimesFM 3 is a separate package."
+ },
+ {
+  "i": 169,
+  "sec": 11,
+  "text": "Chronos-2 was run without covariates."
+ },
+ {
+  "i": 170,
+  "sec": 11,
+  "text": "LightGBM needed a system OpenMP library, so scikit-learn's HistGradientBoosting (the same family of algorithm) was used instead."
+ },
+ {
+  "i": 171,
+  "sec": 11,
+  "text": "The main test period is 11 months, which limits the power of the Sharpe comparison and the 20-day tests."
+ },
+ {
+  "i": 172,
+  "sec": 11,
+  "text": "No multiple-comparison correction was applied across 16 models and 3 horizons."
+ },
+ {
+  "i": 173,
+  "sec": 11,
+  "text": "No model was significantly better, so a correction would not change the conclusion."
+ },
+ {
+  "i": 174,
+  "sec": 11,
+  "text": "Only public daily data was used: no intraday data, news or order flow."
+ },
+ {
+  "i": 175,
+  "sec": 12,
+  "text": "10. Conclusion"
+ },
+ {
+  "i": 176,
+  "sec": 12,
+  "text": "The thesis's central claim does not survive reproduction: its models lose to the random walk by a wide margin, and part of what it reported came from a misalignment and a leak in the code."
+ },
+ {
+  "i": 177,
+  "sec": 12,
+  "text": "Under a current protocol, 16 models including 2025's foundation models do not significantly beat the random walk on daily stock returns, on two test periods."
+ },
+ {
+  "i": 178,
+  "sec": 12,
+  "text": "What is predictable on the same data is volatility."
+ },
+ {
+  "i": 179,
+  "sec": 12,
+  "text": "The broader lesson is that as models improve, the evaluation protocol, not the model, decides whether a result can be trusted."
+ },
+ {
+  "i": 180,
+  "sec": 12,
+  "text": "The habits behind the original errors, and the checklist I use now, are in Section 8."
+ },
+ {
+  "i": 181,
+  "sec": 13,
+  "text": "Reproducibility"
+ },
+ {
+  "i": 182,
+  "sec": 13,
+  "text": "The original code and result files, the new experiment code, all forecasts and scores, and a locked environment (uv, requirements.lock.txt) are kept together; the full run takes about one hour on an M1 Pro with 16 GB of memory."
+ },
+ {
+  "i": 183,
+  "sec": 13,
+  "text": "The repository is not yet public."
+ },
+ {
+  "i": 184,
+  "sec": 13,
+  "text": "A narrated walkthrough of the study is on the case page."
+ }
+]
