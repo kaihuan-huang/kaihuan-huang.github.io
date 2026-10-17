@@ -1054,6 +1054,11 @@
             }
           }
         ]
+      },
+      "paper": {
+        "src": "content/papers/thesis-revisit.html",
+        "title": "Does a Hybrid Prophet-LSTM Forecast Stock Prices? A 2026 Re-examination",
+        "desc": "A paper-style re-examination of my 2024 MSc thesis: reproduction, twelve measured problems, and a 2026 protocol with 16 models against the random walk."
       }
     },
     {
