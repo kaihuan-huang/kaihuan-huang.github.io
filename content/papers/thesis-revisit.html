@@ -7,23 +7,24 @@
 
 <section class="p-abs" lang="en">
   <h2>Abstract</h2>
-  <p>My 2024 MSc thesis proposed a hybrid of Prophet and a Long Short-Term Memory network (LSTM) for daily stock-price forecasting and reported that it was the best of four models on Apple, with a significant difference (p &lt; 0.05). Two years later I reproduced the original code unchanged and evaluated it against the baseline it never used: the random walk, which forecasts that tomorrow's price equals today's. The random walk had the lowest error on all four series; the best thesis model was 1.9–5.6 times worse and the proposed hybrid 7.0–12.8 times worse (RMSE). I list twelve problems in the original study and measure each, including a 60-day misalignment in the hybrid, a scaler fitted on test data, and a reported test that does not exist in the code. I then re-ran the question under a current protocol: 20 US stocks and ETFs, log returns at 1, 5 and 20 trading days, a forecast from each of 208 trading days between November 2025 and September 2026 using only earlier data, and 16 models including the 2025 time-series foundation models Chronos-2 and TimesFM 2.5, each compared with the random walk by a Diebold-Mariano test. No model was significantly more accurate than the random walk at any horizon; the foundation models were significantly less accurate at one day, though their 80% intervals were close to calibrated. The result held on a second test period (2023–2025). The predictable quantity was volatility: a gradient-boosted model reduced the error of 20-day volatility forecasts by 20% against a naive baseline (relative MAE 0.802, DM p = 0.048, uncorrected for two comparisons).</p>
+  <p>My 2024 MSc thesis proposed a hybrid of Prophet and a Long Short-Term Memory network (LSTM) for daily stock-price forecasting and reported that it was the best of four models on Apple, with a significant difference (p &lt; 0.05). Two years later I reproduced the original code unchanged and evaluated it against the baseline it never used: the random walk, which forecasts that tomorrow's price equals today's. The random walk had the lowest error on all four series; the best thesis model was 1.9–5.6 times worse and the proposed hybrid 7.0–12.8 times worse (RMSE). I list twelve problems in the original study and measure each, including a 60-day misalignment in the hybrid, a scaler fitted on test data, and a reported test that does not exist in the code. I then re-ran the question under a current protocol: 20 US stocks and ETFs, log returns at 1, 5 and 20 trading days, a forecast from each of 208 trading days between November 2025 and September 2026 using only earlier data, and 16 models including the 2025 time-series foundation models Chronos-2 and TimesFM 2.5, each compared with the random walk by a Diebold-Mariano test. No model was significantly more accurate than the random walk at any horizon; the foundation models were significantly less accurate at one day, though their 80% intervals were close to calibrated. The result held on a second test period (2023–2025). The predictable quantity was volatility: a gradient-boosted model reduced the error of 20-day volatility forecasts by 20% against a naive baseline (relative MAE 0.802, DM p = 0.048, uncorrected for two comparisons). I close with what went wrong in how I worked, not only in the code, and the checklist I now apply before trusting any model result, including the language-model systems I build.</p>
 </section>
 
 <section class="p-abs p-abs-zh" lang="zh">
   <h2>中文摘要 · 正文为英文</h2>
-  <p>2024 年的硕士论文提出用 Prophet + LSTM 混合模型预测日股价，结论是它在苹果股票上最好，且差异显著（p &lt; 0.05）。2026 年我用原代码原样复现，并加上论文从没用过的基准——随机游走（「明天的价格 = 今天的价格」）：它在 4 个序列上误差都最小，论文最好的模型差 1.9–5.6 倍，混合模型差 7.0–12.8 倍。我列出原研究的 12 个问题并逐条量化，包括混合模型的 60 天错位、缩放器在测试数据上拟合、论文报告的检验在代码里不存在。随后按现在的协议重做：20 只美股和 ETF、1 / 5 / 20 天对数收益率、2025-11 到 2026-09 每个交易日一个预测起点（共 208 个，只用之前的数据）、16 个模型（含 2025 年的 Chronos-2、TimesFM 2.5），每个都用 Diebold-Mariano 检验和随机游走比较。没有任何模型在任何步长上显著优于随机游走；基础模型在 1 天上显著更差，但 80% 区间接近校准。换 2023–2025 测试期结论不变。能预测的是波动率：梯度提升树把 20 天波动率的预测误差降低 20%（相对 MAE 0.802，DM p = 0.048，未做两次比较的校正）。</p>
+  <p>2024 年的硕士论文提出用 Prophet + LSTM 混合模型预测日股价，结论是它在苹果股票上最好，且差异显著（p &lt; 0.05）。2026 年我用原代码原样复现，并加上论文从没用过的基准——随机游走（「明天的价格 = 今天的价格」）：它在 4 个序列上误差都最小，论文最好的模型差 1.9–5.6 倍，混合模型差 7.0–12.8 倍。我列出原研究的 12 个问题并逐条量化，包括混合模型的 60 天错位、缩放器在测试数据上拟合、论文报告的检验在代码里不存在。随后按现在的协议重做：20 只美股和 ETF、1 / 5 / 20 天对数收益率、2025-11 到 2026-09 每个交易日一个预测起点（共 208 个，只用之前的数据）、16 个模型（含 2025 年的 Chronos-2、TimesFM 2.5），每个都用 Diebold-Mariano 检验和随机游走比较。没有任何模型在任何步长上显著优于随机游走；基础模型在 1 天上显著更差，但 80% 区间接近校准。换 2023–2025 测试期结论不变。能预测的是波动率：梯度提升树把 20 天波动率的预测误差降低 20%（相对 MAE 0.802，DM p = 0.048，未做两次比较的校正）。最后一节写我在做事方式上错在哪里（不只是代码），以及我现在相信任何模型结果之前都会过一遍的清单，包括我现在做的语言模型系统。</p>
 </section>
 
 <section>
   <h2><span class="mono">1</span>Introduction</h2>
   <p>Forecasting daily stock prices is a standard student project because the data is free and the target feels important. It is also a setting where a weak evaluation can make almost any model look good: prices are highly autocorrelated, so any forecast close to yesterday's price earns a high R², and an error measured in dollars says nothing until it is compared with a sensible baseline.</p>
-  <p>This paper revisits my own MSc thesis with that in mind. It makes four contributions:</p>
+  <p>This paper revisits my own MSc thesis with that in mind. It makes five contributions:</p>
   <ol>
     <li>An unchanged reproduction of the original code, matched to the result files submitted with the thesis (Section 3).</li>
     <li>A list of twelve problems in the original study, each with its measured effect (Section 4).</li>
     <li>A re-run of the research question under a 2026 protocol, with 16 models, two test periods and significance tests against the random walk (Sections 5–6).</li>
     <li>Evidence that, on the same data, volatility is predictable where direction is not (Section 6.4).</li>
+    <li>An account of why the mistakes happened and the working checklist that came out of it (Section 8).</li>
   </ol>
 </section>
 
@@ -201,11 +202,49 @@
   <p><b>Why nothing beats the random walk.</b> The result is consistent with the efficient-markets view (Fama, 1970) and with the forecasting literature, where simple benchmarks are hard to beat out of sample (Welch &amp; Goyal, 2008). A regularity that public models can find in public daily prices is one that traders can exploit, and exploiting it removes it. Tying the random walk is the realistic ceiling for this task.</p>
   <p><b>What changed between 2024 and 2026.</b> The tools changed a great deal: statsforecast and NeuralForecast run rolling-origin evaluation in a few lines, and a zero-shot foundation model produces 4,160 forecasts with intervals in seconds (Chronos-Bolt took 22 seconds on an M1 Pro). On general benchmarks such as GIFT-Eval these models now beat classical methods. On daily stock returns their point accuracy did not improve, and should not be expected to. What changed most is the standard of evaluation: the first question a reviewer asks today is whether the model was compared with the random walk.</p>
   <p><b>What the thesis should have asked.</b> A falsifiable version of the question is: can 2025 time-series foundation models, zero-shot, beat classical baselines on stock returns and volatility? Stated as hypotheses: H1, no model is significantly more accurate than the random walk on returns (supported); H2, learned models beat naive and HAR forecasts of volatility (partly supported: GBDT at <i>p</i> = 0.048, HAR not significant); H3, foundation-model intervals are better calibrated than a Gaussian random walk (not tested here).</p>
-  <p><b>Lessons for any modelling project.</b> Build the simplest baseline first and stop if a complex model cannot beat it. Treat a suspiciously good score as a symptom of leakage or misalignment. Compare every model on the same samples, horizon and information. Make every method in the write-up traceable to a line of code, and every conclusion to a results file. Re-run on another period before believing a result. Ask first whether the target is predictable at all.</p>
+</section>
+
+<section id="reflection" class="p-refl">
+  <h2><span class="mono">8</span>Reflection: what I got wrong, and how I work now</h2>
+  <p>The errors in Section 4 are symptoms. This section is about the habits that produced them, because those habits would produce the same errors on any other problem.</p>
+
+  <h3>8.1 Why the mistakes happened</h3>
+  <ol>
+    <li><b>Nothing had to be beaten.</b> The study compared four models with each other and never with a forecast they had to beat. That produces a ranking, and a ranking always has a winner, so the study could not fail. The question I should have asked first was "what does doing nothing clever score?"</li>
+    <li><b>I read a high number as success.</b> An R² of 0.9 looked like a good model. I did not ask what a trivial forecast would score on the same metric; the answer, 0.99, would have ended the thesis's argument on the first day.</li>
+    <li><b>The write-up drifted from the code.</b> The methods chapter describes a t-test, feature selection and interpolation that are not in the submitted code, and the conclusion contradicts the submitted results file. I wrote what I had planned and believed, and did not check each sentence against an output.</li>
+    <li><b>Nothing forced the predictions to line up.</b> The 60-day shift survived because forecasts and targets were matched by array position, never by date, and no test checked that day <i>k</i>'s forecast was compared with day <i>k</i>'s price. The leak survived because preprocessing was fitted before the split rather than inside it.</li>
+    <li><b>One run was treated as the answer.</b> One split, one training run, no second period. With no variance, I could not tell a result from noise, and neither could a reader.</li>
+    <li><b>I could not have re-run it myself.</b> An unpinned environment and a repository full of build artefacts meant that even I could not reproduce the numbers later. A result nobody can re-run, including its author, cannot be corrected.</li>
+  </ol>
+
+  <h3>8.2 What I learned</h3>
+  <ul>
+    <li><b>A model's score is a claim about a comparison.</b> Without a baseline and a test, it is not yet a result.</li>
+    <li><b>The evaluation is designed before the model, not after.</b> The split, the baseline, the metric and the bar to clear decide what the study can conclude. Changing them after seeing results is how a study ends up proving what its author hoped.</li>
+    <li><b>Bugs hide in summary tables.</b> Neither bug was visible in the table of RMSEs. Both appeared only when I aligned forecasts to dates and refitted preprocessing on training data alone.</li>
+    <li><b>An honest negative result is useful.</b> Accepting that daily returns are not predictable is what led to the question that was answerable: volatility (Section 6.4).</li>
+    <li><b>Better tools do not fix the question.</b> The 2026 tools made the re-run fast and the foundation models are strong elsewhere, but none of them could beat the random walk on this target. Model capability is moving quickly; whether a result can be trusted still depends on the protocol.</li>
+  </ul>
+
+  <h3>8.3 How I work now</h3>
+  <p>Before I trust any model result, mine or anyone else's, I go through this list:</p>
+  <ol class="p-check">
+    <li><b>Baseline and bar first.</b> Before building anything, write down the simplest baseline (the random walk, a rule, no model at all) and how much better the model must be to matter.</li>
+    <li><b>Freeze the test set before looking.</b> Split by time or by source. Nothing from the test set touches scaling, feature selection, prompts, few-shot examples or fine-tuning data.</li>
+    <li><b>Join on keys, and assert it.</b> Forecasts and targets are matched by date or ID, and the code fails if they do not line up.</li>
+    <li><b>Same samples, same information.</b> Every model sees the same rows, the same horizon and the same inputs, or the difference is stated next to the number.</li>
+    <li><b>Effect size with uncertainty.</b> Report how big the difference is, with a test, seeds or an interval, and correct for the number of comparisons.</li>
+    <li><b>A second period or dataset</b> before calling anything a finding.</li>
+    <li><b>Every sentence traceable.</b> Each claim in a write-up points to a file or a line of code, and tables are generated from result files rather than typed. The video's numbers are read directly from the result files; the tables on this page were transcribed from them, and generating them too is the next step.</li>
+    <li><b>One-command re-run.</b> Pinned environment, data snapshot, scripts in order.</li>
+    <li><b>Ask whether the target is predictable at all</b>, and change the question if it is not.</li>
+  </ol>
+  <p>The same list applies to the language-model systems I build now. On the <a href="booking-agent.html">Booking Agent</a>, the rules and the confirmation gate are measured on a separate held-out set of 39 cases, and the page says plainly that this and the 30-case pilot are not a like-for-like before-and-after. On the <a href="pii-detector.html">PII detector</a>, recall is reported per category rather than as one average, which is how the Chinese national-ID gap (23% before boundary-safe rules, 91% after) became visible. Evaluating a prompt or an agent has the same traps as evaluating a forecaster: no baseline, test examples leaking into prompts, and a single run read as a result.</p>
 </section>
 
 <section>
-  <h2><span class="mono">8</span>Limitations</h2>
+  <h2><span class="mono">9</span>Limitations</h2>
   <ul>
     <li>Moirai 2 and TimesFM 3 were not run: Moirai 2's library pins PyTorch 2.4 and NumPy 1.x, which conflicted with the other packages, and TimesFM 3 is a separate package. Chronos-2 was run without covariates.</li>
     <li>LightGBM needed a system OpenMP library, so scikit-learn's HistGradientBoosting (the same family of algorithm) was used instead.</li>
@@ -216,8 +255,8 @@
 </section>
 
 <section>
-  <h2><span class="mono">9</span>Conclusion</h2>
-  <p>The thesis's central claim does not survive reproduction: its models lose to the random walk by a wide margin, and part of what it reported came from a misalignment and a leak in the code. Under a current protocol, 16 models including 2025's foundation models do not significantly beat the random walk on daily stock returns, on two test periods. What is predictable on the same data is volatility. The broader lesson is that as models improve, the evaluation protocol, not the model, decides whether a result can be trusted.</p>
+  <h2><span class="mono">10</span>Conclusion</h2>
+  <p>The thesis's central claim does not survive reproduction: its models lose to the random walk by a wide margin, and part of what it reported came from a misalignment and a leak in the code. Under a current protocol, 16 models including 2025's foundation models do not significantly beat the random walk on daily stock returns, on two test periods. What is predictable on the same data is volatility. The broader lesson is that as models improve, the evaluation protocol, not the model, decides whether a result can be trusted. The habits behind the original errors, and the checklist I use now, are in <a href="#reflection">Section 8</a>.</p>
 </section>
 
 <section>

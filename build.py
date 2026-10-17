@@ -475,6 +475,11 @@ def build_case(i, kind, w, prev, nxt):
     <a href="{nxt['slug']}.html">{nxt['title']} →</a>
   </nav>"""
     secs = [({"en": "Problem", "zh": "问题"}, f'<p class="lead">{bi(w["problem"])}</p>')]
+    if w.get("reflection"):
+        r = w["reflection"]
+        more = f'<p class="mono"><a href="{w["slug"]}-paper.html#reflection">{bi(r["more"])}</a></p>' if w.get("paper") else ""
+        secs.append((r.get("h", {"en": "What I learned", "zh": "我学到了什么"}),
+                     '<ul class="approach">' + "".join(f"<li>{bi(x)}</li>" for x in r["items"]) + "</ul>" + more))
     if w.get("awards"):
         secs.append(({"en": "Recognition", "zh": "获奖"}, '<ul class="awards">' + "".join(f"<li>{bi(x)}</li>" for x in w["awards"]) + "</ul>"))
     if kind == "w":
