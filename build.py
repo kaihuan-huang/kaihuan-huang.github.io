@@ -491,7 +491,12 @@ def build_case(i, kind, w, prev, nxt):
                      f'<figcaption class="mono">{bi(y["cap"])}</figcaption></figure>'))
     if w.get("video"):
         v = w["video"]
-        secs.append(({"en": "Watch it run", "zh": "看它运行"}, f'<figure class="case-video"><video src="{v["src"]}" controls{"" if v.get("sound") else " muted"} playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'))
+        vid = f'{w["slug"]}-video'
+        chs = "".join(f'<button type="button" class="ch mono" data-seek="{vid}" data-t="{c["t"]}">'
+                      f'{int(c["t"]) // 60}:{int(c["t"]) % 60:02d} {bi(c["l"])}</button>' for c in v.get("chapters", []))
+        secs.append((v.get("h", {"en": "Watch it run", "zh": "看它运行"}),
+                     f'<figure class="case-video"><video id="{vid}" src="{v["src"]}" controls{"" if v.get("sound") else " muted"} playsinline preload="none" poster="{v.get("poster", "")}"></video><figcaption class="mono">{bi(v["cap"])}</figcaption></figure>'
+                     + (f'<div class="chapters">{chs}</div>' if chs else "")))
     if w.get("series"):
         eps = ""
         for n, e in enumerate(w["series"], 1):

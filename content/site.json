@@ -819,6 +819,244 @@
   ],
   "deep": [
     {
+      "slug": "thesis-revisit",
+      "title": "Revisiting my MSc thesis",
+      "kicker": {
+        "en": "Re-run of my York MSc thesis · Oct 2026",
+        "zh": "重做约克硕士论文 · 2026 年 10 月"
+      },
+      "type": {
+        "en": "Time-series forecasting · evaluation design",
+        "zh": "时间序列预测 · 评估设计"
+      },
+      "pitch": {
+        "en": "My 2024 thesis said a hybrid Prophet-LSTM forecasts stock prices well. Re-run in 2026, it loses to “tomorrow = today”, and so does every model, including 2025's foundation models.",
+        "zh": "2024 年的论文说 Prophet-LSTM 混合模型能很好地预测股价。2026 年重跑：它输给「明天 = 今天」，所有模型都一样，包括 2025 年的基础模型。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "Sole author, of the thesis (2024) and of the re-run (2026)",
+            "zh": "独立完成：2024 年论文与 2026 年重做"
+          }
+        ],
+        [
+          "Stack",
+          "Python · statsforecast · NeuralForecast · Chronos-2 · TimesFM 2.5 · scikit-learn · uv"
+        ],
+        [
+          "Data",
+          {
+            "en": "Public daily prices: 20 US stocks and ETFs, 2010 → Sep 2026, plus VIX and the 10-year yield",
+            "zh": "公开日线：20 只美股与 ETF，2010 → 2026-09，外加 VIX 和 10 年期美债收益率"
+          }
+        ],
+        [
+          "Status",
+          {
+            "en": "Experiments complete; code local, not yet published",
+            "zh": "实验完成；代码在本地，尚未公开"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "The thesis compared four models on one 80/20 split and called the hybrid best on Apple, with p < 0.05. It never compared against the simplest forecast, and its numbers didn't hold up when I re-ran them.",
+        "zh": "论文在一次 80/20 切分上比较四个模型，结论是苹果股票上混合模型最好、p < 0.05。它从没和最简单的预测比过，而且重跑时数字站不住。"
+      },
+      "approach": [
+        {
+          "en": "Reproduced the original code unchanged with three seeds; it matches the thesis's own result files, so every problem found is the thesis's, not the re-run's.",
+          "zh": "原代码一行不改、3 个种子重跑，和论文自带的结果文件对得上：找到的问题都属于论文本身，不是复现偏差。"
+        },
+        {
+          "en": "Listed 12 problems and measured each: no random-walk baseline, unequal horizons, a 60-day misalignment in the hybrid, a scaler fitted on test data, a conclusion its own CSV contradicts.",
+          "zh": "列出 12 个问题并逐条量化：没有随机游走基准、步长不一致、混合模型 60 天错位、缩放器在测试数据上拟合、结论和自带 CSV 矛盾。"
+        },
+        {
+          "en": "Rebuilt the study: forecast returns at 1, 5 and 20 days from every trading day (208 origins × 20 tickers), with the test period after the foundation models were released.",
+          "zh": "重新设计实验：从每个交易日（208 个起点 × 20 只）预测 1、5、20 天收益率，测试期在基础模型发布之后。"
+        },
+        {
+          "en": "Scored 16 models against the random walk with Diebold-Mariano tests, checked a second test period (2023–2025), and tested whether volatility is predictable instead.",
+          "zh": "16 个模型都和随机游走比，并做 Diebold-Mariano 检验；用第二段测试期（2023–2025）复查；再测试波动率是否可预测。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Reproduce",
+          "zh": "复现"
+        },
+        {
+          "en": "Find the errors",
+          "zh": "找错"
+        },
+        {
+          "en": "2026 protocol",
+          "zh": "2026 协议"
+        },
+        {
+          "en": "16 models vs random walk",
+          "zh": "16 个模型对随机游走"
+        },
+        {
+          "en": "Second test period",
+          "zh": "第二段测试期",
+          "gate": true
+        },
+        {
+          "en": "Conclusion",
+          "zh": "结论"
+        }
+      ],
+      "metrics": [
+        {
+          "v": "7–13×",
+          "l": {
+            "en": "the thesis's hybrid error versus “tomorrow = today” (RMSE, 4 series)",
+            "zh": "论文混合模型的误差是「明天 = 今天」的倍数（RMSE，4 个序列）"
+          },
+          "src": "york-irp-revisit/results/e01.json"
+        },
+        {
+          "v": "0 / 16",
+          "l": {
+            "en": "models significantly better than the random walk, at 1, 5 or 20 days",
+            "zh": "个模型在 1、5、20 天上显著优于随机游走"
+          },
+          "src": "york-irp-revisit/results/e2_scores.csv"
+        },
+        {
+          "v": "−20%",
+          "l": {
+            "en": "volatility forecast error versus the naive baseline (p = 0.048)",
+            "zh": "波动率预测误差，相对朴素基准（p = 0.048）"
+          },
+          "src": "york-irp-revisit/results/e5_volatility.csv"
+        },
+        {
+          "v": "12",
+          "l": {
+            "en": "problems in the original study, each one measured",
+            "zh": "个原论文问题，逐条量化"
+          },
+          "src": "Vault · IRP 2026 revisit, §3"
+        }
+      ],
+      "limits": [
+        {
+          "en": "Moirai 2 and TimesFM 3 were not run (dependency conflicts); Chronos-2 was used without covariates.",
+          "zh": "没跑 Moirai 2 和 TimesFM 3（依赖冲突）；Chronos-2 没有用协变量。"
+        },
+        {
+          "en": "The main test period is 11 months; Sharpe ratios and 20-day tests have little power.",
+          "zh": "主测试期只有 11 个月；Sharpe 和 20 天步长的检验功效有限。"
+        },
+        {
+          "en": "No multiple-comparison correction; with no model significantly better, a correction would not change the conclusion.",
+          "zh": "没做多重比较校正；本来就没有显著更好的模型，校正不改变结论。"
+        },
+        {
+          "en": "Point forecasts only on public daily data; no intraday data, news or order flow.",
+          "zh": "只用公开日线数据；没有日内数据、新闻或订单流。"
+        }
+      ],
+      "next": [
+        {
+          "en": "Publish the repository with the locked environment so the whole study re-runs in one command.",
+          "zh": "公开代码仓库和锁定的环境，一条命令复现全部实验。"
+        },
+        {
+          "en": "Feed VIX and SPY to Chronos-2 as covariates, and add Moirai 2 in its own environment.",
+          "zh": "把 VIX、SPY 作为协变量喂给 Chronos-2，并在单独环境里补上 Moirai 2。"
+        }
+      ],
+      "sheet_note": {
+        "en": "Narrated video · results from the re-run",
+        "zh": "讲解视频 · 重做实验的结果"
+      },
+      "img": "thesis-revisit-chart.jpg",
+      "alt": "Bar chart: forecast error relative to the random walk for 13 models; none is below 1",
+      "video": {
+        "src": "../assets/video/thesis-revisit.mp4",
+        "poster": "../assets/img/works/thesis-revisit.jpg",
+        "sound": true,
+        "h": {
+          "en": "Watch the re-run",
+          "zh": "看重做过程"
+        },
+        "cap": {
+          "en": "6:30 · English narration, English and Chinese subtitles",
+          "zh": "6:30 · 英文讲解，中英字幕"
+        },
+        "chapters": [
+          {
+            "t": 0.0,
+            "l": {
+              "en": "The question",
+              "zh": "开场"
+            }
+          },
+          {
+            "t": 32.8,
+            "l": {
+              "en": "The 2024 thesis",
+              "zh": "原论文"
+            }
+          },
+          {
+            "t": 56.7,
+            "l": {
+              "en": "The dumb baseline",
+              "zh": "最笨的基准"
+            }
+          },
+          {
+            "t": 110.6,
+            "l": {
+              "en": "What went wrong",
+              "zh": "找 bug"
+            }
+          },
+          {
+            "t": 196.3,
+            "l": {
+              "en": "A 2026 protocol",
+              "zh": "新协议"
+            }
+          },
+          {
+            "t": 247.2,
+            "l": {
+              "en": "Results",
+              "zh": "结果"
+            }
+          },
+          {
+            "t": 317.1,
+            "l": {
+              "en": "Another test period",
+              "zh": "换一段"
+            }
+          },
+          {
+            "t": 338.7,
+            "l": {
+              "en": "What is predictable",
+              "zh": "换个问题"
+            }
+          },
+          {
+            "t": 361.8,
+            "l": {
+              "en": "Lessons",
+              "zh": "经验"
+            }
+          }
+        ]
+      }
+    },
+    {
       "slug": "bilingual-reader",
       "title": "Bilingual Note Reader",
       "kicker": {

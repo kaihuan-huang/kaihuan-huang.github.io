@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Revisiting my MSc thesis · Kaihuan Huang</title>
+<meta name="description" content="My 2024 thesis said a hybrid Prophet-LSTM forecasts stock prices well. Re-run in 2026, it loses to “tomorrow = today”, and so does every model, including 2025&#x27;s foundation models.">
+<link rel="canonical" href="https://kaihuan-huang.github.io/works/thesis-revisit.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kaihuan-huang.github.io/works/thesis-revisit.html">
+<meta property="og:title" content="Revisiting my MSc thesis · Kaihuan Huang">
+<meta property="og:description" content="My 2024 thesis said a hybrid Prophet-LSTM forecasts stock prices well. Re-run in 2026, it loses to “tomorrow = today”, and so does every model, including 2025&#x27;s foundation models.">
+<meta property="og:image" content="https://kaihuan-huang.github.io/assets/img/works/thesis-revisit-chart.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f4f0e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120f" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<link rel="stylesheet" href="../assets/css/folio.css?v=5">
+<script>(function(){var r=document.documentElement,l=null,s=null;try{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='zh')localStorage.setItem('kh-lang',q);l=localStorage.getItem('kh-lang');s=sessionStorage.getItem('kh-intro')}catch(e){}r.setAttribute('data-lang',l||((navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en'));if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('no-intro')})();</script>
+<script src="../assets/js/folio.js?v=5" defer></script>
+</head>
+<body>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="zh">跳到正文</span></a>
+<nav class="nav" id="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="../index.html"><span class="stamp">KH</span><span class="b-txt">Kaihuan Huang — Folio</span></a>
+    <div class="nav-r">
+      <a class="pill hide-sm" href="../resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a>
+      <button class="pill" id="lang-btn" type="button" title="Switch language / 切换语言">中</button>
+      <button class="pill" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu"><span lang="en">Menu</span><span lang="zh">目录</span></button>
+    </div>
+  </div>
+</nav>
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+  <button class="pill menu-close" id="menu-close" type="button"><span lang="en">Close</span><span lang="zh">关闭</span></button>
+  <div class="wrap">
+    <ol>
+      <li><a href="../index.html#top"><span class="m-num">00</span><span class="m-title"><span lang="en">Home</span><span lang="zh">首页</span></span><span class="m-tag"><span lang="en">Start</span><span lang="zh">开始</span></span></a></li>
+<li><a href="../works/booking-agent.html"><span class="m-num">01</span><span class="m-title">Booking Agent</span><span class="m-tag"><span lang="en">Bilingual LLM booking agent · 2026</span><span lang="zh">双语 LLM 预订助手 · 2026</span></span></a></li>
+<li><a href="../works/pos-platform.html"><span class="m-num">02</span><span class="m-title">POS Platform</span><span class="m-tag"><span lang="en">Restaurant backend · 2026</span><span lang="zh">餐厅 POS 后端 · 2026</span></span></a></li>
+<li><a href="../works/refund-agent.html"><span class="m-num">03</span><span class="m-title">Refund Agent</span><span class="m-tag"><span lang="en">Tool-calling agent · 2026</span><span lang="zh">工具调用 Agent · 2026</span></span></a></li>
+<li><a href="../works/pii-detector.html"><span class="m-num">04</span><span class="m-title">PII Detector</span><span class="m-tag"><span lang="en">In-browser privacy model · 2026</span><span lang="zh">浏览器内隐私模型 · 2026</span></span></a></li>
+<li><a href="../works/career-ops.html"><span class="m-num">05</span><span class="m-title">Career OPS</span><span class="m-tag"><span lang="en">Job intelligence and interview platform · 2026</span><span lang="zh">求职情报与面试平台 · 2026</span></span></a></li>
+<li><a href="../works/llm-arch-cards.html"><span class="m-num">06</span><span class="m-title">LLM Arch Cards</span><span class="m-tag"><span lang="en">Model internals · 2026</span><span lang="zh">模型内部结构 · 2026</span></span></a></li>
+<li><a href="../works/thesis-revisit.html"><span class="m-num">07</span><span class="m-title">Revisiting my MSc thesis</span><span class="m-tag"><span lang="en">Time-series forecasting · evaluation design</span><span lang="zh">时间序列预测 · 评估设计</span></span></a></li>
+<li><a href="../works/bilingual-reader.html"><span class="m-num">08</span><span class="m-title">Bilingual Note Reader</span><span class="m-tag"><span lang="en">Local speech synthesis · Obsidian · GPU home server</span><span lang="zh">本地语音合成 · Obsidian · 家用 GPU 服务器</span></span></a></li>
+<li><a href="../works/study-video.html"><span class="m-num">09</span><span class="m-title">Narrated Study Videos</span><span class="m-tag"><span lang="en">Script-to-video pipeline · local speech synthesis · Playwright · ffmpeg</span><span lang="zh">脚本生成视频 · 本地语音合成 · Playwright · ffmpeg</span></span></a></li>
+<li><a href="../works/dispute-ingest.html"><span class="m-num">10</span><span class="m-title">Dispute Ingestion Service</span><span class="m-tag"><span lang="en">Card disputes · Go · synthetic data</span><span lang="zh">银行卡争议 · Go · 合成数据</span></span></a></li>
+<li><a href="../works/governance-platform.html"><span class="m-num">11</span><span class="m-title">AI Governance Platform</span><span class="m-tag"><span lang="en">Privacy & policy platform · Sep 2026</span><span lang="zh">隐私与策略平台 · 2026 年 9 月</span></span></a></li>
+<li><a href="../works/commander-ops.html"><span class="m-num">12</span><span class="m-title">Remote Commander Ops</span><span class="m-tag"><span lang="en">macOS supervision & monitoring · Oct 2026</span><span lang="zh">macOS 进程监督与监控 · 2026 年 10 月</span></span></a></li>
+<li><a href="../works/ipot.html"><span class="m-num">13</span><span class="m-title">IPOT Restaurant Platform</span><span class="m-tag"><span lang="en">Production · restaurant operations</span><span lang="zh">生产环境 · 餐饮运营</span></span></a></li>
+<li><a href="../works/loan-draw-review.html"><span class="m-num">14</span><span class="m-title">Loan-Draw Review Controls</span><span class="m-tag"><span lang="en">Fintech lending · merged Oct 2026</span><span lang="zh">金融科技借贷 · 2026 年 10 月合并</span></span></a></li>
+<li><a href="../works/reea.html"><span class="m-num">15</span><span class="m-title">REEA</span><span class="m-tag"><span lang="en">AI real-estate platform · 2023–24</span><span lang="zh">AI 房地产平台 · 2023–24</span></span></a></li>
+<li><a href="../works/lightup.html"><span class="m-num">16</span><span class="m-title">LightUp</span><span class="m-tag"><span lang="en">Charity giving platform · Gold, London Design Award</span><span lang="zh">慈善捐赠平台 · 伦敦设计奖金奖</span></span></a></li>
+<li><a href="../resume.html"><span class="m-num">17</span><span class="m-title"><span lang="en">Résumé</span><span lang="zh">简历</span></span><span class="m-tag"><span lang="en">Web · print</span><span lang="zh">网页 · 可打印</span></span></a></li>
+<li><a href="../index.html#decisions"><span class="m-num">D</span><span class="m-title"><span lang="en">How I decide</span><span lang="zh">我怎么做决定</span></span><span class="m-tag"><span lang="en">Three decisions</span><span lang="zh">三个决定</span></span></a></li>
+<li><a href="../archive.html"><span class="m-num">A</span><span class="m-title"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></span><span class="m-tag">2023 — 2025</span></a></li>
+<li><a href="../notes/"><span class="m-num">18</span><span class="m-title"><span lang="en">Notes</span><span lang="zh">笔记</span></span><span class="m-tag"><span lang="en">Writing</span><span lang="zh">文章</span></span></a></li>
+<li><a href="../index.html#contact"><span class="m-num">19</span><span class="m-title"><span lang="en">Contact</span><span lang="zh">联系</span></span><span class="m-tag"><span lang="en">Say hi</span><span lang="zh">打个招呼</span></span></a></li>
+    </ol>
+    <div class="m-foot"><span><span lang="en">San Francisco Bay Area</span><span lang="zh">旧金山湾区</span></span><a href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a><a href="https://github.com/kaihuan-huang">GitHub</a></div>
+  </div>
+</div>
+<main id="main" class="case">
+  <header class="wrap case-head">
+    <div class="hero-top mono"><span>Nº07 · <span lang="en">Re-run of my York MSc thesis · Oct 2026</span><span lang="zh">重做约克硕士论文 · 2026 年 10 月</span></span><span><span lang="en">Time-series forecasting · evaluation design</span><span lang="zh">时间序列预测 · 评估设计</span></span></div>
+    <h1>Revisiting my MSc thesis</h1>
+    <p class="case-pitch"><span lang="en">My 2024 thesis said a hybrid Prophet-LSTM forecasts stock prices well. Re-run in 2026, it loses to “tomorrow = today”, and so does every model, including 2025's foundation models.</span><span lang="zh">2024 年的论文说 Prophet-LSTM 混合模型能很好地预测股价。2026 年重跑：它输给「明天 = 今天」，所有模型都一样，包括 2025 年的基础模型。</span></p>
+    <div class="cta left"></div>
+  </header>
+  <div class="wrap"><figure class="case-hero">
+      <div class="frame"><img src="../assets/img/works/thesis-revisit-chart.jpg" alt="Bar chart: forecast error relative to the random walk for 13 models; none is below 1" width="860" height="536"></div>
+    </figure></div>
+  <div class="wrap case-body">
+    <aside class="titleblock"><dl><dt><span lang="en">Role</span><span lang="zh">角色</span></dt><dd><span lang="en">Sole author, of the thesis (2024) and of the re-run (2026)</span><span lang="zh">独立完成：2024 年论文与 2026 年重做</span></dd><dt><span lang="en">Stack</span><span lang="zh">技术栈</span></dt><dd>Python · statsforecast · NeuralForecast · Chronos-2 · TimesFM 2.5 · scikit-learn · uv</dd><dt><span lang="en">Data</span><span lang="zh">数据</span></dt><dd><span lang="en">Public daily prices: 20 US stocks and ETFs, 2010 → Sep 2026, plus VIX and the 10-year yield</span><span lang="zh">公开日线：20 只美股与 ETF，2010 → 2026-09，外加 VIX 和 10 年期美债收益率</span></dd><dt><span lang="en">Status</span><span lang="zh">状态</span></dt><dd><span lang="en">Experiments complete; code local, not yet published</span><span lang="zh">实验完成；代码在本地，尚未公开</span></dd></dl></aside>
+    <div class="case-main">
+      <section class="case-sec"><h2 class="case-h"><span class="mono">01</span><span lang="en">Problem</span><span lang="zh">问题</span></h2><p class="lead"><span lang="en">The thesis compared four models on one 80/20 split and called the hybrid best on Apple, with p < 0.05. It never compared against the simplest forecast, and its numbers didn't hold up when I re-ran them.</span><span lang="zh">论文在一次 80/20 切分上比较四个模型，结论是苹果股票上混合模型最好、p < 0.05。它从没和最简单的预测比过，而且重跑时数字站不住。</span></p></section><section class="case-sec"><h2 class="case-h"><span class="mono">02</span><span lang="en">What I built</span><span lang="zh">我做了什么</span></h2><ul class="approach"><li><span lang="en">Reproduced the original code unchanged with three seeds; it matches the thesis's own result files, so every problem found is the thesis's, not the re-run's.</span><span lang="zh">原代码一行不改、3 个种子重跑，和论文自带的结果文件对得上：找到的问题都属于论文本身，不是复现偏差。</span></li><li><span lang="en">Listed 12 problems and measured each: no random-walk baseline, unequal horizons, a 60-day misalignment in the hybrid, a scaler fitted on test data, a conclusion its own CSV contradicts.</span><span lang="zh">列出 12 个问题并逐条量化：没有随机游走基准、步长不一致、混合模型 60 天错位、缩放器在测试数据上拟合、结论和自带 CSV 矛盾。</span></li><li><span lang="en">Rebuilt the study: forecast returns at 1, 5 and 20 days from every trading day (208 origins × 20 tickers), with the test period after the foundation models were released.</span><span lang="zh">重新设计实验：从每个交易日（208 个起点 × 20 只）预测 1、5、20 天收益率，测试期在基础模型发布之后。</span></li><li><span lang="en">Scored 16 models against the random walk with Diebold-Mariano tests, checked a second test period (2023–2025), and tested whether volatility is predictable instead.</span><span lang="zh">16 个模型都和随机游走比，并做 Diebold-Mariano 检验；用第二段测试期（2023–2025）复查；再测试波动率是否可预测。</span></li></ul></section><section class="case-sec"><h2 class="case-h"><span class="mono">03</span><span lang="en">Watch the re-run</span><span lang="zh">看重做过程</span></h2><figure class="case-video"><video id="thesis-revisit-video" src="../assets/video/thesis-revisit.mp4" controls playsinline preload="none" poster="../assets/img/works/thesis-revisit.jpg"></video><figcaption class="mono"><span lang="en">6:30 · English narration, English and Chinese subtitles</span><span lang="zh">6:30 · 英文讲解，中英字幕</span></figcaption></figure><div class="chapters"><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="0.0">0:00 <span lang="en">The question</span><span lang="zh">开场</span></button><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="32.8">0:32 <span lang="en">The 2024 thesis</span><span lang="zh">原论文</span></button><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="56.7">0:56 <span lang="en">The dumb baseline</span><span lang="zh">最笨的基准</span></button><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="110.6">1:50 <span lang="en">What went wrong</span><span lang="zh">找 bug</span></button><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="196.3">3:16 <span lang="en">A 2026 protocol</span><span lang="zh">新协议</span></button><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="247.2">4:07 <span lang="en">Results</span><span lang="zh">结果</span></button><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="317.1">5:17 <span lang="en">Another test period</span><span lang="zh">换一段</span></button><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="338.7">5:38 <span lang="en">What is predictable</span><span lang="zh">换个问题</span></button><button type="button" class="ch mono" data-seek="thesis-revisit-video" data-t="361.8">6:01 <span lang="en">Lessons</span><span lang="zh">经验</span></button></div></section><section class="case-sec"><h2 class="case-h"><span class="mono">04</span><span lang="en">Measured</span><span lang="zh">测量结果</span></h2><div class="metrics"><div class="metric"><div class="mv">7–13×</div><div class="ml"><span lang="en">the thesis's hybrid error versus “tomorrow = today” (RMSE, 4 series)</span><span lang="zh">论文混合模型的误差是「明天 = 今天」的倍数（RMSE，4 个序列）</span></div><div class="ms mono">src · <span title="Private source">york-irp-revisit/results/e01.json</span></div></div><div class="metric"><div class="mv">0 / 16</div><div class="ml"><span lang="en">models significantly better than the random walk, at 1, 5 or 20 days</span><span lang="zh">个模型在 1、5、20 天上显著优于随机游走</span></div><div class="ms mono">src · <span title="Private source">york-irp-revisit/results/e2_scores.csv</span></div></div><div class="metric"><div class="mv">−20%</div><div class="ml"><span lang="en">volatility forecast error versus the naive baseline (p = 0.048)</span><span lang="zh">波动率预测误差，相对朴素基准（p = 0.048）</span></div><div class="ms mono">src · <span title="Private source">york-irp-revisit/results/e5_volatility.csv</span></div></div><div class="metric"><div class="mv">12</div><div class="ml"><span lang="en">problems in the original study, each one measured</span><span lang="zh">个原论文问题，逐条量化</span></div><div class="ms mono">src · <span title="Private source">Vault · IRP 2026 revisit, §3</span></div></div></div></section><section class="case-sec"><h2 class="case-h"><span class="mono">05</span><span lang="en">Limits, stated plainly</span><span lang="zh">局限，直说</span></h2><ul class="limits"><li><span lang="en">Moirai 2 and TimesFM 3 were not run (dependency conflicts); Chronos-2 was used without covariates.</span><span lang="zh">没跑 Moirai 2 和 TimesFM 3（依赖冲突）；Chronos-2 没有用协变量。</span></li><li><span lang="en">The main test period is 11 months; Sharpe ratios and 20-day tests have little power.</span><span lang="zh">主测试期只有 11 个月；Sharpe 和 20 天步长的检验功效有限。</span></li><li><span lang="en">No multiple-comparison correction; with no model significantly better, a correction would not change the conclusion.</span><span lang="zh">没做多重比较校正；本来就没有显著更好的模型，校正不改变结论。</span></li><li><span lang="en">Point forecasts only on public daily data; no intraday data, news or order flow.</span><span lang="zh">只用公开日线数据；没有日内数据、新闻或订单流。</span></li></ul></section><section class="case-sec"><h2 class="case-h"><span class="mono">06</span><span lang="en">Next</span><span lang="zh">下一步</span></h2><ul class="approach"><li><span lang="en">Publish the repository with the locked environment so the whole study re-runs in one command.</span><span lang="zh">公开代码仓库和锁定的环境，一条命令复现全部实验。</span></li><li><span lang="en">Feed VIX and SPY to Chronos-2 as covariates, and add Moirai 2 in its own environment.</span><span lang="zh">把 VIX、SPY 作为协变量喂给 Chronos-2，并在单独环境里补上 Moirai 2。</span></li></ul></section>
+    </div>
+  </div>
+  <nav class="pager wrap mono" aria-label="More work">
+    <a href="llm-arch-cards.html">← LLM Arch Cards</a>
+    <a href="../index.html#works"><span lang="en">All work</span><span lang="zh">全部作品</span></a>
+    <a href="bilingual-reader.html">Bilingual Note Reader →</a>
+  </nav>
+</main>
+<footer class="foot wrap">
+  <div class="cols">
+    <div>
+      <div class="sign">Kaihuan Huang</div>
+      <div class="motto"><span lang="en">Measure first. Ship second. Keep the receipts.</span><span lang="zh">先测量，再上线，留好凭据。</span></div>
+    </div>
+    <div><p class="foot-h"><span lang="en">Index</span><span lang="zh">目录</span></p><ul><li><a href="../works/booking-agent.html">01 Booking Agent</a></li><li><a href="../works/pos-platform.html">02 POS Platform</a></li><li><a href="../works/refund-agent.html">03 Refund Agent</a></li><li><a href="../works/pii-detector.html">04 PII Detector</a></li><li><a href="../works/career-ops.html">05 Career OPS</a></li><li><a href="../works/llm-arch-cards.html">06 LLM Arch Cards</a></li><li><a href="../works/thesis-revisit.html">07 Revisiting my MSc thesis</a></li><li><a href="../works/bilingual-reader.html">08 Bilingual Note Reader</a></li><li><a href="../works/study-video.html">09 Narrated Study Videos</a></li><li><a href="../works/dispute-ingest.html">10 Dispute Ingestion Service</a></li><li><a href="../works/governance-platform.html">11 AI Governance Platform</a></li><li><a href="../works/commander-ops.html">12 Remote Commander Ops</a></li><li><a href="../works/ipot.html">13 IPOT Restaurant Platform</a></li><li><a href="../works/loan-draw-review.html">14 Loan-Draw Review Controls</a></li><li><a href="../works/reea.html">15 REEA</a></li><li><a href="../works/lightup.html">16 LightUp</a></li></ul></div>
+    <div><p class="foot-h"><span lang="en">Elsewhere</span><span lang="zh">其他</span></p><ul>
+      <li><a href="https://github.com/kaihuan-huang">GitHub</a></li>
+      <li><a href="https://linkedin.com/in/kaijacksonus/">LinkedIn</a></li>
+      <li><a href="../resume.html"><span lang="en">Résumé</span><span lang="zh">简历</span></a></li>
+      <li><a href="../archive.html"><span lang="en">Learning Archive</span><span lang="zh">学习档案</span></a></li>
+      <li><a href="../notes/"><span lang="en">Notes</span><span lang="zh">笔记</span></a></li>
+    </ul></div>
+    <div><p class="foot-h"><span lang="en">Contact</span><span lang="zh">联系</span></p><ul>
+      <li><a href="mailto:huangkaihuan0216@gmail.com">huangkaihuan0216@gmail.com</a></li>
+      <li><span lang="en">San Francisco Bay Area</span><span lang="zh">旧金山湾区</span></li>
+    </ul></div>
+  </div>
+  <div class="base mono"><span>© <span id="year">2026</span> Kaihuan Huang</span><span>SFO 37.7749°N 122.4194°W</span></div>
+</footer>
+</body>
+</html>
