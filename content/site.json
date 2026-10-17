@@ -1059,6 +1059,38 @@
         "src": "content/papers/thesis-revisit.html",
         "title": "Does a Hybrid Prophet-LSTM Forecast Stock Prices? A 2026 Re-examination",
         "desc": "A paper-style re-examination of my 2024 MSc thesis: reproduction, twelve measured problems, and a 2026 protocol with 16 models against the random walk."
+      },
+      "reflection": {
+        "h": {
+          "en": "What I learned, and how I work now",
+          "zh": "我学到了什么，现在怎么做"
+        },
+        "items": [
+          {
+            "en": "Nothing in the original study had to be beaten: four models ranked against each other always produce a winner. Now I write down the simplest baseline and the bar to clear before building anything.",
+            "zh": "原研究里没有一个必须打赢的对象：四个模型互相排名，总会有赢家。现在我在动手之前先写下最简单的基准，以及要比它好多少才算数。"
+          },
+          {
+            "en": "I read R² 0.9 as success without asking what a trivial forecast scores (0.99). Now a good-looking number makes me look for leakage and misalignment first.",
+            "zh": "当年我把 R² 0.9 当成成功，没问过最笨的预测能得多少（0.99）。现在分数好看时，我先查泄漏和错位。"
+          },
+          {
+            "en": "Both bugs were invisible in the summary table. Now forecasts and targets are joined by date or ID, the code fails if they don't line up, and preprocessing is fitted on training data only.",
+            "zh": "两个 bug 在汇总表里都看不出来。现在预测和目标按日期或 ID 对齐，对不上代码就报错；预处理只在训练数据上拟合。"
+          },
+          {
+            "en": "The write-up described methods the code didn't have. Now every claim points to a file or a line, and tables are generated from results, never typed.",
+            "zh": "论文写了代码里没有的方法。现在每句结论都指向一个文件或一行代码，表格从结果文件生成，不手抄。"
+          },
+          {
+            "en": "The same rules apply to the LLM systems I build: a baseline, a held-out set that never reaches prompts or fine-tuning, the same conditions for every model, and a check that a gain isn't noise.",
+            "zh": "同样的规则用在我做的 LLM 系统上：有基准、留出集不进 prompt 或微调数据、所有模型同条件比较、确认提升不是噪音。"
+          }
+        ],
+        "more": {
+          "en": "Full reflection and checklist: paper, Section 8 →",
+          "zh": "完整反思和清单：论文第 8 节 →"
+        }
       }
     },
     {

@@ -487,3 +487,5 @@ code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);padding:1
 .paper code{font-family:var(--mono);font-size:.9em}.paper pre .ln{display:inline-block;width:2em;color:var(--muted);user-select:none}.paper pre .ln.bad{color:var(--red);font-weight:700}
 .paper .p-issues li{margin-bottom:12px}.paper .p-refs li{font-size:15px}
 @media (max-width:680px){.paper{padding-top:96px;font-size:16px}.paper .p-abs{padding:16px}}
+.paper .p-refl{border-left:3px solid var(--red);padding-left:22px}.paper .p-check li{margin-bottom:10px}
+@media (max-width:680px){.paper .p-refl{padding-left:14px}}
