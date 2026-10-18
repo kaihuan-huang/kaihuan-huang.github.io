@@ -125,6 +125,50 @@
 
     var y = document.getElementById('year');
     if (y) y.textContent = new Date().getFullYear();
+
+    // read-aloud: one pre-generated audio file + per-sentence times; highlight and follow the sentence being read
+    var rd = document.querySelector('.reader[data-timings]');
+    if (rd && window.fetch) {
+      fetch(rd.getAttribute('data-timings')).then(function (r) { return r.json(); }).then(function (tm) {
+        var base = rd.getAttribute('data-timings').replace(/[^/]*$/, '');
+        var au = new Audio(); au.preload = 'none'; au.src = base + tm.src;
+        var spans = {}; document.querySelectorAll('.s[data-s]').forEach(function (s) { spans[s.getAttribute('data-s')] = s; });
+        var ts = tm.sents, cur = null, btn = rd.querySelector('.r-play'), time = rd.querySelector('.r-time');
+        var bar = document.createElement('input'); bar.type = 'range'; bar.min = 0; bar.max = tm.dur; bar.step = 0.1; bar.value = 0;
+        bar.className = 'r-bar'; bar.setAttribute('aria-label', 'Position'); rd.insertBefore(bar, time);
+        var fmt = function (x) { x = Math.floor(x); return Math.floor(x / 60) + ':' + ('0' + x % 60).slice(-2); };
+        var find = function (t) {
+          var lo = 0, hi = ts.length - 1, k = -1;
+          while (lo <= hi) { var m = (lo + hi) >> 1; if (ts[m].t0 <= t) { k = m; lo = m + 1; } else hi = m - 1; }
+          return k >= 0 && t <= ts[k].t1 + 0.4 ? ts[k] : null;
+        };
+        var mark = function (x) {
+          var el = x ? spans[x.i] : null;
+          if (el === cur) return;
+          if (cur) cur.classList.remove('on');
+          cur = el;
+          if (!el) return;
+          el.classList.add('on');
+          var r = el.getBoundingClientRect();
+          if (r.top < 90 || r.bottom > window.innerHeight - 110) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        };
+        var seek = function (t) { au.currentTime = t; mark(find(t)); };
+        au.addEventListener('timeupdate', function () { bar.value = au.currentTime; time.textContent = fmt(au.currentTime) + ' / ' + fmt(tm.dur); mark(find(au.currentTime)); });
+        au.addEventListener('play', function () { btn.textContent = '❚❚'; btn.setAttribute('aria-label', 'Pause'); document.body.classList.add('reading'); });
+        au.addEventListener('pause', function () { btn.textContent = '▶'; btn.setAttribute('aria-label', 'Play'); });
+        au.addEventListener('ended', function () { mark(null); document.body.classList.remove('reading'); });
+        btn.addEventListener('click', function () { if (au.paused) au.play(); else au.pause(); });
+        bar.addEventListener('input', function () { seek(+bar.value); });
+        Object.keys(spans).forEach(function (k) {
+          spans[k].addEventListener('click', function (e) {
+            if (!document.body.classList.contains('reading') || e.target.closest('a')) return;
+            var x = ts.filter(function (s) { return String(s.i) === k; })[0];
+            if (x) { seek(x.t0); au.play(); }
+          });
+        });
+        rd.hidden = false;
+      }).catch(function () {});
+    }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

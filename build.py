@@ -554,10 +554,77 @@ def build_case(i, kind, w, prev, nxt):
 
 # ---------------- learning archive ----------------
 
+# ---------------- read-aloud: sentence spans for paper pages ----------------
+_READ_BLOCK = re.compile(r"<(h1|h2|h3|p|li|figcaption)(\s[^>]*)?>(.*?)</\1>", re.S)
+_SKIP = re.compile(r'<(pre|table)\b.*?</\1>|<section class="p-refs".*?</section>|<[a-z]+ [^>]*lang="zh"[^>]*>.*?</section>'
+                   r'|<p class="p-(?:back|kicker|meta)\b.*?</p>', re.S)
+_ABBR = ("e.g", "i.e", "et al", "vs", "cf")
+
+
+def _split_points(inner):
+    """Sentence ends in a block's top-level text (never inside a tag pair), so each span nests cleanly."""
+    pts, depth, i = [], 0, 0
+    for m in re.finditer(r"<(/?)([a-z0-9]+)[^>]*>|([^<]+)", inner):
+        if m.group(3) is None:
+            depth += -1 if m.group(1) else (0 if m.group(0).endswith("/>") else 1)
+            continue
+        if depth:
+            continue
+        for b in re.finditer(r"(?<=[.?!])\s+(?=[A-Z\"“(0-9])", m.group(3)):
+            before = m.group(3)[:b.start()].rstrip(".?!")
+            if not before.lower().endswith(_ABBR):
+                pts.append((m.start(3) + b.start(), m.start(3) + b.end()))
+    return pts
+
+
+def paper_spans(body):
+    """Wrap every readable sentence in <span class="s" data-s="N">; return (html, [{i, sec, text}])."""
+    sents, out, sec = [], [], 0
+    skips = [(m.start(), m.end()) for m in _SKIP.finditer(body)]
+    pos = 0
+    for m in _READ_BLOCK.finditer(body):
+        if any(a <= m.start() < z for a, z in skips):
+            continue
+        sec = body.count("<section", 0, m.start())
+        tag, attrs, inner = m.group(1), m.group(2) or "", m.group(3)
+        if tag in ("li",) and "<p" in inner:
+            continue
+        pieces, start = [], 0
+        for a, z in _split_points(inner) + [(len(inner), len(inner))]:
+            pieces.append((inner[start:a], inner[a:z])); start = z
+        new = ""
+        for frag, gap in pieces:
+            spoken = _html.unescape(re.sub(r"<span class=\"mono\">(\d+)</span>", r"\1. ", re.sub(r"<span class=\"ln[^\"]*\">.*?</span>", "", frag)))
+            spoken = re.sub(r"<[^>]+>", "", spoken).strip()
+            if spoken:
+                new += f'<span class="s" data-s="{len(sents)}">{frag}</span>{gap}'
+                sents.append({"i": len(sents), "sec": sec, "text": spoken})
+            else:
+                new += frag + gap
+        out.append(body[pos:m.start(3)] + new)
+        pos = m.end(3)
+    out.append(body[pos:])
+    return "".join(out), sents
+
+
 # ---------------- paper pages (long-form write-up beside a case) ----------------
 def build_paper(w):
     pp = w["paper"]
     body = (ROOT / pp["src"]).read_text(encoding="utf-8")
+    reader = ""
+    if pp.get("read"):
+        body, sents = paper_spans(body)
+        (ROOT / pp["src"]).with_suffix(".sentences.json").write_text(json.dumps(sents, ensure_ascii=False, indent=1), encoding="utf-8")
+        tj = ROOT / "assets" / "audio" / w["slug"] / "timings.json"
+        if tj.exists():
+            t = json.loads(tj.read_text(encoding="utf-8"))
+            if [x["text"] for x in sents] != t["texts"]:
+                print(f"warning: {w['slug']} read-aloud audio is stale; re-run paper_audio.py")
+            reader = (f'<div class="reader mono" data-timings="../assets/audio/{w["slug"]}/timings.json" hidden>'
+                      f'<button type="button" class="r-play" aria-label="Play">▶</button>'
+                      f'<span class="r-label">{bi(pp["read"]["label"])}</span>'
+                      f'<span class="r-time">0:00 / {int(t["dur"]) // 60}:{int(t["dur"]) % 60:02d}</span>'
+                      f'<span class="r-note" lang="zh">{pp["read"].get("zh_note", "")}</span></div>')
     html = head(f"{pp['title']} · {P['name_first']} {P['name_last']}", pp["desc"], "../", f"works/{w['slug']}-paper.html",
                 f"assets/img/works/{w['img']}" if w.get("img") else "assets/img/og.png")
     html += nav("../")
@@ -566,6 +633,7 @@ def build_paper(w):
     <p class="p-back mono"><a href="{w['slug']}.html">← {w['title']}</a></p>
 {body}
   </article>
+  {reader}
 </main>
 """
     html += footer("../")
