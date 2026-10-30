@@ -3856,6 +3856,329 @@
       "link": null
     },
     {
+      "slug": "eaglefrontier",
+      "title": "EagleFrontier Diligence Q&A",
+      "kicker": {
+        "en": "EagleFrontier · Jackson Ventures · 2026",
+        "zh": "EagleFrontier · Jackson Ventures · 2026"
+      },
+      "type": {
+        "en": "Private-data Q&A · local machine · Oct 2026",
+        "zh": "私有数据问答 · 本地机器 · 2026 年 10 月"
+      },
+      "pitch": {
+        "en": "Investors ask about a company's confidential data and get an answer with a source. The cloud portal only relays: it stores no question, no answer and no file.",
+        "zh": "投资人询问公司的保密数据，得到带出处的回答。云端门户只负责转发：不存问题、不存回答、不存文件。"
+      },
+      "spec": [
+        [
+          "Role",
+          {
+            "en": "AI Engineer on a team. I designed and built the approval gate and the relay (2 pull requests, written with coding agents); the local Q&A service is a teammate's work",
+            "zh": "团队中的 AI 工程师。我设计并构建审批闸门与转发层（2 个 PR，借助编码智能体完成）；本地问答服务由同事完成"
+          }
+        ],
+        [
+          "Stack",
+          "Python · FastAPI · PostgreSQL · Redis · Alembic · Docker · Tailscale · NVIDIA DGX Spark"
+        ],
+        [
+          "Status",
+          {
+            "en": "Gate and relay merged and deployed with the feature switched off; the local Q&A service is merged but not yet running in production",
+            "zh": "闸门与转发层已合并并部署，功能保持关闭；本地问答服务已合并，尚未在生产中运行"
+          }
+        ]
+      ],
+      "problem": {
+        "en": "The first version stored investors' confidential files on our cloud backend, but the company's data policy says the raw data never leaves our own machine. The fix had to keep the rest of the product shipping.",
+        "zh": "第一版把投资人的保密文件存在云端后端，而公司的数据政策要求原始数据不离开我们自己的机器。修复不能拖住产品其余功能的上线。"
+      },
+      "approach": [
+        {
+          "en": "A master switch (off by default) and a people list with approver, reference and a 90-day expiry, so everything else shipped while diligence stayed closed.",
+          "zh": "总开关（默认关闭）加 people 名单，记录批准人、凭据和 90 天到期，其余功能照常上线，尽调保持关闭。"
+        },
+        {
+          "en": "Turned the backend into a relay: removed upload, storage and six tables. The migration refuses to run if any of them holds data.",
+          "zh": "把后端改成转发层：删掉上传、存储和 6 张表；迁移遇到表里有数据就拒绝执行。"
+        },
+        {
+          "en": "The relay accepts only private-network and loopback IP addresses, checked before any DNS lookup or connection. Anything else, or a missing token, returns 503.",
+          "zh": "转发层只接受私有网络和回环 IP 地址，在任何 DNS 查询和连接之前就检查；其他地址或缺少令牌一律返回 503。"
+        },
+        {
+          "en": "The audit row is written before the question is forwarded and records only who, when, outcome and latency. The database transaction is closed before the wait, so a slow answer holds no connection.",
+          "zh": "审计行在转发之前写入，只记录谁、何时、结果和耗时；等待回答之前先结束数据库事务，慢回答不占连接。"
+        },
+        {
+          "en": "Per-person limits (20 a minute, 200 a day) and 8 in flight per process, backed by Redis; if Redis fails, the request is refused, not let through.",
+          "zh": "按人限流（每分钟 20、每天 200），每个进程最多 8 个同时转发，由 Redis 支撑；Redis 出错时拒绝请求，不放行。"
+        },
+        {
+          "en": "A strict contract with the local service: unexpected fields, oversize or malformed replies return 502 and are never shown.",
+          "zh": "与本地服务约定严格的契约：多出的字段、超大或格式不对的回复返回 502，不显示给用户。"
+        }
+      ],
+      "principle": [
+        {
+          "en": "Data and answering stay on one machine we own. Cost: a single machine, no auto-scaling or managed backups.",
+          "zh": "数据和回答都留在我们自己的一台机器上。代价：单机，没有自动扩容和托管备份。"
+        },
+        {
+          "en": "The portal stays in the cloud (login, MFA, CRM) and only relays questions. Cost: one more hop and an inbound path to the local machine, limited to one address.",
+          "zh": "门户留在云端（登录、MFA、CRM），只转发问题。代价：多一跳，以及通向本地机器的入站路径，仅限一个地址。"
+        },
+        {
+          "en": "If the local machine is down, answers wait. It never falls back to a cloud model, because one fallback is one leak that cannot be undone.",
+          "zh": "本地机器停了，回答就等。绝不退回云端模型：一次回退就是一次无法收回的外流。"
+        },
+        {
+          "en": "Numbers never come from a model. The service looks up approved facts by company, metric and period, cites file and row, and says “not in the data” when it finds nothing. Cost: open-ended analysis is not supported.",
+          "zh": "数字不交给模型。服务按公司、指标、期间查批准过的事实，带出文件和行号，查不到就说“不在数据里”。代价：不支持开放式分析。"
+        },
+        {
+          "en": "Data counts only once approved: a manifest with a SHA-256 hash per file, and a changed file is not served. Cost: adding data means editing the manifest and restarting.",
+          "zh": "数据批准后才生效：清单登记每个文件的 SHA-256 哈希，文件被改动就不再服务。代价：加数据要改清单并重启。"
+        },
+        {
+          "en": "Logs say who asked, when, and how it ended, never what was asked. Cost: a wrong answer cannot be replayed from the logs.",
+          "zh": "日志只记谁问的、何时、结果如何，不记问了什么。代价：答错了没法从日志重放。"
+        }
+      ],
+      "flow": [
+        {
+          "en": "Investor question",
+          "zh": "投资人提问"
+        },
+        {
+          "en": "Approved person?",
+          "zh": "已批准的人？",
+          "gate": true
+        },
+        {
+          "en": "Relay · private network + token",
+          "zh": "转发 · 私有网络 + 令牌"
+        },
+        {
+          "en": "Q&A on our own machine",
+          "zh": "在我们自己机器上问答"
+        },
+        {
+          "en": "Answer with source, or “not in the data”",
+          "zh": "带出处的回答，或“不在数据里”"
+        }
+      ],
+      "diagrams": [
+        {
+          "id": "ef-sys",
+          "title": {
+            "en": "Where the data lives",
+            "zh": "数据在哪里"
+          },
+          "caption": {
+            "en": "Drawn from the merged code and the design notes",
+            "zh": "依据已合并的代码和设计笔记绘制"
+          },
+          "nodes": [
+            {
+              "id": "inv",
+              "r": 0,
+              "c": 0,
+              "t": "end",
+              "l": {
+                "en": "Investor · browser",
+                "zh": "投资人 · 浏览器"
+              }
+            },
+            {
+              "id": "por",
+              "r": 0,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Portal API · cloud host",
+                "zh": "门户 API · 云主机"
+              }
+            },
+            {
+              "id": "gt",
+              "r": 1,
+              "c": 1,
+              "t": "gate",
+              "l": {
+                "en": "Switch on and person approved?",
+                "zh": "总开关开启且已批准？"
+              }
+            },
+            {
+              "id": "au",
+              "r": 2,
+              "c": 2,
+              "t": "store",
+              "l": {
+                "en": "Audit · who, when, outcome",
+                "zh": "审计 · 谁、何时、结果"
+              }
+            },
+            {
+              "id": "rl",
+              "r": 2,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Relay · stores nothing",
+                "zh": "转发层 · 不存任何内容"
+              }
+            },
+            {
+              "id": "qa",
+              "r": 3,
+              "c": 1,
+              "t": "step",
+              "l": {
+                "en": "Q&A service · our own machine",
+                "zh": "问答服务 · 我们自己的机器"
+              }
+            },
+            {
+              "id": "dt",
+              "r": 3,
+              "c": 2,
+              "t": "store",
+              "l": {
+                "en": "Approved data · hashed manifest",
+                "zh": "批准的数据 · 哈希清单"
+              }
+            }
+          ],
+          "edges": [
+            [
+              "inv",
+              "por",
+              {
+                "en": "question",
+                "zh": "问题"
+              }
+            ],
+            [
+              "por",
+              "gt"
+            ],
+            [
+              "gt",
+              "rl",
+              {
+                "en": "yes",
+                "zh": "是"
+              }
+            ],
+            [
+              "rl",
+              "au",
+              {
+                "en": "no content",
+                "zh": "无内容"
+              },
+              "dash"
+            ],
+            [
+              "rl",
+              "qa",
+              {
+                "en": "private network + token",
+                "zh": "私有网络 + 令牌"
+              }
+            ],
+            [
+              "qa",
+              "dt",
+              {
+                "en": "read only",
+                "zh": "只读"
+              }
+            ],
+            [
+              "qa",
+              "rl",
+              {
+                "en": "answer or not_in_data",
+                "zh": "回答或 not_in_data"
+              },
+              "dash"
+            ]
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "v": "2",
+          "l": {
+            "en": "pull requests merged: the approval gate with its master switch, and the relay that stores nothing",
+            "zh": "个 PR 已合并：带总开关的审批闸门，以及不存任何内容的转发层"
+          },
+          "src": "jacksonventures-dev/eaglefrontier-orchestrator #70, #74 (private)",
+          "url": ""
+        },
+        {
+          "v": "6",
+          "l": {
+            "en": "diligence tables removed by a migration that refuses to run if any holds data",
+            "zh": "张尽调表被迁移删除；该迁移遇到表里有数据就拒绝执行"
+          },
+          "src": "eaglefrontier-orchestrator #74 (private)",
+          "url": ""
+        },
+        {
+          "v": "0",
+          "l": {
+            "en": "hits for test marker strings in the database dump, server logs and audit rows during a real-run test",
+            "zh": "次：真实运行测试中，标记字符串在数据库导出、服务日志和审计行里的命中数"
+          },
+          "src": "relay branch real-run evidence, Oct 2026 (private)",
+          "url": ""
+        },
+        {
+          "v": "997",
+          "l": {
+            "en": "tests passing on the relay branch before merge, on real PostgreSQL 16 and Redis",
+            "zh": "个测试在合并前的转发层分支上通过，使用真实的 PostgreSQL 16 和 Redis"
+          },
+          "src": "relay branch verification, Oct 2026 (private)",
+          "url": ""
+        }
+      ],
+      "limits": [
+        {
+          "en": "Employer code is private; this page describes the design only.",
+          "zh": "雇主代码不公开，本页只描述设计。"
+        },
+        {
+          "en": "The local Q&A service is not running in production yet, so diligence stays switched off until the people list is approved and the service is installed.",
+          "zh": "本地问答服务尚未在生产中运行，所以在批准名单确定、服务装好之前，尽调保持关闭。"
+        },
+        {
+          "en": "One machine: if it is down, answers wait. External investors are not enabled yet; that needs per-company grants and NDA dates first.",
+          "zh": "单机：机器停了回答就等。外部投资人暂未开放，需要先补按公司授权和 NDA 日期。"
+        },
+        {
+          "en": "It answers only what is in the approved tables; open-ended analysis is out of scope.",
+          "zh": "只回答批准表格里有的内容，不做开放式分析。"
+        }
+      ],
+      "next": [
+        {
+          "en": "In progress: code computes totals and rankings, and a check compares every number in an answer with the data before it is shown.",
+          "zh": "进行中：由代码计算合计和排名，答案显示之前，逐个数字与数据核对。"
+        },
+        {
+          "en": "After go-live: a running count of outbound connections and canary strings in the data, as ongoing proof that nothing leaves.",
+          "zh": "上线后：持续统计出站连接，并在数据里放金丝雀字符串，持续证明没有东西流出。"
+        }
+      ],
+      "link": null
+    },
+    {
       "slug": "reea",
       "title": "REEA",
       "kicker": {
