@@ -3857,44 +3857,56 @@
     },
     {
       "slug": "eaglefrontier",
-      "title": "EagleFrontier Diligence Q&A",
+      "title": "EagleFrontier Investment Platform",
       "kicker": {
         "en": "EagleFrontier · Jackson Ventures · 2026",
         "zh": "EagleFrontier · Jackson Ventures · 2026"
       },
       "type": {
-        "en": "Private-data Q&A · local machine · Oct 2026",
-        "zh": "私有数据问答 · 本地机器 · 2026 年 10 月"
+        "en": "Platform engineering · deploys, login security, private-data Q&A · Oct 2026",
+        "zh": "平台工程 · 部署、登录安全、私有数据问答 · 2026 年 10 月"
       },
       "pitch": {
-        "en": "Investors ask about a company's confidential data and get an answer with a source. The cloud portal only relays: it stores no question, no answer and no file.",
-        "zh": "投资人询问公司的保密数据，得到带出处的回答。云端门户只负责转发：不存问题、不存回答、不存文件。"
+        "en": "A San Francisco merchant bank's deal platform for family offices and investors: sourcing, review, CRM and diligence Q&A behind one login. I owned its production engineering, and confidential diligence data never leaves our own machine.",
+        "zh": "旧金山一家商人银行的交易平台，服务家族办公室和投资人：找公司、审核、CRM 和尽调问答都在同一个登录后面。我负责它的生产工程，尽调的保密数据从不离开我们自己的机器。"
       },
       "spec": [
         [
           "Role",
           {
-            "en": "AI Engineer on a team. I designed and built the approval gate and the relay (2 pull requests, written with coding agents); the local Q&A service is a teammate's work",
-            "zh": "团队中的 AI 工程师。我设计并构建审批闸门与转发层（2 个 PR，借助编码智能体完成）；本地问答服务由同事完成"
+            "en": "AI Engineer on a team. I owned production engineering: the deploy fix and release kit, login security, the diligence chain end to end, and per-client isolation (22 pull requests merged, written with coding agents). Teammates built the sourcing agents and run the production local Q&A service",
+            "zh": "团队中的 AI 工程师。我负责生产工程：部署修复和上线工具包、登录安全、尽调整条链路、客户之间的数据隔离（22 个 PR 已合并，借助编码智能体完成）。找公司的智能体和正式的本地问答服务由同事负责"
           }
         ],
         [
           "Stack",
-          "Python · FastAPI · PostgreSQL · Redis · Alembic · Docker · Tailscale · NVIDIA DGX Spark"
+          "Python · FastAPI · PostgreSQL · Redis · Alembic · Docker · GitHub Actions · Next.js · Tailscale · NVIDIA DGX Spark"
         ],
         [
           "Status",
           {
-            "en": "Gate and relay merged and deployed with the feature switched off; the local Q&A service is merged but not yet running in production",
-            "zh": "闸门与转发层已合并并部署，功能保持关闭；本地问答服务已合并，尚未在生产中运行"
+            "en": "Backend deploy fix live since Oct 28; login security and diligence merged, with diligence switched off; per-client isolation and emailed one-time codes in review",
+            "zh": "后端部署修复自 10 月 28 日起上线；登录安全和尽调已合并，尽调功能关闭；客户隔离和邮件一次性验证码在审核中"
           }
         ]
       ],
       "problem": {
-        "en": "The first version stored investors' confidential files on our cloud backend, but the company's data policy says the raw data never leaves our own machine. The fix had to keep the rest of the product shipping.",
-        "zh": "第一版把投资人的保密文件存在云端后端，而公司的数据政策要求原始数据不离开我们自己的机器。修复不能拖住产品其余功能的上线。"
+        "en": "Production deploys had failed since August behind a green health check, and no migration had run since June. The first diligence version also stored investors' confidential files in the cloud, against the policy that raw data never leaves our own machine. Both had to be fixed without stopping the rest of the product.",
+        "zh": "生产部署从 8 月起一直失败，健康检查却是绿的，6 月之后没有执行过任何迁移。第一版尽调还把投资人的保密文件存在云端，违反了原始数据不离开自己机器的政策。两件事都要修好，又不能拖住产品其余部分。"
       },
       "approach": [
+        {
+          "en": "Fixed the deploy: build the migration image with its profile, stop seeding on every deploy, and stop before restarting unless migrations are at head. Rehearsed on a copy of production, then shipped on Oct 28.",
+          "zh": "修好部署：带 profile 构建迁移镜像，不再每次部署都跑 seed，迁移没到最新就不重启。先在生产数据副本上预演，10 月 28 日上线。"
+        },
+        {
+          "en": "A release kit in the repo: pre-deploy host check, verified backup, a rollback snapshot even when the running image is gone, and a runbook with failure paths.",
+          "zh": "上线工具包放进代码库：上线前主机检查、经过验证的备份、运行中的镜像丢了也能做回滚快照，以及写明失败路径的 runbook。"
+        },
+        {
+          "en": "MFA attempts are counted before the code is checked (5 wrong codes end a challenge, 10 per person in 15 minutes), tokens record MFA, and the portal renews the session while the user is active.",
+          "zh": "MFA 尝试先计数再校验（一次验证错 5 次作废，每人 15 分钟内最多错 10 次），令牌记录是否通过 MFA，门户在用户活跃时自动续期。"
+        },
         {
           "en": "A master switch (off by default) and a people list with approver, reference and a 90-day expiry, so everything else shipped while diligence stayed closed.",
           "zh": "总开关（默认关闭）加 people 名单，记录批准人、凭据和 90 天到期，其余功能照常上线，尽调保持关闭。"
@@ -3918,6 +3930,14 @@
         {
           "en": "A strict contract with the local service: unexpected fields, oversize or malformed replies return 502 and are never shown.",
           "zh": "与本地服务约定严格的契约：多出的字段、超大或格式不对的回复返回 502，不显示给用户。"
+        },
+        {
+          "en": "Code computes totals, rankings and gross margin, and every number in an answer must match a cited row or a computed total, or the answer is withheld.",
+          "zh": "合计、排名和毛利率由代码计算；回答里的每个数字都必须对得上引用的行或计算结果，否则不发出回答。"
+        },
+        {
+          "en": "Per-client data is attributed by who wrote it, not by names found in text, so one client never sees another's notes (in review).",
+          "zh": "客户数据按“谁写的”归属，而不是按文字里出现的名字，一个客户看不到另一个客户的记录（审核中）。"
         }
       ],
       "principle": [
@@ -4112,12 +4132,21 @@
       ],
       "metrics": [
         {
-          "v": "2",
+          "v": "22",
           "l": {
-            "en": "pull requests merged: the approval gate with its master switch, and the relay that stores nothing",
-            "zh": "个 PR 已合并：带总开关的审批闸门，以及不存任何内容的转发层"
+            "en": "pull requests merged across the backend and frontend: deploy fixes, release kit, login security and the diligence chain",
+            "zh": "个 PR 已合并（后端加前端）：部署修复、上线工具包、登录安全和尽调链路"
           },
-          "src": "jacksonventures-dev/eaglefrontier-orchestrator #70, #74 (private)",
+          "src": "jacksonventures-dev/eaglefrontier-orchestrator, eaglefrontier-web (private)",
+          "url": ""
+        },
+        {
+          "v": "1,458",
+          "l": {
+            "en": "backend tests passing on real PostgreSQL after the login-email change",
+            "zh": "个后端测试在真实 PostgreSQL 上通过（登录邮箱改动之后）"
+          },
+          "src": "eaglefrontier-orchestrator #88 (private)",
           "url": ""
         },
         {
@@ -4164,12 +4193,16 @@
         {
           "en": "It answers only what is in the approved tables; open-ended analysis is out of scope.",
           "zh": "只回答批准表格里有的内容，不做开放式分析。"
+        },
+        {
+          "en": "Per-client isolation and emailed one-time codes are still in review.",
+          "zh": "客户隔离和邮件一次性验证码仍在审核中。"
         }
       ],
       "next": [
         {
-          "en": "In progress: code computes totals and rankings, and a check compares every number in an answer with the data before it is shown.",
-          "zh": "进行中：由代码计算合计和排名，答案显示之前，逐个数字与数据核对。"
+          "en": "In review: emailed one-time codes, sent only to an address on the approved list, as the second login step for external investors.",
+          "zh": "审核中：给外部投资人的第二步登录——邮件一次性验证码，只发到批准名单上的地址。"
         },
         {
           "en": "After go-live: a running count of outbound connections and canary strings in the data, as ongoing proof that nothing leaves.",
@@ -4720,10 +4753,18 @@
       "when": "Apr 2023 — now",
       "title": "AI Engineer · Jackson Ventures",
       "at": {
-        "en": "BloomFrontier fintech lending · IPOT restaurant platform · revenue analytics · San Francisco Bay Area · affiliate of REAAI under the same ownership",
-        "zh": "BloomFrontier 金融科技借贷 · IPOT 餐饮平台 · 营收分析 · 旧金山湾区 · 与 REAAI 同一老板旗下的关联公司"
+        "en": "EagleFrontier investment platform · BloomFrontier fintech lending · IPOT restaurant platform · revenue analytics · San Francisco Bay Area · affiliate of REAAI under the same ownership",
+        "zh": "EagleFrontier 投资平台 · BloomFrontier 金融科技借贷 · IPOT 餐饮平台 · 营收分析 · 旧金山湾区 · 与 REAAI 同一老板旗下的关联公司"
       },
       "items": [
+        {
+          "en": "Owned EagleFrontier's production engineering: fixed deploys that had failed for two months behind a green health check, added a release kit with backups and rollback, and MFA attempt limits; 22 pull requests merged.",
+          "zh": "负责 EagleFrontier 的生产工程：修好健康检查是绿的、实际失败了两个月的部署，加上带备份和回滚的上线工具包，以及 MFA 次数限制；22 个 PR 已合并。"
+        },
+        {
+          "en": "Built a diligence relay so confidential company data never leaves our own machine: an approval gate, nothing stored in the cloud, and every number in an answer checked against the data.",
+          "zh": "构建尽调转发链路，让公司保密数据不离开我们自己的机器：审批闸门、云端不存任何内容、回答里的每个数字都与数据核对。"
+        },
         {
           "en": "Building BloomFrontier's AI-assisted loan-draw review (FastAPI/PostgreSQL): missing or flagged documents go to loan officers instead of being approved automatically.",
           "zh": "构建 BloomFrontier 的 AI 辅助提款审核（FastAPI/PostgreSQL）：缺失或被标记的文件转给信贷员，而不是自动通过。"
