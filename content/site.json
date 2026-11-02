@@ -5626,6 +5626,114 @@
           "a": "Start with the baseline and the evaluation design, fit every scaler on training data only, and align the horizons before comparing models. The redo found twelve problems of that kind in the original, and I measured each one."
         }
       ]
+    },
+    {
+      "id": "rules-from-evidence",
+      "date": "2026-10",
+      "projects": [
+        "career-ops",
+        "ipot"
+      ],
+      "kind": {
+        "en": "Control · rules",
+        "zh": "控制 · 规则"
+      },
+      "title": {
+        "en": "Rules I tuned on evidence, not taste",
+        "zh": "用证据调规则，不凭感觉"
+      },
+      "status": {
+        "en": "Gate hook live since Oct 27 · approval rule written into each project plan",
+        "zh": "闸门钩子 10-27 起生效 · 审批规则写在各项目计划里"
+      },
+      "then": {
+        "en": "I run coding agents under rules. The first version made everything wait for my approval, including pushing a branch. Two projects stalled at the same point: one repo had 87 finished commits nobody could see, and five security PRs for the restaurant platform sat local for days.",
+        "zh": "我让编程 agent 在规则下干活。第一版什么都要等我批，连推送分支也要。两个项目卡在同一处：一个仓库攒了 87 个没人看得见的提交，餐厅平台的五个安全 PR 在本地放了好几天。"
+      },
+      "did": {
+        "en": "I moved enforcement into hooks: spending, external sends and deletions are hard-blocked, and a hook exits with an error instead of asking, because in auto mode an ask gets approved silently. Merging and deploying need my explicit yes. Each project got a plan file with the approval rule, a definition of done, ordered tasks and stop conditions; the plans say pushing and draft PRs are free. The 87 commits became one branch.",
+        "zh": "我把强制放进钩子：花钱、对外发送、删除硬拦，钩子直接报错而不是问，因为自动模式下「问」会被悄悄批准。合并和部署要我明确点头。每个项目一份计划文件：审批规则、完成标准、有序任务、停止条件；计划里写明 push 和 draft PR 不用批。那 87 个提交压成了一条分支。"
+      },
+      "tradeoff": {
+        "en": "A hook that errors cannot be waved through, so every blocked action comes back to me by hand. Freer pushing means more branches to review. Rules are friction, so I keep the evidence next to each change: when subagents were 46% of my usage, I cut their default tier.",
+        "zh": "会报错的钩子不能被顺手放行，所以每个被拦的动作都要我亲手做。放开推送意味着更多分支要看。规则就是摩擦，所以每次改规则都把证据写在旁边：子智能体占了 46% 用量，就把它们的默认档降下来。"
+      },
+      "rule": {
+        "en": "A rule that hides finished work costs more than it protects. Change it, and write the evidence next to the change.",
+        "zh": "一条把做完的工作藏起来的规则，代价大于它保护的东西。改掉它，把证据写在改动旁边。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "Hooks, not prompts. Why?",
+            "zh": "为什么用钩子不用提示词？"
+          },
+          "a": "A prompt is advice; a hook is enforcement. In auto mode an \"ask\" gets approved silently, so the gate exits with an error instead and the blocked action comes back to me. A table-driven test with 168 cases means removing any rule fails a test."
+        },
+        {
+          "q": {
+            "en": "How did you notice the stall?",
+            "zh": "怎么发现卡住的？"
+          },
+          "a": "By counting. One repo had 87 local commits nobody could see; another had five finished branches waiting days for a merge. Both waited on the same rule. The plans now free pushing and draft PRs, and the backlog became one branch."
+        },
+        {
+          "q": {
+            "en": "Isn't this just process overhead?",
+            "zh": "这不就是流程负担吗？"
+          },
+          "a": "It is friction, and I measure it. When subagents were 46% of usage I cut their default tier. When the push rule hid finished work, I loosened it. A rule that costs more than it catches gets changed, with the evidence written next to the change."
+        }
+      ]
+    },
+    {
+      "id": "self-learning-loop",
+      "date": "2026-10-27",
+      "projects": [],
+      "kind": {
+        "en": "Improvement · design",
+        "zh": "改进 · 设计"
+      },
+      "title": {
+        "en": "A self-learning loop, designed and being instrumented",
+        "zh": "自学习闭环：设计好了，刚开始采数"
+      },
+      "status": {
+        "en": "Rules written · collector runs by hand · no held-out set yet",
+        "zh": "规则写好 · 采集脚本手动跑 · 还没有留出集"
+      },
+      "then": {
+        "en": "Agents that run and change themselves need a loop that cannot grade itself. I wrote the rules after a brief on self-learning products, for every agent and pipeline I plan to let improve on its own.",
+        "zh": "会自己跑、自己改的 agent，需要一个不能给自己打分的闭环。读了一份自学习产品的简报后，我为所有打算让它自己改进的 agent 和流程写下规则。"
+      },
+      "did": {
+        "en": "Run with a full trace, observe, evaluate with deterministic code, improve, verify, then ship. Change the harness before the model. A candidate change passes a held-out test and a regression suite that holds every past failure. Only verified runs become training data. Each task is billed as cost per successful task, not total tokens. The first instrument is a collector that logs model, effort, time, tokens and the verification result for every subagent run.",
+        "zh": "跑（留完整轨迹）→ 看 → 评（确定性代码）→ 改 → 验 → 上线。先改 harness 再改模型。候选改动要过留出集和含全部历史失败的回归集。只有验证过的轨迹进训练。每个任务按「单次成功任务的成本」记账，不报 token 总量。第一个仪表是一个采集脚本，记下每次子智能体运行的模型、档位、时间、token 和验证结论。"
+      },
+      "tradeoff": {
+        "en": "The collector runs by hand, and there is no held-out set for my own agents yet, so the loop cannot close. I call it designed and instrumented, not built. The next step is the held-out set, because without it the loop would grade itself.",
+        "zh": "采集脚本手动跑，自己的 agent 还没有留出集，所以闭环闭不上。我说它是设计好、开始采数，不说做好了。下一步是留出集，没有它闭环就在给自己打分。"
+      },
+      "rule": {
+        "en": "No verification, no ship. Evaluation never lives in the model that generated the answer.",
+        "zh": "没有验证不上线。评价永远不放在生成答案的那个模型里。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "You said the loop is designed. What actually runs today?",
+            "zh": "闭环「设计好了」，今天真跑着的是什么？"
+          },
+          "a": "Three things run: the rules, the hooks, and a collector that logs model, effort, time, tokens and the verification result for every subagent run. What does not exist yet is a held-out set for my own agents, or the weekly report. So I say designed and instrumented, not built. The next step is the held-out set, because without it the loop would be grading itself."
+        },
+        {
+          "q": {
+            "en": "How do you keep the regression set honest?",
+            "zh": "回归集怎么保持诚实？"
+          },
+          "a": "Every failure that ever happened goes in, and every generation re-runs all of it. Scores come from deterministic code, never from a model grading itself. And I red-team it: look for a shortcut that raises the score without raising capability."
+        }
+      ]
     }
   ]
 }

@@ -524,7 +524,7 @@ def build_case(i, kind, w, prev, nxt):
         secs.append(({"en": "Listen", "zh": "听一段"}, f'<figure class="case-video"><audio src="{a["src"]}" controls preload="none"></audio><figcaption class="mono">{bi(a["cap"])}</figcaption></figure>'))
     if w["metrics"]:
         secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
-    if kind == "d" and journal_for(w["slug"]):
+    if journal_for(w["slug"]):
         secs.append(({"en": "Engineering notes", "zh": "工程记录"}, journal_notes(w["slug"], "../")))
     secs.append(({"en": "Limits, stated plainly", "zh": "局限，直说"}, f'<ul class="limits">{limits}</ul>'))
     if w.get("next"):
@@ -743,7 +743,7 @@ def journal_notes(slug, base):
 def build_journal():
     sheets = ""
     for k, j in enumerate(C["journal"], 1):
-        cases = " · ".join(f'<a href="works/{slug}.html">{slug_title(slug)}</a>' for slug in j["projects"])
+        cases = " · ".join(f'<a href="works/{slug}.html">{slug_title(slug)}</a>' for slug in j["projects"]) or bi({"en": "my coding workspace, across projects", "zh": "我的工作区，跨项目"})
         sheets += f"""<article class="sheet-a reveal" id="{j['id']}">
       <div class="sa-side mono"><span class="sa-no">J{nn(k)}</span><span>{j['date']}</span><span>{bi(j['kind'])}</span></div>
       <div class="sa-main">
