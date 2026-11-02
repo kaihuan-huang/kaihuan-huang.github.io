@@ -119,6 +119,7 @@ def nav(base):
     rows.append(f'<li><a href="{base}resume.html"><span class="m-num">{nn(n + 1)}</span><span class="m-title">{bi({"en": "Résumé", "zh": "简历"})}</span><span class="m-tag">{bi({"en": "Web · print", "zh": "网页 · 可打印"})}</span></a></li>')
     rows.append(f'<li><a href="{base}index.html#decisions"><span class="m-num">D</span><span class="m-title">{bi({"en": "How I decide", "zh": "我怎么做决定"})}</span><span class="m-tag">{bi({"en": "Three decisions", "zh": "三个决定"})}</span></a></li>')
     rows.append(f'<li><a href="{base}archive.html"><span class="m-num">A</span><span class="m-title">{bi({"en": "Learning Archive", "zh": "学习档案"})}</span><span class="m-tag">2023 — 2025</span></a></li>')
+    rows.append(f'<li><a href="{base}journal.html"><span class="m-num">J</span><span class="m-title">{bi({"en": "Engineering journal", "zh": "工程记录"})}</span><span class="m-tag">{bi({"en": "Records · Q&amp;A", "zh": "记录 · 追问"})}</span></a></li>')
     rows.append(f'<li><a href="{base}notes/"><span class="m-num">{nn(n + 2)}</span><span class="m-title">{bi({"en": "Notes", "zh": "笔记"})}</span><span class="m-tag">{bi({"en": "Writing", "zh": "文章"})}</span></a></li>')
     rows.append(f'<li><a href="{base}index.html#contact"><span class="m-num">{nn(n + 3)}</span><span class="m-title">{bi({"en": "Contact", "zh": "联系"})}</span><span class="m-tag">{bi({"en": "Say hi", "zh": "打个招呼"})}</span></a></li>')
     return f"""<nav class="nav" id="nav" aria-label="Main">
@@ -157,6 +158,7 @@ def footer(base):
       <li><a href="{P['linkedin']}">LinkedIn</a></li>
       <li><a href="{base}resume.html">{bi({"en": "Résumé", "zh": "简历"})}</a></li>
       <li><a href="{base}archive.html">{bi({"en": "Learning Archive", "zh": "学习档案"})}</a></li>
+      <li><a href="{base}journal.html">{bi({"en": "Engineering journal", "zh": "工程记录"})}</a></li>
       <li><a href="{base}notes/">{bi({"en": "Notes", "zh": "笔记"})}</a></li>
     </ul></div>
     <div><p class="foot-h">{bi({"en": "Contact", "zh": "联系"})}</p><ul>
@@ -522,6 +524,8 @@ def build_case(i, kind, w, prev, nxt):
         secs.append(({"en": "Listen", "zh": "听一段"}, f'<figure class="case-video"><audio src="{a["src"]}" controls preload="none"></audio><figcaption class="mono">{bi(a["cap"])}</figcaption></figure>'))
     if w["metrics"]:
         secs.append(({"en": "Measured", "zh": "测量结果"}, f'<div class="metrics">{metrics}</div>'))
+    if kind == "d" and journal_for(w["slug"]):
+        secs.append(({"en": "Engineering notes", "zh": "工程记录"}, journal_notes(w["slug"], "../")))
     secs.append(({"en": "Limits, stated plainly", "zh": "局限，直说"}, f'<ul class="limits">{limits}</ul>'))
     if w.get("next"):
         secs.append(({"en": "Next", "zh": "下一步"}, '<ul class="approach">' + "".join(f"<li>{bi(x)}</li>" for x in w["next"]) + "</ul>"))
@@ -712,6 +716,66 @@ def build_archive():
     (ROOT / "archive.html").write_text(html, encoding="utf-8")
 
 
+# ---------------- engineering journal ----------------
+
+def qa_list(post):
+    items = "".join(f"<dt>{bi(x['q'])}</dt><dd>{x['a']}</dd>" for x in post["qa"])
+    return f'<dl class="qa">{items}</dl>'
+
+
+def journal_for(slug):
+    return [j for j in C.get("journal", []) if slug in j["projects"]]
+
+
+def journal_notes(slug, base):
+    """The project page's own records: title, status and the questions, linking to the full record."""
+    notes = ""
+    for j in journal_for(slug):
+        notes += f"""<article class="jr-note">
+        <h3><a href="{base}journal.html#{j['id']}">{bi(j['title'])}</a></h3>
+        <p class="jr-meta mono">{j['date']} · {bi(j['status'])}</p>
+        {qa_list(j)}
+        <p class="mono"><a href="{base}journal.html#{j['id']}">{bi({"en": "Read the record →", "zh": "阅读记录 →"})}</a></p>
+      </article>"""
+    return notes
+
+
+def build_journal():
+    sheets = ""
+    for k, j in enumerate(C["journal"], 1):
+        cases = " · ".join(f'<a href="works/{slug}.html">{slug_title(slug)}</a>' for slug in j["projects"])
+        sheets += f"""<article class="sheet-a reveal" id="{j['id']}">
+      <div class="sa-side mono"><span class="sa-no">J{nn(k)}</span><span>{j['date']}</span><span>{bi(j['kind'])}</span></div>
+      <div class="sa-main">
+        <h2>{bi(j['title'])}</h2>
+        <p class="sa-stack mono">{bi({"en": "Status", "zh": "现状"})}: {bi(j['status'])}</p>
+        <dl class="sa-dl">
+          <dt>{bi({"en": "Then", "zh": "当时"})}</dt><dd>{bi(j['then'])}</dd>
+          <dt>{bi({"en": "What I did", "zh": "做了什么"})}</dt><dd>{bi(j['did'])}</dd>
+          <dt>{bi({"en": "Trade-off", "zh": "取舍"})}</dt><dd>{bi(j['tradeoff'])}</dd>
+          <dt class="red">{bi({"en": "The rule", "zh": "规则"})}</dt><dd class="sa-rule">{bi(j['rule'])}</dd>
+        </dl>
+        <h3 class="jr-qa-h">{bi({"en": "Questions I get asked", "zh": "面试追问"})}</h3>
+        {qa_list(j)}
+        <div class="sa-foot mono"><span>{bi({"en": "Project", "zh": "项目"})}: {cases}</span></div>
+      </div>
+    </article>"""
+    html = head(f"Engineering Journal · {P['name_first']} {P['name_last']}", "Engineering records written as the questions interviewers ask: what happened, what I did, the trade-off, the status and the answers.", "", "journal.html")
+    html += nav("")
+    html += f"""<main id="main" class="case">
+  <header class="wrap case-head">
+    <div class="hero-top mono"><span>Section J · {bi({"en": "Engineering journal", "zh": "工程记录"})}</span><span>{len(C['journal'])} {bi({"en": "records", "zh": "条"})}</span></div>
+    <h1>{bi({"en": "Engineering journal", "zh": "工程记录"})}</h1>
+    <p class="case-pitch">{bi(C['journal_intro'])}</p>
+  </header>
+  <div class="wrap sheets">{sheets}</div>
+  <nav class="pager wrap mono" aria-label="More"><a href="archive.html">← {bi({"en": "Learning archive", "zh": "学习档案"})}</a><a href="index.html#works">{bi({"en": "All work", "zh": "全部作品"})}</a><a href="notes/approach.html">{bi({"en": "Rehearsal map", "zh": "练习导图"})} →</a></nav>
+</main>
+"""
+    html += footer("")
+    (ROOT / "journal.html").write_text(html, encoding="utf-8")
+
+
 # ---------------- résumé ----------------
 
 def build_resume():
@@ -763,7 +827,8 @@ if __name__ == "__main__":
             build_paper(w)
     build_resume()
     build_archive()
-    urls = ["", "archive.html", "resume.html", "notes/"] + [f"works/{w['slug']}.html" for _, w in items] + [f"works/{w['slug']}-paper.html" for _, w in items if w.get("paper")]
+    build_journal()
+    urls = ["", "archive.html", "journal.html", "resume.html", "notes/"] + [f"works/{w['slug']}.html" for _, w in items] + [f"works/{w['slug']}-paper.html" for _, w in items if w.get("paper")]
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
                                       + "".join(f"  <url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n", encoding="utf-8")
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n", encoding="utf-8")
