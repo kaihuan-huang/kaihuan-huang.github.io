@@ -44,7 +44,7 @@
           if (done) return; done = true;
           clearInterval(typer);
           intro.classList.add('gone');
-          setTimeout(function () { intro.remove(); }, 700);
+          setTimeout(function () { intro.remove(); }, 350); // matches the .3s fade in folio.css
           document.removeEventListener('keydown', close);
         };
         intro.addEventListener('click', close);
@@ -109,19 +109,6 @@
         a.replaceWith(f);
       });
     });
-
-    // ---------- reveal on scroll ----------
-    var els = document.querySelectorAll('.reveal');
-    if (!('IntersectionObserver' in window) || reduced) {
-      els.forEach(function (el) { el.classList.add('in'); });
-    } else {
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
-        });
-      }, { rootMargin: '0px 0px -8% 0px' });
-      els.forEach(function (el) { io.observe(el); });
-    }
 
     var y = document.getElementById('year');
     if (y) y.textContent = new Date().getFullYear();
