@@ -16,7 +16,7 @@ C = json.loads((ROOT / "content" / "site.json").read_text(encoding="utf-8"))
 P = C["person"]
 FONTS = ("https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600"
          "&family=JetBrains+Mono:wght@400;500&display=swap")
-VER = "5"
+VER = "6"
 SITE = "https://kaihuan-huang.github.io/"
 ZH = {  # labels that live in build.py, not in site.json
     "Role": "角色", "Stack": "技术栈", "Data": "数据", "Status": "状态",
@@ -62,7 +62,7 @@ def book_btn(cls="btn solid"):
 
 
 def decision_card(k, d):
-    return f"""      <article class="dec reveal" id="{d['id']}">
+    return f"""      <article class="dec" id="{d['id']}">
         <div class="w-label mono"><span>D{nn(k)} · {d['when']}</span><span>{bi(d['status'])}</span></div>
         <h3>{bi(d['title'])}</h3>
         <dl>
@@ -97,7 +97,7 @@ def head(title, desc, base, path="", og_img="assets/img/og.png", jsonld=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="{FONTS}" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="{FONTS}"></noscript>
+<noscript><link rel="stylesheet" href="{FONTS}"><style>.intro{{display:none}}</style></noscript>
 <link rel="stylesheet" href="{base}assets/css/folio.css?v={VER}">
 <script>(function(){{var r=document.documentElement,l=null,s=null;try{{var q=new URLSearchParams(location.search).get('lang');if(q==='en'||q==='zh')localStorage.setItem('kh-lang',q);l=localStorage.getItem('kh-lang');s=sessionStorage.getItem('kh-intro')}}catch(e){{}}r.setAttribute('data-lang',l||((navigator.language||'').toLowerCase().indexOf('zh')===0?'zh':'en'));if(s||matchMedia('(prefers-reduced-motion: reduce)').matches)r.classList.add('no-intro')}})();</script>
 <script src="{base}assets/js/folio.js?v={VER}" defer></script>
@@ -190,8 +190,7 @@ def metric(m):
 def wall_card(i, w):
     small = w["img"].replace(".jpg", "-640.jpg")
     load = 'fetchpriority="high"' if i == 1 else ('decoding="async"' if i <= 3 else 'loading="lazy" decoding="async"')
-    rev = "" if i <= 3 else " reveal"
-    return f"""      <article class="work{rev}">
+    return f"""      <article class="work">
         <a href="works/{w['slug']}.html">
           <div class="w-label mono"><span>Nº{nn(i)}</span><span>{w['tag']}</span></div>
           <div class="frame"><img src="assets/img/works/{small}" srcset="assets/img/works/{small} 640w, assets/img/works/{w['img']} 960w" sizes="(max-width:680px) 92vw, (max-width:980px) 46vw, 380px" alt="{w['alt']}" {load} width="960" height="750"><span class="v-dim"></span></div>
@@ -206,7 +205,7 @@ def wall_card(i, w):
 
 
 def deep_card(i, d):
-    return f"""      <article class="deep reveal">
+    return f"""      <article class="deep">
         <a href="works/{d['slug']}.html">
           <div class="w-label mono"><span>Nº{nn(i)}</span><span>{bi(d['kicker'])}</span></div>
           <h3>{d['title']}</h3>
@@ -307,11 +306,11 @@ def build_index():
   <section class="sec wrap" id="about" aria-labelledby="about-h">
     <div class="sec-head"><span class="n">04</span><h2 id="about-h">— {bi({"en": "The Engineer", "zh": "工程师"})}</h2></div>
     <div class="study">
-      <figure class="fig reveal">
+      <figure class="fig">
         <div class="plate" id="plate">{PORTRAIT}</div>
         <figcaption class="mono"><span>FIG. 01 — {bi({"en": "The model proposes; the system decides", "zh": "模型提议，系统决定"})}</span><span>York · MSc</span></figcaption>
       </figure>
-      <div class="reveal">
+      <div>
         <span class="kicker">{bi({"en": "Profile", "zh": "简介"})}</span>
         <h3>{bi({"en": "Measured before it ships", "zh": "上线之前，先量清楚"})}</h3>
         <p class="quote">{bi({"en": "“A model's answer is a proposal. What runs is decided by rules, tests and an explicit yes.”", "zh": "“模型的回答只是提议。真正执行什么，由规则、测试和一句明确的‘是’来决定。”"})}</p>
@@ -326,7 +325,7 @@ def build_index():
 
   <section class="sec wrap" id="contact" aria-labelledby="contact-h">
     <div class="sec-head"><span class="n">05</span><h2 id="contact-h">— {bi({"en": "The Invitation", "zh": "邀请"})}</h2></div>
-    <div class="invite reveal">
+    <div class="invite">
       <span class="kicker">{bi({"en": "Hiring for AI or backend engineering?", "zh": "在招 AI 或后端工程师？"})}</span>
       <div class="big">{bi({"en": "Let's build<br>what <span class=\"red\">ships</span>", "zh": "一起做<br>能<span class=\"red\">上线</span>的东西"})}</div>
       <a class="mail" href="mailto:{P['email']}">{P['email']}</a>
@@ -650,7 +649,7 @@ def slug_title(slug):
 def archive_register(base):
     rows = ""
     for k, a in enumerate(C["archive"], 1):
-        rows += f"""<li class="reg-row reveal"><a href="{base}archive.html#{a['id']}">
+        rows += f"""<li class="reg-row"><a href="{base}archive.html#{a['id']}">
           <span class="r-no mono">A{nn(k)}</span>
           <span class="r-yr mono">{a['years']}</span>
           <span class="r-ti"><b>{bi(a['title'])}</b><em>{bi(a['kind'])}</em></span>
@@ -682,7 +681,7 @@ def build_archive():
     sheets = ""
     for k, a in enumerate(C["archive"], 1):
         repos = " · ".join(a["repos"])
-        sheets += f"""<article class="sheet-a reveal" id="{a['id']}">
+        sheets += f"""<article class="sheet-a" id="{a['id']}">
       <div class="sa-side mono"><span class="sa-no">A{nn(k)}</span><span>{a['years']}</span><span>{bi(a['kind'])}</span></div>
       <div class="sa-main">
         <h2>{bi(a['title'])}</h2>
