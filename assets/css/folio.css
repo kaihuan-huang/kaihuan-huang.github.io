@@ -502,3 +502,17 @@ body.reading .paper .s{cursor:pointer}
 .paper{padding-bottom:120px}
 @media (max-width:680px){.reader .r-label{display:none}.reader{bottom:10px}}
 @media (prefers-reduced-motion:reduce){.paper .s{transition:none}}
+
+/* engineering journal: records and their Q&A, on journal.html and on each project page */
+.qa{margin:14px 0 0;max-width:880px}
+.qa dt{font-weight:600;color:var(--ink);margin-top:18px;max-width:66ch}
+.qa dd{margin:6px 0 0;color:var(--ink-2);max-width:72ch}
+.jr-note{margin-bottom:40px;padding-top:4px}
+.jr-note h3{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:clamp(20px,2vw,26px);letter-spacing:.03em;line-height:1.05;margin:0}
+.jr-note h3 a{color:inherit;text-decoration:none}
+.jr-note h3 a:hover{color:var(--red)}
+.jr-meta{color:var(--muted);margin:6px 0 0}
+.jr-note>p.mono{margin:14px 0 0}
+.jr-note>p.mono a{color:var(--ink);text-decoration:none}
+.jr-note>p.mono a:hover{color:var(--red)}
+.jr-qa-h{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:28px 0 0}

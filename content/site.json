@@ -3307,8 +3307,8 @@
         [
           "Role",
           {
-            "en": "AI Engineer. Reservation API from the first commit; led POS backend architecture; rebuilt Nalu",
-            "zh": "AI 工程师。从第一个提交开始构建 Reservation API；主导 POS 后端架构；重建 Nalu"
+            "en": "AI Engineer. Reservation API from the first commit; led POS backend architecture; rebuilt Nalu; wrote and merged a shared engineering contract across five repositories",
+            "zh": "AI 工程师。从第一个提交开始构建 Reservation API；主导 POS 后端架构；重建 Nalu；写并合并了五个仓库的共享工程契约"
           }
         ],
         [
@@ -3335,6 +3335,10 @@
         {
           "en": "POS: atomic settlement and refunds, sale-time price snapshots, audited voids; revived a long-failing test suite and fixed diverged Alembic heads.",
           "zh": "POS：原子结算与退款、售出时价格快照、可审计作废；修复长期失败的测试套件与分叉的 Alembic heads。"
+        },
+        {
+          "en": "Shared engineering contract across five repositories (four services and their web client): schema changes only through migrations, requests scoped to the organization, fail-closed defaults. I wrote and merged all five PRs after rehearsing the merge order on throwaway databases.",
+          "zh": "五个仓库的共享工程契约（四个服务和它们的网页客户端）：表结构只能通过迁移改、请求限定到组织范围、默认失败即关闭。五个 PR 都是我写和合并的，合并前先在一次性数据库上演练过合并顺序。"
         },
         {
           "en": "Nalu: deterministic field resolution and an explicit-yes gate after the LLM pilot invented values.",
@@ -3386,12 +3390,25 @@
           },
           "src": "IPOT reservation-api git log (private)",
           "url": ""
+        },
+        {
+          "v": "5 / 5",
+          "l": {
+            "en": "contract PRs I wrote and merged, one per repository (Oct 2026)",
+            "zh": "我写并合并的工程契约 PR，每个仓库一个（2026 年 10 月）"
+          },
+          "src": "IPOT GitHub pull requests (private)",
+          "url": ""
         }
       ],
       "limits": [
         {
           "en": "Employer code is private. The POS and booking demos are independent reimplementations on synthetic data.",
           "zh": "雇主代码不公开；POS 与预订演示是基于合成数据的独立重写。"
+        },
+        {
+          "en": "The contract PRs are merged; deploy is pending. ModelGateway, the shared model layer, is a design with no code yet.",
+          "zh": "契约 PR 已合并，部署待定。共享模型层 ModelGateway 只有设计，还没有代码。"
         }
       ],
       "link": [
@@ -3723,6 +3740,12 @@
             ]
           ]
         }
+      ],
+      "extra_links": [
+        [
+          "Interview Q&A",
+          "../notes/approach.html"
+        ]
       ]
     },
     {
@@ -5155,6 +5178,562 @@
         "zh": "5 个 PR 于 2026 年 10 月 9 日合并，103 个资金相关测试跑在真实 PostgreSQL 上，包括并发审批。尚未部署。"
       },
       "now": "loan-draw-review"
+    }
+  ],
+  "journal_intro": {
+    "en": "Engineering records written as the questions interviewers ask. Each one says what happened, what I did, the trade-off, the status (built, designed only, or still on a branch) and the answers I give when asked. Every record also appears on its project page.",
+    "zh": "按面试官会问的问题写的工程记录。每条写发生了什么、我做了什么、取舍、现状（做了、只有设计、还在分支上）和被问到时的答法。每条记录也会出现在对应的项目页上。"
+  },
+  "journal": [
+    {
+      "id": "five-repos-one-contract",
+      "date": "2026-10",
+      "projects": [
+        "ipot"
+      ],
+      "kind": {
+        "en": "Shared contract",
+        "zh": "工程契约"
+      },
+      "title": {
+        "en": "Five repositories, one engineering contract",
+        "zh": "五个仓库，一套工程契约"
+      },
+      "status": {
+        "en": "Merged in all five, deploy pending",
+        "zh": "五个都已合并，部署待定"
+      },
+      "then": {
+        "en": "Four services and their web client on our restaurant platform each handled schema changes and config their own way. Some created tables at startup, outside migrations.",
+        "zh": "餐厅平台的四个服务和它们的网页客户端，表结构和配置各管各的。有的在启动时绕过迁移自己建表。"
+      },
+      "did": {
+        "en": "I wrote and merged five PRs, one per repository, that give every service the same contract: schema changes only through migrations, requests scoped to the organization behind a strict-mode switch, and fail-closed defaults. Before merging I replayed the whole merge order on throwaway databases and ran the suites in strict mode for the first time. The repository that touched live reservations went last.",
+        "zh": "我写并合并了五个 PR，每个仓库一个，让每个服务遵守同一套契约：表结构只走迁移、请求在严格模式开关后面限定到组织、默认失败即关闭。合并前在一次性数据库上重放整个合并顺序，第一次开严格模式跑测试。碰真实订位的仓库最后合。"
+      },
+      "tradeoff": {
+        "en": "The contract is shared, the code is not. Small pieces such as config parsing live in four places, and the shared checks catch drift there. The chat API and its web client changed together, so the client was merged first and the API change two days later.",
+        "zh": "共享的是契约，不是代码。配置解析这类小块在四个地方各有一份，靠共享的检查发现漂移。聊天接口和它的网页客户端要一起改，所以先合并客户端，两天后才合并接口的改动。"
+      },
+      "rule": {
+        "en": "Only a blocker stops a merge. Everything else gets an owner and a plan.",
+        "zh": "只有阻断问题才停合并，其余的都登记负责人和计划。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "What exactly did you own?",
+            "zh": "你具体负责哪部分？"
+          },
+          "a": "I wrote and merged all five PRs. Before merging, I replayed the full merge order on throwaway databases in strict mode. One rule decided each merge. Only a blocker stops it, and anything else gets an owner and a plan. The repository that touched live bookings went last."
+        },
+        {
+          "q": {
+            "en": "Why not one shared package?",
+            "zh": "为什么不做成一个共享包？"
+          },
+          "a": "The contract was shared, but the code was not the same. Each service needed a different change, and one of the five is not even Python. A shared package would also have forced a dependency upgrade across the four services first, and tied their releases together. So I shared what was identical. One migration-adoption tool, one script that checks every service against the contract, and one merge gate. The cost is that small pieces such as config parsing live in four places, and the shared checks catch drift there."
+        },
+        {
+          "q": {
+            "en": "Didn't the stricter defaults break existing clients?",
+            "zh": "更严的默认值，不会弄坏现有客户端吗？"
+          },
+          "a": "Yes, that was the main risk. The chat API and its web client had to change together, so I merged the client first, and the API change two days later."
+        },
+        {
+          "q": {
+            "en": "Why migrations only?",
+            "zh": "为什么只允许走迁移？"
+          },
+          "a": "Services could create tables at startup, outside migrations, so a database could drift from the code. In the merged code, startup refuses a database that is not at the latest migration, and a clean database rebuilds from migrations alone. The cost is slower schema changes and a rollback that must go in order. Downgrade the database first, then roll back the image. I rehearsed that order."
+        },
+        {
+          "q": {
+            "en": "Did strict mode find real bugs?",
+            "zh": "严格模式找到真 bug 了吗？"
+          },
+          "a": "One small handler bug, and the fix is merged. The other failures were tests written for the earlier defaults."
+        },
+        {
+          "q": {
+            "en": "Is it in production?",
+            "zh": "上生产了吗？"
+          },
+          "a": "It is merged to main in all five repositories; deploy is pending. Each database needs its own migration step first, and I documented those steps."
+        }
+      ]
+    },
+    {
+      "id": "modelgateway-design",
+      "date": "2026-10",
+      "projects": [
+        "ipot"
+      ],
+      "kind": {
+        "en": "Model layer · design",
+        "zh": "模型层 · 设计"
+      },
+      "title": {
+        "en": "ModelGateway: designed before it is built",
+        "zh": "ModelGateway：先设计，还没写"
+      },
+      "status": {
+        "en": "Design only, no code yet",
+        "zh": "只有设计，还没有代码"
+      },
+      "then": {
+        "en": "Every agent we plan for the restaurant business needs a model, and models change every few months. Binding business code to one vendor or SDK would mean rewriting agents each time, and paid calls on private data need budgets and filtering from day one.",
+        "zh": "我们为餐厅生意规划的每个 agent 都要用模型，而模型几个月一换。业务代码绑死某个厂商或 SDK，就得每次重写；对私有数据的付费调用，第一天就要有预算和过滤。"
+      },
+      "did": {
+        "en": "I designed one model layer, ModelGateway. Agents call one interface with a tier, never a vendor. Four tiers: local, fast, deep and auto, each paid tier with its own switch and monthly budget. Every task declares a fallback policy. Private fields are filtered in code before anything leaves our servers. Every call writes one usage row. A 40-question eval gates each tier.",
+        "zh": "我设计了一个模型层 ModelGateway：agent 按档位调用一个接口，不直接调厂商。四档（local / fast / deep / auto），每个付费档有自己的开关和月预算；每个任务声明降级策略；隐私字段在代码里过滤后才出我们的服务器；每次调用记一行用量；40 题评测把关每一档。"
+      },
+      "tradeoff": {
+        "en": "Vendor-specific features such as prompt caching have to go through an adapter. The local default costs nothing, so the first version has to prove 90% tool-call accuracy before any paid tier is switched on.",
+        "zh": "提示词缓存这类厂商特有功能只能通过适配器用。默认本地零成本，所以第一版要先证明 90% 的工具调用正确率，才会打开任何付费档。"
+      },
+      "rule": {
+        "en": "The data foundation comes first. An agent reading numbers nobody trusts is worse than no agent.",
+        "zh": "数据地基排在前面：一个读着没人信的数字的 agent，比没有 agent 更糟。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "Is ModelGateway built?",
+            "zh": "ModelGateway 做出来了吗？"
+          },
+          "a": "No. I designed it in October 2026 and it is a later phase. The data foundation comes first, because an agent reading numbers nobody trusts is worse than no agent."
+        },
+        {
+          "q": {
+            "en": "Why not just use LiteLLM or OpenRouter?",
+            "zh": "为什么不直接用 LiteLLM 或 OpenRouter？"
+          },
+          "a": "In the design the gateway is thin. It owns policy, meaning tiers, budgets, fallback, privacy and logging. Transport stays open source. The first adapter would be the OpenAI Agents SDK pointed at a local model, and a library like LiteLLM could become a second adapter. The cost is that vendor-specific features such as prompt caching would have to go through an adapter."
+        },
+        {
+          "q": {
+            "en": "What happens when a paid tier fails?",
+            "zh": "付费档挂了怎么办？"
+          },
+          "a": "Every task would declare its policy. Fall back to local, ask the user, or fail closed. A request that explicitly asks for the strongest tier never downgrades silently. For an owner's decision, a clear error beats a cheap wrong answer."
+        },
+        {
+          "q": {
+            "en": "How does the privacy filter work?",
+            "zh": "隐私过滤怎么做？"
+          },
+          "a": "In application code, not in prompts. A field allowlist and aggregation come first. A PII detector is only a backstop, because detectors miss things."
+        },
+        {
+          "q": {
+            "en": "How will you know the local model is good enough?",
+            "zh": "怎么知道本地模型够用？"
+          },
+          "a": "A 40-question eval would gate the build. At least 90% correct tool calls, zero rule violations and 4 of 4 privacy cases. Paid tiers would run the same eval by replaying recorded runs, so testing costs nothing."
+        }
+      ]
+    },
+    {
+      "id": "rehearsal-two-bugs",
+      "date": "2026-10-28",
+      "projects": [
+        "eaglefrontier"
+      ],
+      "kind": {
+        "en": "Deploy rehearsal",
+        "zh": "部署预演"
+      },
+      "title": {
+        "en": "A rehearsal that found a missing config and a check that could not fail",
+        "zh": "一次预演：缺的配置和永远通过的检查"
+      },
+      "status": {
+        "en": "Fixes on a local branch, not pushed",
+        "zh": "修复在本地分支，未推送"
+      },
+      "then": {
+        "en": "Before moving the web frontend to a self-hosted deploy, I rehearsed the deploy scripts end to end on my machine with Docker, including a bad-image rollback.",
+        "zh": "把网页前端搬到自托管部署之前，我在本机用 Docker 把部署脚本从头到尾预演了一遍，包括坏镜像回滚。"
+      },
+      "did": {
+        "en": "The rehearsal caught two real problems. The image's runtime stage did not set the backend address, so the login proxy fell back to localhost and every production login would have returned 500. And the build check meant to catch exactly that could never fail. I set the variable in the runtime stage and replaced the check with a positive one: the runtime address, the rewrite target and the browser bundle must all equal the expected URL.",
+        "zh": "预演抓到两个真问题：镜像运行阶段没设后端地址，登录代理退回 localhost，线上登录会全部 500；而本该抓这个问题的构建检查永远通过。我在运行阶段补上变量，把检查改成正向检查：运行时地址、重写目标和浏览器包都必须等于预期地址。"
+      },
+      "tradeoff": {
+        "en": "The new check is stricter and has to change when the URL changes. That is worth it.",
+        "zh": "新检查更严，换地址时要跟着改。值得。"
+      },
+      "rule": {
+        "en": "Before I trust a check, I feed it a broken input and confirm it fails.",
+        "zh": "相信一个检查之前，先喂它一个坏输入，证明它会失败。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "How did the config go missing?",
+            "zh": "配置是怎么丢的？"
+          },
+          "a": "The login proxy reads the backend address from the environment. The runtime stage of the image did not set it, so it fell back to localhost and every login would have returned 500. I set it in the runtime stage, on a local branch."
+        },
+        {
+          "q": {
+            "en": "How could a check always pass?",
+            "zh": "检查怎么会一直通过？"
+          },
+          "a": "It looked for something that should not be there, and in that image it could not detect it at all. I replaced it with a positive check. The runtime address, the rewrite target and the browser bundle must all equal the expected URL. It is stricter and has to change when the URL changes. That is worth it."
+        },
+        {
+          "q": {
+            "en": "What was your role there?",
+            "zh": "你在这里的角色？"
+          },
+          "a": "I owned the deploy rehearsal and the frontend release. The backend is mostly a teammate's."
+        }
+      ]
+    },
+    {
+      "id": "loop-in-practice",
+      "date": "2025 — 2026",
+      "projects": [
+        "ipot"
+      ],
+      "kind": {
+        "en": "How I iterate",
+        "zh": "我怎么迭代"
+      },
+      "title": {
+        "en": "The loop in practice: check-in states, Nalu, the POS split",
+        "zh": "循环的实践：签到状态、Nalu、拆 POS"
+      },
+      "status": {
+        "en": "Check-in live · Nalu in pre-launch testing · POS in progress",
+        "zh": "签到已上线 · Nalu 预发布测试 · POS 还在做"
+      },
+      "then": {
+        "en": "Three times on the restaurant platform the first version was not what the business needed: a check-in that only marked guests arrived, a booking agent that let a model fill fields, and a request to deliver the whole POS at once.",
+        "zh": "餐厅平台上有三次，第一版都不是生意真正需要的：只会标记到店的签到、让模型填字段的预订助手、以及一次交付整个 POS 的要求。"
+      },
+      "did": {
+        "en": "I went around the loop each time. Check-in gained an early-arrival prompt, late arrivals held for the host's approval and a closing message, six revisions in three days with the owner. For Nalu, a 30-case pilot showed 17 fully correct and 3 invented values, so booking fields moved to deterministic code with an explicit yes before anything is written; a separate 39-case held-out set came back 33 correct and 0 invented. For the POS I argued for small, separately tested pieces; my piece was the settlement path, four writes in one transaction.",
+        "zh": "每次都绕一圈。签到加了早到提示、迟到等店方审批和完成提示，三天里和老板改了六次。Nalu 的 30 例试点只有 17 例全对、3 例编造，于是字段改由代码解析校验、客人明确说「是」才写入；另一套 39 例留出集 33 例全对、0 编造。POS 我主张拆成可单独测试的小块，我的那块是结算路径，四个写收进一个事务。"
+      },
+      "tradeoff": {
+        "en": "Each round costs another check-in and a slower first complete version. The guest gets one more confirmation step. The POS is not all delivered yet. The two Nalu case sets differ, so there is no before-and-after percentage.",
+        "zh": "每一轮多一次确认、第一个完整版本来得更慢；客人多一步确认；POS 还没全部交付。Nalu 的两套用例不同，所以没有前后百分比对比。"
+      },
+      "rule": {
+        "en": "Write the rules as a table with the owner before coding.",
+        "zh": "编码前先和老板把规则写成表。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "Give me an MVP you took to a stakeholder and then changed.",
+            "zh": "举一个拿给干系人之后改掉的 MVP"
+          },
+          "a": "Reservation check-in. The first version only marked a guest checked in. The owner wanted early arrivals warned, late arrivals held for the host's approval, and a friendly message at the end. We revised the states and the wording six times in three days. What I took from it was to write the rules as a table with the owner before coding. The next contract we did that way."
+        },
+        {
+          "q": {
+            "en": "A round that changed your direction?",
+            "zh": "哪一轮改了方向？"
+          },
+          "a": "The booking agent. We let a model fill booking fields. In a 30-case pilot only 17 were fully correct and 3 had values the guest never said. I did not fix that with prompting. Booking fields moved to deterministic code, and nothing is written until the guest says yes to the exact summary. On a separate 39-case held-out set, 33 were fully correct and none invented. The cost is one more confirmation step for the guest. The two sets are different cases, so I don't present them as a before-and-after."
+        },
+        {
+          "q": {
+            "en": "What if the stakeholder disagrees with your MVP plan?",
+            "zh": "干系人不同意你的 MVP 怎么办？"
+          },
+          "a": "A stakeholder wanted the whole POS delivered in one go. I didn't think that was possible safely. I proposed small pieces we could build and test one at a time, then merge. My piece was the settlement path. Four writes became one transaction, with an integration test against a real database that checks a refused capture leaves the order open with no writes. The cost is that it isn't all delivered yet. It's still in progress."
+        },
+        {
+          "q": {
+            "en": "Isn't the loop slower? When did skipping it cost you?",
+            "zh": "循环不是更慢吗？跳过它吃过亏吗？"
+          },
+          "a": "The loop costs more check-ins and a slower first \"complete\" version. What it buys is no big-bang rewrite. I learned that the other way. At my first startup every merge auto-deployed with no tests, it only ever ran as a demo, and we missed an investor demo date because we had committed to more than two people could build. Now I plan to the team we have, then commit to a date."
+        }
+      ]
+    },
+    {
+      "id": "exit-test-first",
+      "date": "2026-10",
+      "projects": [
+        "ipot"
+      ],
+      "kind": {
+        "en": "Data foundation",
+        "zh": "数据底座"
+      },
+      "title": {
+        "en": "The exit test goes into the plan first",
+        "zh": "退出测试先写进计划"
+      },
+      "status": {
+        "en": "Three pieces merged · exit test not reached",
+        "zh": "底座三块已合并 · 退出测试未达到"
+      },
+      "then": {
+        "en": "The growth system for the restaurant group is meant to recommend actions. Before any agent, the plan needed a test that says when the first stage is done.",
+        "zh": "餐厅集团的增长系统最终要给出行动建议。在任何 agent 之前，计划里先要有一个说明「第一阶段什么时候算完成」的测试。"
+      },
+      "did": {
+        "en": "I wrote the stage-1 exit test into the plan: at least one real action recommended and approved, measured against a control group or holdout, incremental contribution profit above zero, no platform-reported attribution, sustained for three months. Then I built the first pieces of the foundation: a store table; cost rates overridden org → store → channel with no overlapping periods; and contribution profit as a pure function, where a missing rate yields no number rather than 0.",
+        "zh": "我把阶段 1 的退出测试写进计划：至少一个真实的、经批准执行的建议动作，有对照组或 holdout，增量贡献利润大于 0，不依赖平台自报归因，持续三个月。然后做了底座的前三块：门店表；成本率按组织 → 门店 → 渠道逐级覆盖、禁止生效期重叠；贡献利润是不碰数据库的纯函数，缺费率就不出数，不拿 0 顶。"
+      },
+      "tradeoff": {
+        "en": "Missing rates produce no number, so some reports stay blank until the finance inputs arrive. The agent layer waits until the test is passed.",
+        "zh": "缺费率就没有数字，财务输入到位前有些报表是空的；agent 层等测试通过再做。"
+      },
+      "rule": {
+        "en": "Decide what done means before building, and measure it against a control.",
+        "zh": "动手前先定「完成」的标准，并用对照组来量。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "How do you know the MVP is right and it's time to scale?",
+            "zh": "怎么知道 MVP 对了、该放大了？"
+          },
+          "a": "The exit test goes into the plan before the build. For the growth system it says at least one real action recommended and approved, measured against a control group or holdout, incremental contribution profit above zero, no platform-reported attribution, sustained for three months. The first pieces of the data foundation are in place. We have not passed that test yet, so the agent layer waits. For the booking agent the test was a held-out case set."
+        }
+      ]
+    },
+    {
+      "id": "bottleneck-then-fail-closed",
+      "date": "2025 — 2026",
+      "projects": [
+        "governance-platform",
+        "eaglefrontier"
+      ],
+      "kind": {
+        "en": "Scale and trade-offs",
+        "zh": "规模与取舍"
+      },
+      "title": {
+        "en": "Find the bottleneck first, then fail closed",
+        "zh": "先找瓶颈，再失败即关"
+      },
+      "status": {
+        "en": "Governance measured locally, never deployed · relay merged, switched off",
+        "zh": "Governance 只在本地测过、未部署 · 转发层已合并、功能关着"
+      },
+      "then": {
+        "en": "Scaling questions come up on every project. Two of mine had measurable answers: the governance platform's event pipeline, and the diligence relay that forwards questions to a single local machine.",
+        "zh": "每个项目都会被问到扩容。我手上两个有可量化答案：治理平台的事件管线，和把问题转发到单台本地机器的尽调转发层。"
+      },
+      "did": {
+        "en": "In the governance platform I measured before guessing. The single worker saturated first while the API had headroom, so the planned order is batch evaluation and a policy cache, more workers, and only when the database becomes the bottleneck a managed queue behind the two existing seams. In the relay I built, the rate limiter fails closed: a Redis error refuses the request, and if the local machine is down we return 503 instead of falling back to a cloud model.",
+        "zh": "治理平台先测后猜：单个 worker 先饱和，API 还有余量，所以计划的顺序是批量评估加策略缓存、加 worker、等数据库成为瓶颈再在已有的两个缝上换托管队列。我写的转发层里，限流失败即关：Redis 出错就拒绝请求；本地机器不在就回 503，不退回云端模型。"
+      },
+      "tradeoff": {
+        "en": "Postgres stays the queue because volume is small and the event and its result commit in one transaction; the cost is a ceiling. Failing closed means a short outage of the feature instead of unlimited access, and that is deliberate.",
+        "zh": "Postgres 继续当队列，因为量小、事件和结果在同一个事务里提交，代价是有上限。失败即关意味着功能短暂不可用，而不是无限访问，这是故意的。"
+      },
+      "rule": {
+        "en": "Measure where it breaks before choosing the fix. When the choice is between availability and a leak, refuse.",
+        "zh": "先量出哪里先坏，再选修法；在可用性和泄漏之间，选拒绝。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "Where did you find the real bottleneck?",
+            "zh": "真正的瓶颈在哪？"
+          },
+          "a": "In the governance platform I measured before guessing. The single worker saturated first; the API had headroom. The order I would follow is to batch the policy evaluation and cache policies, add workers, and only when the database becomes the bottleneck swap the two queue seams, claim and acknowledge, to a managed queue. I kept Postgres as the queue because volume was small and the event and its result had to commit in one transaction. Local numbers only; it never ran in production."
+        },
+        {
+          "q": {
+            "en": "A consistency versus availability trade-off you made?",
+            "zh": "举一个一致性和可用性的取舍"
+          },
+          "a": "In the diligence relay I built, the rate limiter fails closed. If Redis is down, requests are refused. If our local machine is down we return 503 instead of falling back to a cloud model, because one fallback is one leak. In the booking flow, a confirmation claims once with the same idempotency key and the reservation service decides \"confirmed\" or \"received, pending\". The key storage itself was a teammate's work."
+        },
+        {
+          "q": {
+            "en": "\"Build both and test.\" A real example?",
+            "zh": "「两个都做出来测」，有真例子吗？"
+          },
+          "a": "My thesis re-run. Instead of arguing which forecasting model was best, I ran all 16 against the random walk with a significance test and a second period; none was significantly better. And my bilingual reader puts two speech engines behind one endpoint, so trying a new engine is a config change, not a rewrite. One boundary. At the booking agent the pilot and the held-out set are different cases, so I don't present them as a before-and-after."
+        }
+      ]
+    },
+    {
+      "id": "thesis-rerun",
+      "date": "2026-10",
+      "projects": [
+        "thesis-revisit"
+      ],
+      "kind": {
+        "en": "Re-running my own research",
+        "zh": "重做自己的研究"
+      },
+      "title": {
+        "en": "Six months, then half a day: re-running my thesis",
+        "zh": "六个月，然后半天：重做我的论文"
+      },
+      "status": {
+        "en": "Done · results on this site",
+        "zh": "做完 · 结果在本站"
+      },
+      "then": {
+        "en": "My master's thesis built a hybrid Prophet-LSTM model to forecast stock prices. Writing it took about six months.",
+        "zh": "硕士论文做了一个 Prophet-LSTM 混合模型预测股价，当时花了大约六个月。"
+      },
+      "did": {
+        "en": "This year I redid the whole experiment with a much stricter protocol: 20 stocks, rolling forecasts from every trading day, significance tests against a random walk, and 16 models across seven families, including the newest time-series foundation models. The full run took about an hour on my laptop, and the redo took about half a day. AI handled the scaffolding, the rolling evaluation and the foundation models that forecast thousands of windows in seconds.",
+        "zh": "今年我用严格得多的方案把整个实验重做了一遍：20 只股票、从每个交易日滚动预测、和随机游走做显著性检验、七个家族 16 个模型，包括最新的时间序列基础模型。整套跑完大约一小时，重做总共大约半天。AI 搭了脚手架、滚动评估，以及几秒内预测上千个窗口的基础模型。"
+      },
+      "tradeoff": {
+        "en": "The result was not what I hoped for. No model significantly beat the random walk, and my original hybrid was among the worst. I also found real mistakes in my own work, such as a normalizer fit on data that included the test period. So I reported what the data showed, then asked a better question: prices were not predictable, but volatility was, with about 20% lower error than the baseline, though only marginally significant.",
+        "zh": "结果不是我希望的：没有一个模型显著胜过随机游走，我原来的混合模型还在最差的一批里。我也在自己的工作里找到真错误，比如归一化器在含测试期的数据上拟合。于是我如实报告数据，再问一个更好的问题：价格不可预测，但波动率可以，误差比基准低约 20%，只是刚过显著线。"
+      },
+      "rule": {
+        "en": "When testing costs almost nothing, test every approach and let the data decide. AI makes the work faster; choosing the baseline and judging the result is still my job.",
+        "zh": "测试几乎免费时，所有方案都测，让数据决定。AI 让工作更快；选基准、判断结果可不可信仍然是我的事。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "Why the random walk as the baseline?",
+            "zh": "为什么拿随机游走当基准？"
+          },
+          "a": "Because for daily prices, tomorrow equals today is the hardest honest baseline. The thesis never compared against it, and once I did, the hybrid's error was 7 to 13 times the random walk's on the original series. A model that cannot beat that has not shown it predicts anything."
+        },
+        {
+          "q": {
+            "en": "Six months, then half a day. What did AI actually do?",
+            "zh": "六个月变半天，AI 到底做了什么？"
+          },
+          "a": "The scaffolding: data loading, the rolling evaluation harness, running the foundation models over thousands of windows, the significance tests and the plots. What it did not do was choose the baseline, design the evaluation, or decide whether a result could be trusted. Those were still mine, and they are where the first thesis went wrong."
+        },
+        {
+          "q": {
+            "en": "Is the 20% volatility result real?",
+            "zh": "波动率那 20% 是真的吗？"
+          },
+          "a": "Marginal. The p-value is 0.048, the main test period is eleven months, and I did not correct for multiple comparisons. I report it as a lead, not a finding, and the limits sit next to the number on the case page."
+        },
+        {
+          "q": {
+            "en": "What would you do differently in the original thesis?",
+            "zh": "原来的论文你会怎么改？"
+          },
+          "a": "Start with the baseline and the evaluation design, fit every scaler on training data only, and align the horizons before comparing models. The redo found twelve problems of that kind in the original, and I measured each one."
+        }
+      ]
+    },
+    {
+      "id": "rules-from-evidence",
+      "date": "2026-10",
+      "projects": [
+        "career-ops",
+        "ipot"
+      ],
+      "kind": {
+        "en": "Control · rules",
+        "zh": "控制 · 规则"
+      },
+      "title": {
+        "en": "Rules I tuned on evidence, not taste",
+        "zh": "用证据调规则，不凭感觉"
+      },
+      "status": {
+        "en": "Gate hook live since Oct 27 · approval rule written into each project plan",
+        "zh": "闸门钩子 10-27 起生效 · 审批规则写在各项目计划里"
+      },
+      "then": {
+        "en": "I run coding agents under rules. The first version made everything wait for my approval, including pushing a branch. Two projects stalled at the same point: one repo had 87 finished commits nobody could see, and five PRs for the restaurant platform sat local for days.",
+        "zh": "我让编程 agent 在规则下干活。第一版什么都要等我批，连推送分支也要。两个项目卡在同一处：一个仓库攒了 87 个没人看得见的提交，餐厅平台的五个 PR 在本地放了好几天。"
+      },
+      "did": {
+        "en": "I moved enforcement into hooks: spending, external sends and deletions are hard-blocked, and a hook exits with an error instead of asking, because in auto mode an ask gets approved silently. Merging and deploying need my explicit yes. Each project got a plan file with the approval rule, a definition of done, ordered tasks and stop conditions; the plans say pushing and draft PRs are free. The 87 commits became one branch.",
+        "zh": "我把强制放进钩子：花钱、对外发送、删除硬拦，钩子直接报错而不是问，因为自动模式下「问」会被悄悄批准。合并和部署要我明确点头。每个项目一份计划文件：审批规则、完成标准、有序任务、停止条件；计划里写明 push 和 draft PR 不用批。那 87 个提交压成了一条分支。"
+      },
+      "tradeoff": {
+        "en": "A hook that errors cannot be waved through, so every blocked action comes back to me by hand. Freer pushing means more branches to review. Rules are friction, so I keep the evidence next to each change: when subagents were 46% of my usage, I cut their default tier.",
+        "zh": "会报错的钩子不能被顺手放行，所以每个被拦的动作都要我亲手做。放开推送意味着更多分支要看。规则就是摩擦，所以每次改规则都把证据写在旁边：子智能体占了 46% 用量，就把它们的默认档降下来。"
+      },
+      "rule": {
+        "en": "A rule that hides finished work costs more than it protects. Change it, and write the evidence next to the change.",
+        "zh": "一条把做完的工作藏起来的规则，代价大于它保护的东西。改掉它，把证据写在改动旁边。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "Hooks, not prompts. Why?",
+            "zh": "为什么用钩子不用提示词？"
+          },
+          "a": "A prompt is advice; a hook is enforcement. In auto mode an \"ask\" gets approved silently, so the gate exits with an error instead and the blocked action comes back to me. A table-driven test with 168 cases means removing any rule fails a test."
+        },
+        {
+          "q": {
+            "en": "How did you notice the stall?",
+            "zh": "怎么发现卡住的？"
+          },
+          "a": "By counting. One repo had 87 local commits nobody could see; another had five finished branches waiting days for a merge. Both waited on the same rule. The plans now free pushing and draft PRs, and the backlog became one branch."
+        },
+        {
+          "q": {
+            "en": "Isn't this just process overhead?",
+            "zh": "这不就是流程负担吗？"
+          },
+          "a": "It is friction, and I measure it. When subagents were 46% of usage I cut their default tier. When the push rule hid finished work, I loosened it. A rule that costs more than it catches gets changed, with the evidence written next to the change."
+        }
+      ]
+    },
+    {
+      "id": "self-learning-loop",
+      "date": "2026-10-27",
+      "projects": [],
+      "kind": {
+        "en": "Improvement · design",
+        "zh": "改进 · 设计"
+      },
+      "title": {
+        "en": "A self-learning loop, designed and being instrumented",
+        "zh": "自学习闭环：设计好了，刚开始采数"
+      },
+      "status": {
+        "en": "Rules written · collector runs by hand · no held-out set yet",
+        "zh": "规则写好 · 采集脚本手动跑 · 还没有留出集"
+      },
+      "then": {
+        "en": "Agents that run and change themselves need a loop that cannot grade itself. I wrote the rules after a brief on self-learning products, for every agent and pipeline I plan to let improve on its own.",
+        "zh": "会自己跑、自己改的 agent，需要一个不能给自己打分的闭环。读了一份自学习产品的简报后，我为所有打算让它自己改进的 agent 和流程写下规则。"
+      },
+      "did": {
+        "en": "Run with a full trace, observe, evaluate with deterministic code, improve, verify, then ship. Change the harness before the model. A candidate change passes a held-out test and a regression suite that holds every past failure. Only verified runs become training data. Each task is billed as cost per successful task, not total tokens. The first instrument is a collector that logs model, effort, time, tokens and the verification result for every subagent run.",
+        "zh": "跑（留完整轨迹）→ 看 → 评（确定性代码）→ 改 → 验 → 上线。先改 harness 再改模型。候选改动要过留出集和含全部历史失败的回归集。只有验证过的轨迹进训练。每个任务按「单次成功任务的成本」记账，不报 token 总量。第一个仪表是一个采集脚本，记下每次子智能体运行的模型、档位、时间、token 和验证结论。"
+      },
+      "tradeoff": {
+        "en": "The collector runs by hand, and there is no held-out set for my own agents yet, so the loop cannot close. I call it designed and instrumented, not built. The next step is the held-out set, because without it the loop would grade itself.",
+        "zh": "采集脚本手动跑，自己的 agent 还没有留出集，所以闭环闭不上。我说它是设计好、开始采数，不说做好了。下一步是留出集，没有它闭环就在给自己打分。"
+      },
+      "rule": {
+        "en": "No verification, no ship. Evaluation never lives in the model that generated the answer.",
+        "zh": "没有验证不上线。评价永远不放在生成答案的那个模型里。"
+      },
+      "qa": [
+        {
+          "q": {
+            "en": "You said the loop is designed. What actually runs today?",
+            "zh": "闭环「设计好了」，今天真跑着的是什么？"
+          },
+          "a": "Three things run: the rules, the hooks, and a collector that logs model, effort, time, tokens and the verification result for every subagent run. What does not exist yet is a held-out set for my own agents, or the weekly report. So I say designed and instrumented, not built. The next step is the held-out set, because without it the loop would be grading itself."
+        },
+        {
+          "q": {
+            "en": "How do you keep the regression set honest?",
+            "zh": "回归集怎么保持诚实？"
+          },
+          "a": "Every failure that ever happened goes in, and every generation re-runs all of it. Scores come from deterministic code, never from a model grading itself. And I red-team it: look for a shortcut that raises the score without raising capability."
+        }
+      ]
     }
   ]
 }
