@@ -3307,8 +3307,8 @@
         [
           "Role",
           {
-            "en": "AI Engineer. Reservation API from the first commit; led POS backend architecture; rebuilt Nalu; wrote and merged the security foundation across five repositories",
-            "zh": "AI 工程师。从第一个提交开始构建 Reservation API；主导 POS 后端架构；重建 Nalu；写并合并了五个仓库的安全地基"
+            "en": "AI Engineer. Reservation API from the first commit; led POS backend architecture; rebuilt Nalu; wrote and merged a shared engineering contract across five repositories",
+            "zh": "AI 工程师。从第一个提交开始构建 Reservation API；主导 POS 后端架构；重建 Nalu；写并合并了五个仓库的共享工程契约"
           }
         ],
         [
@@ -3337,8 +3337,8 @@
           "zh": "POS：原子结算与退款、售出时价格快照、可审计作废；修复长期失败的测试套件与分叉的 Alembic heads。"
         },
         {
-          "en": "Security foundation across five repositories (four services and their web client): schema changes only through migrations, authenticated and scoped requests, fail-closed defaults. I wrote and merged all five PRs after rehearsing the merge order on throwaway databases.",
-          "zh": "五个仓库的安全地基（四个服务和它们的网页客户端）：表结构只能通过迁移改、请求必须鉴权并限定范围、默认失败即关闭。五个 PR 都是我写和合并的，合并前先在一次性数据库上演练过合并顺序。"
+          "en": "Shared engineering contract across five repositories (four services and their web client): schema changes only through migrations, requests scoped to the organization, fail-closed defaults. I wrote and merged all five PRs after rehearsing the merge order on throwaway databases.",
+          "zh": "五个仓库的共享工程契约（四个服务和它们的网页客户端）：表结构只能通过迁移改、请求限定到组织范围、默认失败即关闭。五个 PR 都是我写和合并的，合并前先在一次性数据库上演练过合并顺序。"
         },
         {
           "en": "Nalu: deterministic field resolution and an explicit-yes gate after the LLM pilot invented values.",
@@ -3394,8 +3394,8 @@
         {
           "v": "5 / 5",
           "l": {
-            "en": "security-foundation PRs I wrote and merged, one per repository (Oct 2026)",
-            "zh": "我写并合并的安全地基 PR，每个仓库一个（2026 年 10 月）"
+            "en": "contract PRs I wrote and merged, one per repository (Oct 2026)",
+            "zh": "我写并合并的工程契约 PR，每个仓库一个（2026 年 10 月）"
           },
           "src": "IPOT GitHub pull requests (private)",
           "url": ""
@@ -3407,8 +3407,8 @@
           "zh": "雇主代码不公开；POS 与预订演示是基于合成数据的独立重写。"
         },
         {
-          "en": "The security foundation is merged, not yet deployed. ModelGateway, the shared model layer, is a design with no code yet.",
-          "zh": "安全地基已合并、还没部署。共享模型层 ModelGateway 只有设计，还没有代码。"
+          "en": "The contract PRs are merged; deploy is pending. ModelGateway, the shared model layer, is a design with no code yet.",
+          "zh": "契约 PR 已合并，部署待定。共享模型层 ModelGateway 只有设计，还没有代码。"
         }
       ],
       "link": [
@@ -5192,28 +5192,28 @@
         "ipot"
       ],
       "kind": {
-        "en": "Security foundation",
-        "zh": "安全地基"
+        "en": "Shared contract",
+        "zh": "工程契约"
       },
       "title": {
-        "en": "Five repositories, one security contract",
-        "zh": "五个仓库，一套安全契约"
+        "en": "Five repositories, one engineering contract",
+        "zh": "五个仓库，一套工程契约"
       },
       "status": {
-        "en": "Merged in all five, not deployed",
-        "zh": "五个都已合并，未部署"
+        "en": "Merged in all five, deploy pending",
+        "zh": "五个都已合并，部署待定"
       },
       "then": {
-        "en": "Four services and their web client on our restaurant platform each handled schema, auth and config their own way. Some created tables at startup, outside migrations. Strict auth had never been switched on. A missing setting could leave a service running open.",
-        "zh": "餐厅平台的四个服务和它们的网页客户端，表结构、鉴权和配置各管各的。有的在启动时绕过迁移自己建表；严格鉴权从没开过；缺一个配置就可能让服务敞着跑。"
+        "en": "Four services and their web client on our restaurant platform each handled schema changes and config their own way. Some created tables at startup, outside migrations.",
+        "zh": "餐厅平台的四个服务和它们的网页客户端，表结构和配置各管各的。有的在启动时绕过迁移自己建表。"
       },
       "did": {
-        "en": "I wrote and merged five PRs, one per repository, that give every service the same contract: schema changes only through migrations, requests authenticated and scoped to the organization behind a strict-auth switch, and fail-closed defaults. Before merging I replayed the whole merge order on throwaway databases and ran the suites in strict mode for the first time. The repository that touched live reservations went last.",
-        "zh": "我写并合并了五个 PR，每个仓库一个，让每个服务遵守同一套契约：表结构只走迁移、请求在严格鉴权开关后面鉴权并限定到组织、默认失败即关闭。合并前在一次性数据库上重放整个合并顺序，第一次开严格模式跑测试。碰真实订位的仓库最后合。"
+        "en": "I wrote and merged five PRs, one per repository, that give every service the same contract: schema changes only through migrations, requests scoped to the organization behind a strict-mode switch, and fail-closed defaults. Before merging I replayed the whole merge order on throwaway databases and ran the suites in strict mode for the first time. The repository that touched live reservations went last.",
+        "zh": "我写并合并了五个 PR，每个仓库一个，让每个服务遵守同一套契约：表结构只走迁移、请求在严格模式开关后面限定到组织、默认失败即关闭。合并前在一次性数据库上重放整个合并顺序，第一次开严格模式跑测试。碰真实订位的仓库最后合。"
       },
       "tradeoff": {
-        "en": "The contract is shared, the code is not. Small pieces such as config parsing live in four places, and the shared checks catch drift there. The chat API started requiring a session key, so the web client that sends it was merged first and the API change two days later.",
-        "zh": "共享的是契约，不是代码。配置解析这类小块在四个地方各有一份，靠共享的检查发现漂移。聊天接口开始要求会话密钥，所以先合并会发送密钥的网页客户端，两天后才合并接口的改动。"
+        "en": "The contract is shared, the code is not. Small pieces such as config parsing live in four places, and the shared checks catch drift there. The chat API and its web client changed together, so the client was merged first and the API change two days later.",
+        "zh": "共享的是契约，不是代码。配置解析这类小块在四个地方各有一份，靠共享的检查发现漂移。聊天接口和它的网页客户端要一起改，所以先合并客户端，两天后才合并接口的改动。"
       },
       "rule": {
         "en": "Only a blocker stops a merge. Everything else gets an owner and a plan.",
@@ -5225,21 +5225,21 @@
             "en": "What exactly did you own?",
             "zh": "你具体负责哪部分？"
           },
-          "a": "I wrote and merged all five PRs. Before merging, I replayed the full merge order on throwaway databases with strict auth on. One rule decided each merge. Only a blocker stops it, and anything else gets an owner and a plan. The repository that touched live bookings went last."
+          "a": "I wrote and merged all five PRs. Before merging, I replayed the full merge order on throwaway databases in strict mode. One rule decided each merge. Only a blocker stops it, and anything else gets an owner and a plan. The repository that touched live bookings went last."
         },
         {
           "q": {
             "en": "Why not one shared package?",
             "zh": "为什么不做成一个共享包？"
           },
-          "a": "The contract was shared, but the code was not the same. Each service needed a different fix. Role checks in one, session keys in another, guest table scope in a third, and one of the five is not even Python. A shared package would also have forced a dependency upgrade across the four services before a security fix, and tied their releases together. So I shared what was identical. One migration-adoption tool, one script that probes every service for unauthenticated writes, and one merge gate. The cost is that small pieces such as config parsing live in four places, and the shared checks catch drift there."
+          "a": "The contract was shared, but the code was not the same. Each service needed a different change, and one of the five is not even Python. A shared package would also have forced a dependency upgrade across the four services first, and tied their releases together. So I shared what was identical. One migration-adoption tool, one script that checks every service against the contract, and one merge gate. The cost is that small pieces such as config parsing live in four places, and the shared checks catch drift there."
         },
         {
           "q": {
-            "en": "Didn't fail-closed defaults break existing clients?",
-            "zh": "默认失败即关闭，不会弄坏现有客户端吗？"
+            "en": "Didn't the stricter defaults break existing clients?",
+            "zh": "更严的默认值，不会弄坏现有客户端吗？"
           },
-          "a": "Yes, that was the main risk. The chat API began requiring a session key, so I merged the web client that sends the key first, and the API change two days later."
+          "a": "Yes, that was the main risk. The chat API and its web client had to change together, so I merged the client first, and the API change two days later."
         },
         {
           "q": {
@@ -5253,14 +5253,14 @@
             "en": "Did strict mode find real bugs?",
             "zh": "严格模式找到真 bug 了吗？"
           },
-          "a": "One. A WebSocket handler echoed input through a method that did not exist, so it crashed. The fix is merged. The other failures were tests that assumed open auth."
+          "a": "One small handler bug, and the fix is merged. The other failures were tests written for the earlier defaults."
         },
         {
           "q": {
             "en": "Is it in production?",
             "zh": "上生产了吗？"
           },
-          "a": "It is merged to main in all five repositories but not deployed yet. Each database needs its own migration step first, and I documented those steps."
+          "a": "It is merged to main in all five repositories; deploy is pending. Each database needs its own migration step first, and I documented those steps."
         }
       ]
     },
@@ -5647,8 +5647,8 @@
         "zh": "闸门钩子 10-27 起生效 · 审批规则写在各项目计划里"
       },
       "then": {
-        "en": "I run coding agents under rules. The first version made everything wait for my approval, including pushing a branch. Two projects stalled at the same point: one repo had 87 finished commits nobody could see, and five security PRs for the restaurant platform sat local for days.",
-        "zh": "我让编程 agent 在规则下干活。第一版什么都要等我批，连推送分支也要。两个项目卡在同一处：一个仓库攒了 87 个没人看得见的提交，餐厅平台的五个安全 PR 在本地放了好几天。"
+        "en": "I run coding agents under rules. The first version made everything wait for my approval, including pushing a branch. Two projects stalled at the same point: one repo had 87 finished commits nobody could see, and five PRs for the restaurant platform sat local for days.",
+        "zh": "我让编程 agent 在规则下干活。第一版什么都要等我批，连推送分支也要。两个项目卡在同一处：一个仓库攒了 87 个没人看得见的提交，餐厅平台的五个 PR 在本地放了好几天。"
       },
       "did": {
         "en": "I moved enforcement into hooks: spending, external sends and deletions are hard-blocked, and a hook exits with an error instead of asking, because in auto mode an ask gets approved silently. Merging and deploying need my explicit yes. Each project got a plan file with the approval rule, a definition of done, ordered tasks and stop conditions; the plans say pushing and draft PRs are free. The 87 commits became one branch.",
